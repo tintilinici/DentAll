@@ -1,0 +1,8 @@
+/docs/*.aux
+/docs/*.lof
+/docs/*.log
+/docs/*.lot
+/docs/*.out
+/docs/*.pdf
+/docs/*.synctex.gz
+/docs/*.toc
