@@ -28,9 +28,9 @@ public class Accommodation {
 
     private String address;
 
-    private LocalDate availability_start;
+    private LocalDate availabilityStart;
 
-    private LocalDate availability_end;
+    private LocalDate availabilityEnd;
 
     private Point location;
 

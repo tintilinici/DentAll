@@ -1,6 +1,8 @@
 package com.dentall.dentallservice.service.impl;
 
 import com.dentall.dentallservice.exception.exceptions.AccommodationBookingNotFoundException;
+import com.dentall.dentallservice.exception.exceptions.AccommodationNotDeletableException;
+import com.dentall.dentallservice.exception.exceptions.AccommodationNotFound;
 import com.dentall.dentallservice.exception.exceptions.AccommodationNotFoundException;
 import com.dentall.dentallservice.exception.exceptions.CustomerNotFoundException;
 import com.dentall.dentallservice.exception.exceptions.NoBookingAvailableException;
@@ -14,11 +16,14 @@ import com.dentall.dentallservice.model.domain.QAccommodation;
 import com.dentall.dentallservice.model.domain.QAccommodationBooking;
 import com.dentall.dentallservice.model.dto.AccommodationBookingDto;
 import com.dentall.dentallservice.model.dto.AccommodationDto;
+import com.dentall.dentallservice.model.request.BadRequestException;
 import com.dentall.dentallservice.model.request.BookAccommodationRequest;
 import com.dentall.dentallservice.model.request.CreateAccommodationRequest;
 import com.dentall.dentallservice.mapper.AccommodationMapper;
+import com.dentall.dentallservice.model.request.DeleteAccommodationBookingRequest;
 import com.dentall.dentallservice.model.request.SearchAccommodationBookingRequest;
 import com.dentall.dentallservice.model.request.SearchAccommodationsRequest;
+import com.dentall.dentallservice.model.request.UpdateAccommodationRequest;
 import com.dentall.dentallservice.repository.AccommodationBookingRepository;
 import com.dentall.dentallservice.repository.AccommodationRepository;
 import com.dentall.dentallservice.repository.CustomerRepository;
@@ -35,7 +40,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class AccommodationServiceImpl implements AccommodationService {
@@ -127,9 +131,96 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public AccommodationBookingDto retrieveAccommodationBooking(String id) {
         AccommodationBooking booking = accommodationBookingRepository.findById(id)
-                .orElseThrow(() -> new AccommodationBookingNotFoundException("Accommodation booking with id: '" + id + "' not found!"));
+                .orElseThrow(() -> new AccommodationBookingNotFoundException("id"));
 
         return accommodationBookingMapper.modelToDto(booking);
+    }
+
+    @Override
+    public void deleteAccommodation(String id) {
+        checkIfAccommodationExists(id);
+
+        boolean bookingsExists = accommodationBookingRepository.existsByAccommodationId(id);
+        if (bookingsExists) {
+            throw new AccommodationNotDeletableException("Accommodation with id: '" + id + "' has reserved bookings.");
+        }
+
+        accommodationRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAccommodationBooking(String id) {
+        checkIfBookingExists(id);
+        accommodationBookingRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAccommodationBookingByAccommodationId(String id) {
+        checkIfAccommodationExists(id);
+        accommodationBookingRepository.deleteByAccommodationId(id);
+    }
+
+    @Override
+    public void deleteAccommodationBooking(DeleteAccommodationBookingRequest request) {
+        checkIfCustomerExists(request.getCustomerId());
+        LocalDateTime dateTimeStart = request.getStartDate().atStartOfDay();
+        LocalDateTime dateTimeEnd = request.getStartDate().plusDays(1).atStartOfDay().minusSeconds(1);
+        accommodationBookingRepository.deleteByCustomerIdAndStartDateBetween(request.getCustomerId(), dateTimeStart, dateTimeEnd);
+    }
+
+    @Override
+    public AccommodationDto updateAccommodation(String id, UpdateAccommodationRequest request) {
+        Accommodation accommodation = accommodationRepository.findById(id)
+                .orElseThrow(() -> new AccommodationNotFound(id));
+
+        if (request.getAccommodationType() != null) {
+            accommodation.setAccommodationType(request.getAccommodationType());
+        }
+        if (request.getAddress() != null) {
+            accommodation.setAddress(request.getAddress());
+        }
+
+        LocalDate startDate = request.getAvailabilityStart();
+        LocalDate endDate = request.getAvailabilityEnd();
+        if (startDate != null) {
+            boolean isUpdatable = startDate.isBefore(accommodation.getAvailabilityEnd()) ||
+                    (endDate != null && endDate.isAfter(startDate));
+            if (!isUpdatable) {
+                throw new BadRequestException("Conflict in updating accommodation's availability!");
+            }
+        }
+
+        if (endDate != null) {
+            boolean isUpdatable = endDate.isAfter(accommodation.getAvailabilityStart()) ||
+                    (startDate != null && startDate.isBefore(endDate));
+            if (!isUpdatable) {
+                throw new BadRequestException("Conflict in updating accommodation's availability!");
+            }
+        }
+
+        accommodationRepository.save(accommodation);
+        return accommodationMapper.modelToDto(accommodation);
+    }
+
+    private void checkIfCustomerExists(String id) {
+        boolean exists = customerRepository.existsById(id);
+        if (!exists) {
+            throw new CustomerNotFoundException(id);
+        }
+    }
+
+    private void checkIfAccommodationExists(String id) {
+        boolean exists = accommodationRepository.existsById(id);
+        if (!exists) {
+            throw new AccommodationNotFound(id);
+        }
+    }
+
+    private void checkIfBookingExists(String id) {
+        boolean exists = accommodationBookingRepository.existsById(id);
+        if (!exists) {
+            throw new AccommodationBookingNotFoundException(id);
+        }
     }
 
     private BooleanBuilder constructSearchAccommodationsWhereClause(SearchAccommodationsRequest request) {
@@ -163,8 +254,8 @@ public class AccommodationServiceImpl implements AccommodationService {
             whereClause.and(qAccommodation.accommodationType.eq(AccommodationType.valueOf(request.getAccommodationType())));
         }
 
-        whereClause.and(qAccommodation.availability_start.loe(LocalDate.from(request.getBooking_start())));
-        whereClause.and(qAccommodation.availability_end.goe(LocalDate.from(request.getBooking_end())));
+        whereClause.and(qAccommodation.availabilityStart.loe(LocalDate.from(request.getBooking_start())));
+        whereClause.and(qAccommodation.availabilityEnd.goe(LocalDate.from(request.getBooking_end())));
 
         QAccommodationBooking qBooking = QAccommodationBooking.accommodationBooking;
 
