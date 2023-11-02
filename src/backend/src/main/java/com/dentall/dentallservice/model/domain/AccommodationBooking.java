@@ -28,5 +28,5 @@ public class AccommodationBooking {
     private Accommodation accommodation;
 
     @ManyToOne
-    private Customer customer;
+    private Patient patient;
 }

@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Customer {
+public class Patient {
 
     @Id
     private String id;
@@ -22,6 +22,6 @@ public class Customer {
 
     private String lastName;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "patient")
     private List<AccommodationBooking> accommodationBookings;
 }

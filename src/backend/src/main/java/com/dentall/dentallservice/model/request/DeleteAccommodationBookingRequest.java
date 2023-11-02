@@ -10,6 +10,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeleteAccommodationBookingRequest {
-    private String customerId;
+    private String patientId;
     private LocalDate startDate;
 }

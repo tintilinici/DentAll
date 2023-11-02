@@ -4,14 +4,14 @@ import com.dentall.dentallservice.exception.exceptions.AccommodationBookingNotFo
 import com.dentall.dentallservice.exception.exceptions.AccommodationNotDeletableException;
 import com.dentall.dentallservice.exception.exceptions.AccommodationNotFound;
 import com.dentall.dentallservice.exception.exceptions.AccommodationNotFoundException;
-import com.dentall.dentallservice.exception.exceptions.CustomerNotFoundException;
+import com.dentall.dentallservice.exception.exceptions.PatientNotFoundException;
 import com.dentall.dentallservice.exception.exceptions.NoBookingAvailableException;
 import com.dentall.dentallservice.factory.AccommodationBookingFactory;
 import com.dentall.dentallservice.mapper.AccommodationBookingMapper;
 import com.dentall.dentallservice.model.domain.Accommodation;
 import com.dentall.dentallservice.model.domain.AccommodationBooking;
 import com.dentall.dentallservice.model.domain.AccommodationType;
-import com.dentall.dentallservice.model.domain.Customer;
+import com.dentall.dentallservice.model.domain.Patient;
 import com.dentall.dentallservice.model.domain.QAccommodation;
 import com.dentall.dentallservice.model.domain.QAccommodationBooking;
 import com.dentall.dentallservice.model.dto.AccommodationBookingDto;
@@ -26,7 +26,7 @@ import com.dentall.dentallservice.model.request.SearchAccommodationsRequest;
 import com.dentall.dentallservice.model.request.UpdateAccommodationRequest;
 import com.dentall.dentallservice.repository.AccommodationBookingRepository;
 import com.dentall.dentallservice.repository.AccommodationRepository;
-import com.dentall.dentallservice.repository.CustomerRepository;
+import com.dentall.dentallservice.repository.PatientRepository;
 import com.dentall.dentallservice.service.AccommodationService;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.Expressions;
@@ -54,7 +54,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     private AccommodationRepository accommodationRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private PatientRepository patientRepository;
 
     @Autowired
     private AccommodationBookingRepository accommodationBookingRepository;
@@ -94,8 +94,8 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public AccommodationBookingDto bookAccommodation(BookAccommodationRequest request) {
-        Customer customer = customerRepository.findById(request.getCustomerId())
-                .orElseThrow(() -> new CustomerNotFoundException("Customer with id: '" + request.getCustomerId() + "' not found!"));
+        Patient patient = patientRepository.findById(request.getPatientId())
+                .orElseThrow(() -> new PatientNotFoundException("Patient with id: '" + request.getPatientId() + "' not found!"));
 
         QAccommodation qAccommodation = QAccommodation.accommodation;
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
@@ -109,7 +109,7 @@ public class AccommodationServiceImpl implements AccommodationService {
             throw new NoBookingAvailableException();
         }
 
-        AccommodationBooking booking = AccommodationBookingFactory.create(request, customer, availableAccommodation);
+        AccommodationBooking booking = AccommodationBookingFactory.create(request, patient, availableAccommodation);
 
         accommodationBookingRepository.save(booking);
 
@@ -119,8 +119,8 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public List<AccommodationBookingDto> searchAccommodationBookings(SearchAccommodationBookingRequest request) {
         List<AccommodationBooking> bookings;
-        if (request.getCustomerId() != null) {
-             bookings = accommodationBookingRepository.findByCustomerId(request.getCustomerId());
+        if (request.getPatientId() != null) {
+             bookings = accommodationBookingRepository.findByPatientId(request.getPatientId());
         } else {
             bookings = accommodationBookingRepository.findByAccommodationId(request.getAccommodationId());
         }
@@ -162,10 +162,10 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public void deleteAccommodationBooking(DeleteAccommodationBookingRequest request) {
-        checkIfCustomerExists(request.getCustomerId());
+        checkIfPatientExists(request.getPatientId());
         LocalDateTime dateTimeStart = request.getStartDate().atStartOfDay();
         LocalDateTime dateTimeEnd = request.getStartDate().plusDays(1).atStartOfDay().minusSeconds(1);
-        accommodationBookingRepository.deleteByCustomerIdAndStartDateBetween(request.getCustomerId(), dateTimeStart, dateTimeEnd);
+        accommodationBookingRepository.deleteByPatientIdAndStartDateBetween(request.getPatientId(), dateTimeStart, dateTimeEnd);
     }
 
     @Override
@@ -202,10 +202,10 @@ public class AccommodationServiceImpl implements AccommodationService {
         return accommodationMapper.modelToDto(accommodation);
     }
 
-    private void checkIfCustomerExists(String id) {
-        boolean exists = customerRepository.existsById(id);
+    private void checkIfPatientExists(String id) {
+        boolean exists = patientRepository.existsById(id);
         if (!exists) {
-            throw new CustomerNotFoundException(id);
+            throw new PatientNotFoundException(id);
         }
     }
 
