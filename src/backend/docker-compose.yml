@@ -9,4 +9,4 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - C:/DockerData/DentAll/mysql_data:/var/lib/mysql
+      - ./DockerData/DentAll/mysql_data:/var/lib/mysql

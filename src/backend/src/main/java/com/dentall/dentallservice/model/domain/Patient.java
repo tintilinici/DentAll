@@ -22,6 +22,13 @@ public class Patient {
 
     private String lastName;
 
+    private String PIN;
+
+    private String phone_number;
+
+    private String email;
+
+
     @OneToMany(mappedBy = "patient")
     private List<AccommodationBooking> accommodationBookings;
 }
