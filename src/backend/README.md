@@ -1,3 +1,5 @@
+# docker setup
+
 Za pokretanje docker containera:
 
 U terminalu se pozicionirajte u _**backend**_ folder:
@@ -30,5 +32,10 @@ Te tada možemo nad svojom bazom pozivati sql komande npr:
 
         show tables;
 
+# swagger ui
+
+Za swagger ui u browseru upišite:
+
+        http://localhost:8080/swagger-ui.html
 
 
