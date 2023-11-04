@@ -9,14 +9,82 @@
 		Od ovakve aplikacije koristi bi imali korisnici, zdravstvene ustanove, prijevoznici te iznajmljivači smještaja. Aplikacija bi zdravstvenim ustanovama omogućila cjelovite usluge pacijentima povećavajući privlačnost njihove ponude. Prijevoznicima i iznajmljivačima smještaja pomogla bi u upravljanju svojim kapacitetima i vožnjama. Najbitniji korisnici imali bi najbolje moguće iskustvo jer bi im bilo olakšano rezerviranje smještaja i prijevoza.
 		
 		
-		\paragraph{\textmd{U aplikaciji postoje tri uloge korisnika:}}
-		\begin{packed_item}{}
+		\paragraph{\indent \textmd{U aplikaciji postoje tri uloge korisnika:}}
+		
+		\begin{packed_item}
 			\item smještajni administrator
 			\item administrator prijevoznih usluga
 			\item korisnički administrator
 		\end{packed_item}
 		
-		\textit{Za pomoć pogledati reference navedene u poglavlju „Popis literature“, a po potrebi konzultirati sadržaj na internetu koji nudi dobre smjernice u tom pogledu.}
+		\noindent Ulaskom u aplikaciju neprijavljeni korisnik dolazi na početnu stranicu “Home”. Može se odlučiti za prijavu u sustav te odabrati opciju “Login”. Korisnika se preusmjerava na “Login” stranicu te tamo upisuje svoje podatke za prijavu “Email” i “Password”. Dalje ga se preusmjerava ovisno o njegovoj ulozi ili ulogama.
+		
+		\subsubsection{\noindent \underbar{Smještajni administrator}}
+		
+		Preusmjerava ga se na stranicu liste svih unesenih smještaja. Odabirom “Dodaj novi smještaj”  može stvoriti novi smještaj. Također pritiskom na određeni smještaj preusmjerava ga se na stranicu detalja o tom smještaju. Tu se može vidjeti i prikaz smještaja na geografskoj karti. Odabirom “Uredi podatke” administrator može uređivati osnovne podatke te obrisati smještaj odabirom “Ukloni ovaj smještaj” nakon što dobije poruku potvrde kojom potvrđuje svoju odluku. Za kreiranje smještaja potrebni su podaci:
+		 
+		\begin{packed_item}
+			\item adresa smještaja
+			\item vrsta smještaja
+			\item kategorija smještaja
+			\item vremenski period dostupnosti ( dostupno od, dostupno do) 
+			\item lokacija ( u koordinatama ) za grafički prikaz geografskog položaja na karti 
+		\end{packed_item}
+		
+		\noindent Ima najveće ovlasti te može definirati druge korisnike te im dodjeljivati različite uloge ( jedan korisnik može imati i više uloga ). Pritiskom na “Upravljanje administratorima” preusmjerava ga se na stranicu s listom svih administratora. Za kreiranje administratora potrebni su podaci: 
+		
+		\begin{packed_item}
+			\item ime
+			\item prezime
+			\item e-mail
+			\item uloga/e
+		\end{packed_item}
+		
+		\noindent Opcijom “Dodaj novog administratora” može unositi nove korisnike. Odabirom opcije “Promijeni ulogu” korisniku se može dodati nova uloga ili promijeniti postojeća. Također, odabirom “Izbriši administratora”, administrator ima mogućnost obrisati odabranog korisnika nakon što dobije poruku potvrde kojom potvrđuje svoju odluku. 
+		
+		\subsubsection{\noindent \underbar{Administrator prijevoznih usluga}}
+		
+		Preusmjerava ga se na stranicu liste svih unesenih prijevoznika. Odabirom “Dodaj novog prijevoznika” može stvoriti novog prijevoznika. Za kreiranje prijevoznika potrebni su podaci: 
+		
+		\begin{packed_item}
+			\item naziv prijevoznika 
+			\item e-mail
+			\item broj telefona
+		\end{packed_item}
+		
+		\noindent Također pritiskom na određenog prijevoznika preusmjerava ga se na stranicu koja prikazuje listu unesenih transportnih vozila za tog prijevoznika. Za kreiranje vozila potrebni su podaci: 
+		
+		\begin{packed_item}
+			\item tip vozila 
+			\item kapacitet
+			\item trenutno u uporabi 
+			\item rezervirano za transport 
+		\end{packed_item}
+		
+		 \noindent Odabirom “Uredi podatke” administrator može uređivati osnovne podatke. Osim toga, odabirom opcije “Ukloni vozilo”, administrator ima mogućnost izbrisati odabrano vozilo nakon što dobije poruku potvrde kojom potvrđuje svoju odluku. 
+		
+		\subsubsection{\noindent \underbar{Korisnički administrator}}
+		
+		\noindent Preusmjerava ga se na stranicu liste unesenih pacijenata. Odabirom opcije “Dodaj novog pacijenta” omogućuje se unos novih pacijenata. Za kreiranje korisnika potrebni su podaci:
+
+		\begin{packed_item}
+			\item ime
+			\item prezime
+			\item PIN
+			\item broj telefona
+			\item e-mail
+		\end{packed_item}
+		
+		\noindent Na kraju završenog korisnik se može odjaviti pritiskom na gumb “Odjava” te se vraća na početnu stranicu “Home”. 
+		
+		Pacijent nema direktnu vezu s aplikacijom. Detalji o tretmanima ne unose se ručno u aplikaciju, već postoji umjetno ispitno sučelje koje komunicira s aplikacijom za evidenciju medicinskih usluga za koju se pretpostavlja da je već razvijena.  
+		
+		Nakon unosa novog pacijenta i potrebnih informacija aplikacija dodjeljuje raspoloživi smještaj pacijentu te je označuje kao zauzetu u periodu njegove medicinske usluge. Aplikacija periodički provjerava status unosa medicinskih termina komunikacijom s aplikacijom medicinskih usluga kako bi se osiguralo da aplikacija ima najnovije informacije o rasporedu i tretmanima pacijenata. Ako aplikacija primi odgovor od aplikacije medicinskih usluga da je plan medicinskih usluga zaključan, to znači da su svi medicinski termini pacijenata potvrđeni te se tada može početi organizirati prijevoz za te termine. Potrebno je i označiti dodijeljene prijevoznike zauzetima u tim terminima. 
+		
+		Nakon završetka ukupnog plana puta, pacijentu će biti poslan e-mail o detaljima plana puta. Također, poruke će biti poslane i svakom prijevozniku s kontaktnim podacima korisnika te podacima o vremenima i adresama smještaja. 
+		
+		Jedna od mogućih nadogradnji ovoga zadatka bila bi dodavanje pristupa korisničkim iskustvima, točnije, omogućavanje ocjenjivanja smještaja i prijevoza te pisanje recenzija kako bi korisnici mogli što bolje procijeniti kvalitetu usluga.  
+		
 		\eject
 		
 		\section{Primjeri u \LaTeX u}
