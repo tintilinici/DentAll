@@ -13,9 +13,14 @@
 			
 			\begin{packed_enum}
 				
-				\item Dionik 1
-				\item Dionik 2				
-				\item ...
+				\item Vlasnik ( naručitelj )
+				\item Korisnici
+				\begin{packed_enum}
+					\item Smještajni administrator 
+					\item Administrator prijevoznih usluga 
+					\item Korisnički administrator
+				\end{packed_enum}			
+				\item Razvojni tim 
 				
 			\end{packed_enum}
 			
@@ -23,30 +28,69 @@
 			
 			
 			\begin{packed_enum}
-				\item  \underbar{Aktor 1 (inicijator) može:}
+				\item  \underbar{Neprijavljeni korisnik (inicijator) može:}
 				
 				\begin{packed_enum}
 					
-					\item funkcionalnost 1
-					\item funkcionalnost 2
-					\begin{packed_enum}
-						
-						\item  podfunkcionalnost 1 
-						\item  podfunkcionalnost 2
-				
-					\end{packed_enum}
-					\item  funkcionalnost 3
+					\item se prijaviti u sustav za što su mu potrebni e-mail i lozinka
 					
 				\end{packed_enum}
 			
-				\item  \underbar{Aktor 2 (sudionik) može:}
+				\item  \underbar{Smještajni administrator ( inicijator ) može:}
 				
 				\begin{packed_enum}
 					
-					\item funkcionalnost 1
-					\item funkcionalnost 2
+					\item unositi nove smještaje
+					\item mijenjati osnovne podatke smještaja
+					\item brisati smještaje
+					\item unositi nove korisnike
+					\item dodjeljivati uloge korisnicima
 					
 				\end{packed_enum}
+				
+				\item  \underbar{Administrator prijevoznih usluga ( inicijator ) može:}
+				
+				\begin{packed_enum}
+					
+					\item unositi nove prijevoznike
+					\item mijenjati podatke prijevoznika
+					\item brisati prijevoznike
+					\item unositi vozila za prijevoznike
+					\item brisati vozila
+					
+				\end{packed_enum}
+				
+				\item  \underbar{Korisnički administrator ( inicijator ) može:}
+				
+				\begin{packed_enum}
+					
+					\item unositi pacijente
+					
+				\end{packed_enum}
+				
+				\item  \underbar{Baza podataka ( sudionik ) može:}
+				
+				\begin{packed_enum}
+					
+					\item pohranjuje sve podatke o korisnicima i njihovim ovlastima 
+					\item pohranjuje sve podatke o pacijentu
+					\item pohranjuje sve podatke o medicinskoj usluzi 
+					\item pohranjuje sve podatke o smještaju 
+					\item pohranjuje sve podatke o prijevozniku i vozilima
+					\item pohranjuje sve podatke o rezerviranju smještaja 
+					\item pohranjuje sve podatke o rezerviranju prijevoznika 
+					
+				\end{packed_enum}
+				
+				\item  \underbar{Aplikacija medicinske usluge ( sudionik ):}
+				
+				\begin{packed_enum}
+					
+					\item odgovorna za prikupljanje podatak o medicinskim tretmanima te naša aplikacija putem sučelja dohvaća podatke o tretmanima korisnika
+					
+				\end{packed_enum}
+				
+				
 			\end{packed_enum}
 			
 			\eject 
