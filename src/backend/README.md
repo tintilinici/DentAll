@@ -19,7 +19,13 @@ se automatski kreirati kao i neki testni podaci za accommodation tablicu
 u njima. Ako se želite spojiti terminalom na Mysql server 
 (kako bi mogli pisati sql naredbe), upišite komandu:
 
+WINDOWS:
+
         docker exec -it backend_db_1 mysql -u root -p
+
+MAC:
+
+        docker exec -it backend-db-1 mysql -u root -p
 
 Te kada vas prompta sa password, upišite: **root**
 
