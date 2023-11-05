@@ -1,6 +1,8 @@
 import { Button, Input, InputGroup, InputRightElement } from "@chakra-ui/react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../components/navbar/auth/AuthProvider";
+import routes from "../constants/routes";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -8,6 +10,14 @@ const LoginPage = () => {
   const [showPassowrd, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => setShowPassword(state => !state);
+
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    await login({ email, password });
+    navigate(routes.TRANSPORT.COMPANIES);
+  };
 
   return (
     <div className="bg-gray-100 h-full p-8">
@@ -46,7 +56,7 @@ const LoginPage = () => {
               </InputRightElement>
             </InputGroup>
           </div>
-          <Button width={"full"} colorScheme="orange">
+          <Button width={"full"} colorScheme="orange" onClick={handleLogin}>
             Prijavi se
           </Button>
         </div>
