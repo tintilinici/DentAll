@@ -14,10 +14,9 @@ import com.dentall.dentallservice.model.request.CreatePatientRequest;
 import com.dentall.dentallservice.repository.AccommodationOrderRepository;
 import com.dentall.dentallservice.repository.PatientRepository;
 import com.dentall.dentallservice.service.PatientService;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class PatientServiceImpl implements PatientService {
@@ -34,6 +33,8 @@ public class PatientServiceImpl implements PatientService {
     @Autowired
     private AccommodationOrderRepository accommodationOrderRepository;
 
+    @Autowired
+    private EntityManager entityManager;
 
     @Override
     public PatientDto createPatient(CreatePatientRequest request) {
@@ -49,20 +50,6 @@ public class PatientServiceImpl implements PatientService {
             throw new PatientNotFoundException("Patient with id: " + id + "doesn't exits.");
         }
         patientRepository.deleteById(id);
-    }
-
-    @Override
-    public PatientDto retrievePatient(String id){
-        Patient patient = patientRepository.findById(id).orElseThrow(() -> new PatientNotFoundException("Patient with id: '" + id + "' not found!"));
-
-        return patientMapper.modelToDto(patient);
-    }
-
-    @Override
-    public List<PatientDto> retrieveAllPatients() {
-        List<Patient> patients = patientRepository.findAll();
-
-        return patientMapper.modelsToDtos(patients);
     }
 
     @Override

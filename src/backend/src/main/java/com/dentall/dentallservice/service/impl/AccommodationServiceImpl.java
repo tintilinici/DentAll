@@ -8,6 +8,7 @@ import com.dentall.dentallservice.exception.exceptions.PatientNotFoundException;
 import com.dentall.dentallservice.exception.exceptions.NoBookingAvailableException;
 import com.dentall.dentallservice.factory.AccommodationBookingFactory;
 import com.dentall.dentallservice.mapper.AccommodationBookingMapper;
+import com.dentall.dentallservice.mapper.AccommodationOrderMapper;
 import com.dentall.dentallservice.model.domain.Accommodation;
 import com.dentall.dentallservice.model.domain.AccommodationBooking;
 import com.dentall.dentallservice.model.domain.AccommodationType;
@@ -25,6 +26,7 @@ import com.dentall.dentallservice.model.request.SearchAccommodationBookingReques
 import com.dentall.dentallservice.model.request.SearchAccommodationsRequest;
 import com.dentall.dentallservice.model.request.UpdateAccommodationRequest;
 import com.dentall.dentallservice.repository.AccommodationBookingRepository;
+import com.dentall.dentallservice.repository.AccommodationOrderRepository;
 import com.dentall.dentallservice.repository.AccommodationRepository;
 import com.dentall.dentallservice.repository.PatientRepository;
 import com.dentall.dentallservice.service.AccommodationService;
@@ -32,14 +34,14 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 @Service
 public class AccommodationServiceImpl implements AccommodationService {
@@ -61,6 +63,9 @@ public class AccommodationServiceImpl implements AccommodationService {
     private AccommodationBookingRepository accommodationBookingRepository;
 
 
+    @Autowired
+    private EntityManager entityManager;
+
     private final double RADIUS = 1000000;
 
     @Override
@@ -80,10 +85,13 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public List<AccommodationDto> searchAccommodations(SearchAccommodationsRequest request) {
-        BooleanBuilder builder = constructSearchAccommodationsWhereClause(request);
+        QAccommodation qAccommodation = QAccommodation.accommodation;
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        BooleanBuilder whereClause = constructSearchAccommodationsWhereClause(request);
 
-        List<Accommodation> accommodations = new ArrayList<>();
-        accommodationRepository.findAll(builder).forEach(accommodations::add);
+        List<Accommodation> accommodations = queryFactory.selectFrom(qAccommodation)
+                .where(whereClause)
+                .fetch();
 
         return accommodationMapper.modelsToDtos(accommodations);
     }
@@ -93,14 +101,19 @@ public class AccommodationServiceImpl implements AccommodationService {
         Patient patient = patientRepository.findById(request.getPatientId())
                 .orElseThrow(() -> new PatientNotFoundException("Patient with id: '" + request.getPatientId() + "' not found!"));
 
-        BooleanBuilder builder = constructBookingRequestWhereClause(request);
+        QAccommodation qAccommodation = QAccommodation.accommodation;
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        BooleanBuilder whereClause = constructBookingRequestWhereClause(request);
 
-        Iterable<Accommodation> accommodationIterable = accommodationRepository.findAll(builder);
-        Accommodation accommodation = StreamSupport.stream(accommodationIterable.spliterator(), false)
-                .findFirst()
-                .orElseThrow(NoBookingAvailableException::new);
+        Accommodation availableAccommodation = queryFactory.selectFrom(qAccommodation)
+                .where(whereClause)
+                .fetchFirst();
 
-        AccommodationBooking booking = AccommodationBookingFactory.create(request, patient, accommodation);
+        if (availableAccommodation == null) {
+            throw new NoBookingAvailableException();
+        }
+
+        AccommodationBooking booking = AccommodationBookingFactory.create(request, patient, availableAccommodation);
 
         accommodationBookingRepository.save(booking);
 
@@ -131,7 +144,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     public void deleteAccommodation(String id) {
         checkIfAccommodationExists(id);
 
-        boolean bookingsExists = accommodationBookingRepository.existsByAccommodationId(id);
+        boolean bookingsExists = accommodationBookingRepository.existsBookingByAccommodationId(id);
         if (bookingsExists) {
             throw new AccommodationNotDeletableException("Accommodation with id: '" + id + "' has reserved bookings.");
         }
@@ -148,7 +161,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public void deleteAccommodationBookingByAccommodationId(String id) {
         checkIfAccommodationExists(id);
-        accommodationBookingRepository.deleteByAccommodationId(id);
+        accommodationBookingRepository.deleteBookingByAccommodationId(id);
     }
 
     @Override
@@ -156,7 +169,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         checkIfPatientExists(request.getPatientId());
         LocalDateTime dateTimeStart = request.getStartDate().atStartOfDay();
         LocalDateTime dateTimeEnd = request.getStartDate().plusDays(1).atStartOfDay().minusSeconds(1);
-        accommodationBookingRepository.deleteByPatientIdAndStartDateBetween(request.getPatientId(), dateTimeStart, dateTimeEnd);
+        accommodationBookingRepository.deleteBookingByPatientIdAndStartDateBetween(request.getPatientId(), dateTimeStart, dateTimeEnd);
     }
 
     @Override
@@ -219,7 +232,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         BooleanBuilder whereClause = new BooleanBuilder();
 
         if (request.getLongitude() != null && request.getLatitude() != null) {
-            String template = "ST_DistanceSphere({0}, ST_MakePoint({1}, {2}))";
+            String template = "ST_Distance_Sphere({0}, POINT({1}, {2}))";
             NumberExpression<Double> distanceExpression = Expressions.numberTemplate(Double.class, template,
                     qAccommodation.location, Expressions.constant(request.getLongitude()), Expressions.constant(request.getLatitude()));
             whereClause.and(distanceExpression.loe(RADIUS));
@@ -234,7 +247,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         BooleanBuilder whereClause = new BooleanBuilder();
 
         if (request.getLongitude() != null && request.getLatitude() != null) {
-            String template = "ST_DistanceSphere({0}, ST_MakePoint({1}, {2}))";
+            String template = "ST_Distance_Sphere({0}, POINT({1}, {2}))";
             NumberExpression<Double> distanceExpression = Expressions.numberTemplate(Double.class, template,
                     qAccommodation.location, Expressions.constant(request.getLongitude()), Expressions.constant(request.getLatitude()));
             whereClause.and(distanceExpression.loe(RADIUS));
@@ -261,5 +274,7 @@ public class AccommodationServiceImpl implements AccommodationService {
 
         return whereClause;
     }
+
+
 
 }
