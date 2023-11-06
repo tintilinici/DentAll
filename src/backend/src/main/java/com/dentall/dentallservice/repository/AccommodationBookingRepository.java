@@ -12,9 +12,9 @@ public interface AccommodationBookingRepository extends JpaRepository<Accommodat
 
     List<AccommodationBooking> findByPatientId(String id);
 
-    boolean existsByAccommodationId(String id);
+    boolean existsBookingByAccommodationId(String id);
 
-    void deleteByAccommodationId(String id);
+    void deleteBookingByAccommodationId(String id);
 
-    void deleteByPatientIdAndStartDateBetween(String patientId, LocalDateTime dateTimeStart, LocalDateTime dateTimeEnd);
+    void deleteBookingByPatientIdAndStartDateBetween(String patientId, LocalDateTime dateTimeStart, LocalDateTime dateTimeEnd);
 }

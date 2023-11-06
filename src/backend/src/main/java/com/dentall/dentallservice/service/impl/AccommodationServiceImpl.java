@@ -8,6 +8,7 @@ import com.dentall.dentallservice.exception.exceptions.PatientNotFoundException;
 import com.dentall.dentallservice.exception.exceptions.NoBookingAvailableException;
 import com.dentall.dentallservice.factory.AccommodationBookingFactory;
 import com.dentall.dentallservice.mapper.AccommodationBookingMapper;
+import com.dentall.dentallservice.mapper.AccommodationOrderMapper;
 import com.dentall.dentallservice.model.domain.Accommodation;
 import com.dentall.dentallservice.model.domain.AccommodationBooking;
 import com.dentall.dentallservice.model.domain.AccommodationType;
@@ -25,6 +26,7 @@ import com.dentall.dentallservice.model.request.SearchAccommodationBookingReques
 import com.dentall.dentallservice.model.request.SearchAccommodationsRequest;
 import com.dentall.dentallservice.model.request.UpdateAccommodationRequest;
 import com.dentall.dentallservice.repository.AccommodationBookingRepository;
+import com.dentall.dentallservice.repository.AccommodationOrderRepository;
 import com.dentall.dentallservice.repository.AccommodationRepository;
 import com.dentall.dentallservice.repository.PatientRepository;
 import com.dentall.dentallservice.service.AccommodationService;
@@ -50,6 +52,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Autowired
     private AccommodationBookingMapper accommodationBookingMapper;
 
+
     @Autowired
     private AccommodationRepository accommodationRepository;
 
@@ -58,6 +61,7 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Autowired
     private AccommodationBookingRepository accommodationBookingRepository;
+
 
     @Autowired
     private EntityManager entityManager;
@@ -140,7 +144,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     public void deleteAccommodation(String id) {
         checkIfAccommodationExists(id);
 
-        boolean bookingsExists = accommodationBookingRepository.existsByAccommodationId(id);
+        boolean bookingsExists = accommodationBookingRepository.existsBookingByAccommodationId(id);
         if (bookingsExists) {
             throw new AccommodationNotDeletableException("Accommodation with id: '" + id + "' has reserved bookings.");
         }
@@ -157,7 +161,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public void deleteAccommodationBookingByAccommodationId(String id) {
         checkIfAccommodationExists(id);
-        accommodationBookingRepository.deleteByAccommodationId(id);
+        accommodationBookingRepository.deleteBookingByAccommodationId(id);
     }
 
     @Override
@@ -165,7 +169,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         checkIfPatientExists(request.getPatientId());
         LocalDateTime dateTimeStart = request.getStartDate().atStartOfDay();
         LocalDateTime dateTimeEnd = request.getStartDate().plusDays(1).atStartOfDay().minusSeconds(1);
-        accommodationBookingRepository.deleteByPatientIdAndStartDateBetween(request.getPatientId(), dateTimeStart, dateTimeEnd);
+        accommodationBookingRepository.deleteBookingByPatientIdAndStartDateBetween(request.getPatientId(), dateTimeStart, dateTimeEnd);
     }
 
     @Override
