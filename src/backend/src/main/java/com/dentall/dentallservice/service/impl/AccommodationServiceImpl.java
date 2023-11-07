@@ -144,7 +144,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     public void deleteAccommodation(String id) {
         checkIfAccommodationExists(id);
 
-        boolean bookingsExists = accommodationBookingRepository.existsBookingByAccommodationId(id);
+        boolean bookingsExists = accommodationBookingRepository.existsByAccommodationId(id);
         if (bookingsExists) {
             throw new AccommodationNotDeletableException("Accommodation with id: '" + id + "' has reserved bookings.");
         }
@@ -161,7 +161,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public void deleteAccommodationBookingByAccommodationId(String id) {
         checkIfAccommodationExists(id);
-        accommodationBookingRepository.deleteBookingByAccommodationId(id);
+        accommodationBookingRepository.deleteByAccommodationId(id);
     }
 
     @Override
@@ -169,7 +169,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         checkIfPatientExists(request.getPatientId());
         LocalDateTime dateTimeStart = request.getStartDate().atStartOfDay();
         LocalDateTime dateTimeEnd = request.getStartDate().plusDays(1).atStartOfDay().minusSeconds(1);
-        accommodationBookingRepository.deleteBookingByPatientIdAndStartDateBetween(request.getPatientId(), dateTimeStart, dateTimeEnd);
+        accommodationBookingRepository.deleteByPatientIdAndStartDateBetween(request.getPatientId(), dateTimeStart, dateTimeEnd);
     }
 
     @Override
