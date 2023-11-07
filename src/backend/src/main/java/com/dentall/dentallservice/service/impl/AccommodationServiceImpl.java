@@ -8,6 +8,7 @@ import com.dentall.dentallservice.exception.exceptions.PatientNotFoundException;
 import com.dentall.dentallservice.exception.exceptions.NoBookingAvailableException;
 import com.dentall.dentallservice.factory.AccommodationBookingFactory;
 import com.dentall.dentallservice.mapper.AccommodationBookingMapper;
+import com.dentall.dentallservice.mapper.AccommodationOrderMapper;
 import com.dentall.dentallservice.model.domain.Accommodation;
 import com.dentall.dentallservice.model.domain.AccommodationBooking;
 import com.dentall.dentallservice.model.domain.AccommodationType;
@@ -25,6 +26,7 @@ import com.dentall.dentallservice.model.request.SearchAccommodationBookingReques
 import com.dentall.dentallservice.model.request.SearchAccommodationsRequest;
 import com.dentall.dentallservice.model.request.UpdateAccommodationRequest;
 import com.dentall.dentallservice.repository.AccommodationBookingRepository;
+import com.dentall.dentallservice.repository.AccommodationOrderRepository;
 import com.dentall.dentallservice.repository.AccommodationRepository;
 import com.dentall.dentallservice.repository.PatientRepository;
 import com.dentall.dentallservice.service.AccommodationService;
@@ -50,6 +52,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Autowired
     private AccommodationBookingMapper accommodationBookingMapper;
 
+
     @Autowired
     private AccommodationRepository accommodationRepository;
 
@@ -58,6 +61,7 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Autowired
     private AccommodationBookingRepository accommodationBookingRepository;
+
 
     @Autowired
     private EntityManager entityManager;
