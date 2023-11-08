@@ -41,7 +41,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 @Service
 public class AccommodationServiceImpl implements AccommodationService {
@@ -85,13 +87,10 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public List<AccommodationDto> searchAccommodations(SearchAccommodationsRequest request) {
-        QAccommodation qAccommodation = QAccommodation.accommodation;
-        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-        BooleanBuilder whereClause = constructSearchAccommodationsWhereClause(request);
+        BooleanBuilder builder = constructSearchAccommodationsWhereClause(request);
 
-        List<Accommodation> accommodations = queryFactory.selectFrom(qAccommodation)
-                .where(whereClause)
-                .fetch();
+        List<Accommodation> accommodations = new ArrayList<>();
+        accommodationRepository.findAll(builder).forEach(accommodations::add);
 
         return accommodationMapper.modelsToDtos(accommodations);
     }
@@ -101,19 +100,14 @@ public class AccommodationServiceImpl implements AccommodationService {
         Patient patient = patientRepository.findById(request.getPatientId())
                 .orElseThrow(() -> new PatientNotFoundException("Patient with id: '" + request.getPatientId() + "' not found!"));
 
-        QAccommodation qAccommodation = QAccommodation.accommodation;
-        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-        BooleanBuilder whereClause = constructBookingRequestWhereClause(request);
+        BooleanBuilder builder = constructBookingRequestWhereClause(request);
 
-        Accommodation availableAccommodation = queryFactory.selectFrom(qAccommodation)
-                .where(whereClause)
-                .fetchFirst();
+        Iterable<Accommodation> accommodationIterable = accommodationRepository.findAll(builder);
+        Accommodation accommodation = StreamSupport.stream(accommodationIterable.spliterator(), false)
+                .findFirst()
+                .orElseThrow(NoBookingAvailableException::new);
 
-        if (availableAccommodation == null) {
-            throw new NoBookingAvailableException();
-        }
-
-        AccommodationBooking booking = AccommodationBookingFactory.create(request, patient, availableAccommodation);
+        AccommodationBooking booking = AccommodationBookingFactory.create(request, patient, accommodation);
 
         accommodationBookingRepository.save(booking);
 
@@ -274,7 +268,5 @@ public class AccommodationServiceImpl implements AccommodationService {
 
         return whereClause;
     }
-
-
 
 }
