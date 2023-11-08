@@ -14,7 +14,6 @@ import com.dentall.dentallservice.model.request.CreatePatientRequest;
 import com.dentall.dentallservice.repository.AccommodationOrderRepository;
 import com.dentall.dentallservice.repository.PatientRepository;
 import com.dentall.dentallservice.service.PatientService;
-import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +32,6 @@ public class PatientServiceImpl implements PatientService {
     @Autowired
     private AccommodationOrderRepository accommodationOrderRepository;
 
-    @Autowired
-    private EntityManager entityManager;
 
     @Override
     public PatientDto createPatient(CreatePatientRequest request) {

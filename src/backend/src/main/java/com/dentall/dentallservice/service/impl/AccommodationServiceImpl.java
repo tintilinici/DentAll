@@ -8,7 +8,6 @@ import com.dentall.dentallservice.exception.exceptions.PatientNotFoundException;
 import com.dentall.dentallservice.exception.exceptions.NoBookingAvailableException;
 import com.dentall.dentallservice.factory.AccommodationBookingFactory;
 import com.dentall.dentallservice.mapper.AccommodationBookingMapper;
-import com.dentall.dentallservice.mapper.AccommodationOrderMapper;
 import com.dentall.dentallservice.model.domain.Accommodation;
 import com.dentall.dentallservice.model.domain.AccommodationBooking;
 import com.dentall.dentallservice.model.domain.AccommodationType;
@@ -26,7 +25,6 @@ import com.dentall.dentallservice.model.request.SearchAccommodationBookingReques
 import com.dentall.dentallservice.model.request.SearchAccommodationsRequest;
 import com.dentall.dentallservice.model.request.UpdateAccommodationRequest;
 import com.dentall.dentallservice.repository.AccommodationBookingRepository;
-import com.dentall.dentallservice.repository.AccommodationOrderRepository;
 import com.dentall.dentallservice.repository.AccommodationRepository;
 import com.dentall.dentallservice.repository.PatientRepository;
 import com.dentall.dentallservice.service.AccommodationService;
@@ -34,8 +32,6 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,9 +60,6 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Autowired
     private AccommodationBookingRepository accommodationBookingRepository;
 
-
-    @Autowired
-    private EntityManager entityManager;
 
     private final double RADIUS = 1000000;
 
