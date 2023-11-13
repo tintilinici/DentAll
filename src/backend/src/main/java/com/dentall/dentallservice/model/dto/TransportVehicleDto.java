@@ -1,6 +1,5 @@
 package com.dentall.dentallservice.model.dto;
 
-import com.dentall.dentallservice.model.domain.TransportCompany;
 import com.dentall.dentallservice.model.domain.TransportVehicleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,5 +18,5 @@ public class TransportVehicleDto {
 
     private TransportVehicleType transportVehicleType;
 
-    private TransportCompany transportCompany;
+    private String transportCompanyId;
 }
