@@ -16,15 +16,55 @@
 
 				
 		\section{Baza podataka}
+
+			Za potrebe naše aplikaicje korisiti ćemo relacijsku bazu podataka kako bismo lakše oblikovali stvarni svijet. Baza nam je potrbna za metodičku pohranu podataka te njihovo brzo dohvaćanje. Naša baza podataka se sastoji od sljedećih entiteta:
 			
-			\textbf{\textit{dio 1. revizije}}\\
-			
+			\begin{packed_item}
+				\item Patient
+				\item Accommodation
+				\item AccommodationOrder
+				\item AccommodationBooking
+				\item TransportCompany
+				\item TransportVehicle
+				\item TransportBooking
+				\item MedicalAppointment
+				\item AdminRole
+				\item AdminRoles
+				\item Admin
+			\end{packed_item}
 		
 			\subsection{Opis tablica}
 			
 
 				\textit{Svaku tablicu je potrebno opisati po zadanom predlošku. Lijevo se nalazi točno ime varijable u bazi podataka, u sredini se nalazi tip podataka, a desno se nalazi opis varijable. Svjetlozelenom bojom označite primarni ključ. Svjetlo plavom označite strani ključ}
+				\newline
 				
+				\noindent \text{\textbf{Patient} Ova tablica predstavlja}
+				\begin{longtblr}[
+					label=none,
+					entry=none
+					]{
+						width = \textwidth,
+						colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+						rowhead = 1,
+					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				
+					\hline 
+					\SetCell[c=3]{c}{\textbf{Patient}}\\
+					\hline[3pt]
+					\SetCell{LightGreen}patient\_ID & VARCHAR & primarni ključ tablice \\
+					\hline
+					first\_name	& VARCHAR &  ime pacijenta\\ 
+					\hline 
+					last\_name & VARCHAR &  prezime pacijenta \\ 
+					\hline 
+					PIN & VARCHAR	&  Personal Identification Number, kao OIB u hrvatskoj\\ 
+					\hline 
+					email & VARCHAR & pacijentov email\\ 
+					\hline	
+					phone\_number & VARCHAR & pacijentov telefonski broj \\
+					\hline
+				\end{longtblr}
 				
 				\begin{longtblr}[
 					label=none,
@@ -34,18 +74,27 @@
 						colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
 						rowhead = 1,
 					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
-					\hline \SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}	 \\ \hline[3pt]
-					\SetCell{LightGreen}IDKorisnik & INT	&  	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  	\\ \hline
-					korisnickoIme	& VARCHAR &   	\\ \hline 
-					email & VARCHAR &   \\ \hline 
-					ime & VARCHAR	&  		\\ \hline 
-					\SetCell{LightBlue} primjer	& VARCHAR &   	\\ \hline 
+					\hline 
+					\SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}\\ 
+					\hline[3pt]
+					\SetCell{LightGreen}PK & type & \\ 
+					\hline
+					fieldName & type & opis \\
+					\hline 
+					\SetCell{LightBlue} FK	& type & opis \\
+					\hline 
 				\end{longtblr}
 				
 				
 			
 			\subsection{Dijagram baze podataka}
-				\textit{ U ovom potpoglavlju potrebno je umetnuti dijagram baze podataka. Primarni i strani ključevi moraju biti označeni, a tablice povezane. Bazu podataka je potrebno normalizirati. Podsjetite se kolegija "Baze podataka".}
+
+				\begin{figure}[H]
+					\includegraphics[scale=0.32]{slike/dijagram_baze.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+					\centering
+					\caption{ER Dijagram baze podataka}
+					\label{fig:dijagram_baze_podataka}
+				\end{figure}
 			
 			\eject
 			
