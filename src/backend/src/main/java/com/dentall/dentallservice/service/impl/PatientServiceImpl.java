@@ -11,6 +11,7 @@ import com.dentall.dentallservice.model.dto.AccommodationOrderDto;
 import com.dentall.dentallservice.model.dto.PatientDto;
 import com.dentall.dentallservice.model.request.CreateAccommodationOrderRequest;
 import com.dentall.dentallservice.model.request.CreatePatientRequest;
+import com.dentall.dentallservice.model.request.UpdatePatientRequest;
 import com.dentall.dentallservice.repository.AccommodationOrderRepository;
 import com.dentall.dentallservice.repository.PatientRepository;
 import com.dentall.dentallservice.service.PatientService;
@@ -55,6 +56,29 @@ public class PatientServiceImpl implements PatientService {
     public PatientDto retrievePatient(String id){
         Patient patient = patientRepository.findById(id).orElseThrow(() -> new PatientNotFoundException("Patient with id: '" + id + "' not found!"));
 
+        return patientMapper.modelToDto(patient);
+    }
+
+    @Override
+    public PatientDto updatePatient(String id, UpdatePatientRequest request) {
+        Patient patient = patientRepository.findById(id).orElseThrow(() -> new PatientNotFoundException(id));
+
+        if(request.getFirstName() != null){
+            patient.setFirstName(request.getFirstName());
+        }
+        if(request.getLastName() != null){
+            patient.setLastName(request.getLastName());
+        }
+        if(request.getPIN() != null){
+            patient.setPIN(request.getPIN());
+        }
+        if(request.getPhone_number() != null){
+            patient.setPhone_number(request.getPhone_number());
+        }
+        if(request.getEmail() != null){
+            patient.setEmail(request.getEmail());
+        }
+        patientRepository.save(patient);
         return patientMapper.modelToDto(patient);
     }
 

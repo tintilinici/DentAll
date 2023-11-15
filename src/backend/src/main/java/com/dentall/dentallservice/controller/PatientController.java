@@ -4,6 +4,7 @@ import com.dentall.dentallservice.model.dto.AccommodationOrderDto;
 import com.dentall.dentallservice.model.dto.PatientDto;
 import com.dentall.dentallservice.model.request.CreateAccommodationOrderRequest;
 import com.dentall.dentallservice.model.request.CreatePatientRequest;
+import com.dentall.dentallservice.model.request.UpdatePatientRequest;
 import com.dentall.dentallservice.service.PatientService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,14 @@ public class PatientController {
     public ResponseEntity<?> deleteAccommodationOrder(@PathVariable("id") String id){
         service.deleteAccommodationOrder(id);
         return ResponseEntity.ok("Successfully deleted");
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<PatientDto> updatePatient(
+            @PathVariable("id") String id,
+            @RequestBody UpdatePatientRequest request){
+        return ResponseEntity.ok(service.updatePatient(id, request));
     }
 
 }
