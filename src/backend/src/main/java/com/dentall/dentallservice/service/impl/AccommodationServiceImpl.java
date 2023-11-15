@@ -219,7 +219,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         BooleanBuilder whereClause = new BooleanBuilder();
 
         if (request.getLongitude() != null && request.getLatitude() != null) {
-            String template = "ST_Distance_Sphere({0}, POINT({1}, {2}))";
+            String template = "ST_DistanceSphere({0}, ST_MakePoint({1}, {2}))";
             NumberExpression<Double> distanceExpression = Expressions.numberTemplate(Double.class, template,
                     qAccommodation.location, Expressions.constant(request.getLongitude()), Expressions.constant(request.getLatitude()));
             whereClause.and(distanceExpression.loe(RADIUS));
@@ -234,7 +234,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         BooleanBuilder whereClause = new BooleanBuilder();
 
         if (request.getLongitude() != null && request.getLatitude() != null) {
-            String template = "ST_Distance_Sphere({0}, POINT({1}, {2}))";
+            String template = "ST_DistanceSphere({0}, ST_MakePoint({1}, {2}))";
             NumberExpression<Double> distanceExpression = Expressions.numberTemplate(Double.class, template,
                     qAccommodation.location, Expressions.constant(request.getLongitude()), Expressions.constant(request.getLatitude()));
             whereClause.and(distanceExpression.loe(RADIUS));
