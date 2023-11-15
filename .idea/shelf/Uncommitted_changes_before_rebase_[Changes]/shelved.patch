@@ -1,0 +1,243 @@
+Index: src/external/src/main/java/com/example/Resource.java
+===================================================================
+diff --git a/src/external/src/main/java/com/example/Resource.java b/src/external/src/main/java/com/example/Resource.java
+deleted file mode 100644
+--- a/src/external/src/main/java/com/example/Resource.java	(revision dbc3e522e027f2516d5ff8b96aaea007decd15e9)
++++ /dev/null	(revision dbc3e522e027f2516d5ff8b96aaea007decd15e9)
+@@ -1,18 +0,0 @@
+-package com.example;
+-
+-import jakarta.ws.rs.GET;
+-import jakarta.ws.rs.Path;
+-import jakarta.ws.rs.Produces;
+-import jakarta.ws.rs.core.MediaType;
+-
+-import java.util.List;
+-
+-@Path("/")
+-public class Resource {
+-
+-    @GET
+-    @Produces(MediaType.APPLICATION_JSON)
+-    public String fetchMedicalTreatments() {
+-        return "Hello RESTEasy";
+-    }
+-}
+Index: src/external/pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\"?>\r\n<project xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd\"\r\n         xmlns=\"http://maven.apache.org/POM/4.0.0\"\r\n         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n    <modelVersion>4.0.0</modelVersion>\r\n    <groupId>com.example</groupId>\r\n    <artifactId>external</artifactId>\r\n    <version>1.0-SNAPSHOT</version>\r\n    <properties>\r\n        <compiler-plugin.version>3.11.0</compiler-plugin.version>\r\n        <maven.compiler.release>17</maven.compiler.release>\r\n        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\r\n        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>\r\n        <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>\r\n        <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>\r\n        <quarkus.platform.version>3.5.1</quarkus.platform.version>\r\n        <skipITs>true</skipITs>\r\n        <surefire-plugin.version>3.1.2</surefire-plugin.version>\r\n    </properties>\r\n    <dependencyManagement>\r\n        <dependencies>\r\n            <dependency>\r\n                <groupId>${quarkus.platform.group-id}</groupId>\r\n                <artifactId>${quarkus.platform.artifact-id}</artifactId>\r\n                <version>${quarkus.platform.version}</version>\r\n                <type>pom</type>\r\n                <scope>import</scope>\r\n            </dependency>\r\n        </dependencies>\r\n    </dependencyManagement>\r\n    <dependencies>\r\n        <dependency>\r\n            <groupId>io.quarkus</groupId>\r\n            <artifactId>quarkus-resteasy</artifactId>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>io.quarkus</groupId>\r\n            <artifactId>quarkus-resteasy-jackson</artifactId>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>io.quarkus</groupId>\r\n            <artifactId>quarkus-arc</artifactId>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>io.quarkus</groupId>\r\n            <artifactId>quarkus-junit5</artifactId>\r\n            <scope>test</scope>\r\n        </dependency>\r\n        <dependency>\r\n            <groupId>io.rest-assured</groupId>\r\n            <artifactId>rest-assured</artifactId>\r\n            <scope>test</scope>\r\n        </dependency>\r\n    </dependencies>\r\n    <build>\r\n        <plugins>\r\n            <plugin>\r\n                <groupId>${quarkus.platform.group-id}</groupId>\r\n                <artifactId>quarkus-maven-plugin</artifactId>\r\n                <version>${quarkus.platform.version}</version>\r\n                <extensions>true</extensions>\r\n                <executions>\r\n                    <execution>\r\n                        <goals>\r\n                            <goal>build</goal>\r\n                            <goal>generate-code</goal>\r\n                            <goal>generate-code-tests</goal>\r\n                        </goals>\r\n                    </execution>\r\n                </executions>\r\n            </plugin>\r\n            <plugin>\r\n                <artifactId>maven-compiler-plugin</artifactId>\r\n                <version>${compiler-plugin.version}</version>\r\n                <configuration>\r\n                    <compilerArgs>\r\n                        <arg>-parameters</arg>\r\n                    </compilerArgs>\r\n                </configuration>\r\n            </plugin>\r\n            <plugin>\r\n                <artifactId>maven-surefire-plugin</artifactId>\r\n                <version>${surefire-plugin.version}</version>\r\n                <configuration>\r\n                    <systemPropertyVariables>\r\n                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>\r\n                        <maven.home>${maven.home}</maven.home>\r\n                    </systemPropertyVariables>\r\n                </configuration>\r\n            </plugin>\r\n            <plugin>\r\n                <artifactId>maven-failsafe-plugin</artifactId>\r\n                <version>${surefire-plugin.version}</version>\r\n                <executions>\r\n                    <execution>\r\n                        <goals>\r\n                            <goal>integration-test</goal>\r\n                            <goal>verify</goal>\r\n                        </goals>\r\n                        <configuration>\r\n                            <systemPropertyVariables>\r\n                                <native.image.path>${project.build.directory}/${project.build.finalName}-runner\r\n                                </native.image.path>\r\n                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>\r\n                                <maven.home>${maven.home}</maven.home>\r\n                            </systemPropertyVariables>\r\n                        </configuration>\r\n                    </execution>\r\n                </executions>\r\n            </plugin>\r\n        </plugins>\r\n    </build>\r\n    <profiles>\r\n        <profile>\r\n            <id>native</id>\r\n            <activation>\r\n                <property>\r\n                    <name>native</name>\r\n                </property>\r\n            </activation>\r\n            <properties>\r\n                <skipITs>false</skipITs>\r\n                <quarkus.package.type>native</quarkus.package.type>\r\n            </properties>\r\n        </profile>\r\n    </profiles>\r\n</project>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/external/pom.xml b/src/external/pom.xml
+--- a/src/external/pom.xml	(revision dbc3e522e027f2516d5ff8b96aaea007decd15e9)
++++ b/src/external/pom.xml	(date 1699999451567)
+@@ -16,6 +16,7 @@
+         <quarkus.platform.version>3.5.1</quarkus.platform.version>
+         <skipITs>true</skipITs>
+         <surefire-plugin.version>3.1.2</surefire-plugin.version>
++        <lombok.version>1.18.30</lombok.version>
+     </properties>
+     <dependencyManagement>
+         <dependencies>
+@@ -47,9 +48,19 @@
+             <scope>test</scope>
+         </dependency>
+         <dependency>
++            <groupId>io.quarkus</groupId>
++            <artifactId>quarkus-smallrye-openapi</artifactId>
++        </dependency>
++        <dependency>
+             <groupId>io.rest-assured</groupId>
+             <artifactId>rest-assured</artifactId>
+             <scope>test</scope>
++        </dependency>
++        <dependency>
++            <groupId>org.projectlombok</groupId>
++            <artifactId>lombok</artifactId>
++            <version>${lombok.version}</version>
++            <scope>provided</scope>
+         </dependency>
+     </dependencies>
+     <build>
+Index: src/external/src/main/java/com/example/service/Service.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/external/src/main/java/com/example/service/Service.java b/src/external/src/main/java/com/example/service/Service.java
+new file mode 100644
+--- /dev/null	(date 1700001850324)
++++ b/src/external/src/main/java/com/example/service/Service.java	(date 1700001850324)
+@@ -0,0 +1,73 @@
++package com.example.service;
++
++import com.example.models.FetchMedicalTreatmentsRequest;
++import com.example.models.MedicalTreatmentDto;
++import jakarta.enterprise.context.ApplicationScoped;
++
++import java.time.LocalDateTime;
++import java.time.LocalTime;
++import java.util.ArrayList;
++import java.util.List;
++import java.util.Random;
++import java.util.UUID;
++
++@ApplicationScoped
++public class Service {
++
++    private static final Random random = new Random();
++
++    public List<MedicalTreatmentDto> fetchMedicalTreatments(List<FetchMedicalTreatmentsRequest> request) {
++        List<MedicalTreatmentDto> treatments = new ArrayList<>();
++        request.forEach(req -> treatments.addAll(generateTreatmentsRandomly(req)));
++        return treatments;
++    }
++
++    private List<MedicalTreatmentDto> generateTreatmentsRandomly(FetchMedicalTreatmentsRequest request) {
++        List<MedicalTreatmentDto> treatments = new ArrayList<>();
++
++        int numOfTreatments = generateNumber();
++        for (int i = 0; i < numOfTreatments; i++) {
++            LocalDateTime startDateTime = getRandomDateTime(request.getArrivalDateTime(), request.getDepartureDateTime());
++            LocalDateTime endDateTime = getRandomDateTime(startDateTime, request.getDepartureDateTime());
++            String clinicAddress = "Clinic Address " + (int) (Math.random() * 10);
++            String description = "Description " + (int) (Math.random() * 10);
++            String id = UUID.randomUUID().toString();
++            MedicalTreatmentDto treatment = new MedicalTreatmentDto(id, request.getPatientId(), description, clinicAddress, startDateTime, endDateTime);
++            treatments.add(treatment);
++        }
++
++        return treatments;
++    }
++
++    public static LocalDateTime getRandomDateTime(LocalDateTime arrivalDateTime, LocalDateTime departureDateTime) {
++        // Define the time constraints
++        LocalTime startTime = LocalTime.of(8, 0); // 8 AM
++        LocalTime endTime = LocalTime.of(18, 0); // 6 PM
++
++        // Adjust arrival and departure times to fit within the constraints
++        LocalDateTime adjustedArrival = arrivalDateTime.toLocalTime().isBefore(startTime) ? arrivalDateTime.with(startTime) : arrivalDateTime;
++        LocalDateTime adjustedDeparture = departureDateTime.toLocalTime().isAfter(endTime) ? departureDateTime.with(endTime) : departureDateTime;
++
++        // Calculate the duration in minutes between the adjusted times
++        long durationMinutes = java.time.Duration.between(adjustedArrival, adjustedDeparture).toMinutes();
++
++        // Generate a random offset in minutes
++        long randomOffsetMinutes = (long) (random.nextDouble() * durationMinutes);
++
++        // Add the random offset to the adjusted arrival time
++        return adjustedArrival.plusMinutes(randomOffsetMinutes);
++    }
++
++    private static int generateNumber() {
++
++        int randomNumber = random.nextInt(100);
++
++        if (randomNumber < 80) {
++            return 0;
++        } else if (randomNumber < 90) {
++            return 1;
++        } else {
++            return 2;
++        }
++    }
++}
+Index: src/external/src/main/java/com/example/models/FetchMedicalTreatmentsRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.models;\r\n\r\nimport java.util.List;\r\n\r\npublic class FetchMedicalTreatmentsRequest {\r\n    private List<Long> ids;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/external/src/main/java/com/example/models/FetchMedicalTreatmentsRequest.java b/src/external/src/main/java/com/example/models/FetchMedicalTreatmentsRequest.java
+--- a/src/external/src/main/java/com/example/models/FetchMedicalTreatmentsRequest.java	(revision dbc3e522e027f2516d5ff8b96aaea007decd15e9)
++++ b/src/external/src/main/java/com/example/models/FetchMedicalTreatmentsRequest.java	(date 1700000966806)
+@@ -1,7 +1,17 @@
+ package com.example.models;
+ 
++import lombok.AllArgsConstructor;
++import lombok.Data;
++import lombok.NoArgsConstructor;
++
++import java.time.LocalDateTime;
+ import java.util.List;
+ 
++@Data
++@NoArgsConstructor
++@AllArgsConstructor
+ public class FetchMedicalTreatmentsRequest {
+-    private List<Long> ids;
++    private String patientId;
++    private LocalDateTime arrivalDateTime;
++    private LocalDateTime departureDateTime;
+ }
+Index: src/external/src/main/java/com/example/resource/Resource.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/external/src/main/java/com/example/resource/Resource.java b/src/external/src/main/java/com/example/resource/Resource.java
+new file mode 100644
+--- /dev/null	(date 1700001049475)
++++ b/src/external/src/main/java/com/example/resource/Resource.java	(date 1700001049475)
+@@ -0,0 +1,28 @@
++package com.example.resource;
++
++import com.example.models.FetchMedicalTreatmentsRequest;
++import com.example.service.Service;
++import jakarta.inject.Inject;
++import jakarta.ws.rs.Consumes;
++import jakarta.ws.rs.GET;
++import jakarta.ws.rs.POST;
++import jakarta.ws.rs.Path;
++import jakarta.ws.rs.Produces;
++import jakarta.ws.rs.core.MediaType;
++import jakarta.ws.rs.core.Response;
++
++import java.util.List;
++
++@Path("/")
++public class Resource {
++
++    @Inject
++    Service service;
++
++    @POST
++    @Consumes(MediaType.APPLICATION_JSON)
++    @Produces(MediaType.APPLICATION_JSON)
++    public Response fetchMedicalTreatments(List<FetchMedicalTreatmentsRequest> request) {
++        return Response.ok(service.fetchMedicalTreatments(request)).build();
++    }
++}
+Index: src/external/src/main/java/com/example/models/MedicalTreatmentDto.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/external/src/main/java/com/example/models/MedicalTreatmentDto.java b/src/external/src/main/java/com/example/models/MedicalTreatmentDto.java
+new file mode 100644
+--- /dev/null	(date 1700001850313)
++++ b/src/external/src/main/java/com/example/models/MedicalTreatmentDto.java	(date 1700001850313)
+@@ -0,0 +1,20 @@
++package com.example.models;
++
++import lombok.AllArgsConstructor;
++import lombok.Data;
++import lombok.NoArgsConstructor;
++
++import java.time.LocalDateTime;
++
++@Data
++@NoArgsConstructor
++@AllArgsConstructor
++public class MedicalTreatmentDto {
++
++    private String id;
++    private String patientId;
++    private String description;
++    private String clinicAddress;
++    private LocalDateTime startDateTime;
++    private LocalDateTime endDateTime;
++}
