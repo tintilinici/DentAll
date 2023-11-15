@@ -39,7 +39,9 @@
 				\textit{Svaku tablicu je potrebno opisati po zadanom predlošku. Lijevo se nalazi točno ime varijable u bazi podataka, u sredini se nalazi tip podataka, a desno se nalazi opis varijable. Svjetlozelenom bojom označite primarni ključ. Svjetlo plavom označite strani ključ}
 				\newline
 				
-				\noindent \text{\textbf{Patient} Ova tablica predstavlja}
+				\noindent
+				\textbf{Patient} Ova entitet sadrži sve informacije o korisniku usluga našeg sustava. Kako su svi korisnici pacijenti odlučili smo ih imenovati tako. Entitet sadrži atribute: patient\_ID, first\_name, last\_name, PIN, email i phone\_number.
+				
 				\begin{longtblr}[
 					label=none,
 					entry=none
@@ -65,26 +67,236 @@
 					phone\_number & VARCHAR & pacijentov telefonski broj \\
 					\hline
 				\end{longtblr}
-				
+			
+				\noindent
+				\textbf{Accommodation}
 				\begin{longtblr}[
 					label=none,
 					entry=none
 					]{
 						width = \textwidth,
-						colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+						colspec={|X[10,l]|X[6, l]|X[18, l]|}, 
 						rowhead = 1,
 					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 					\hline 
-					\SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}\\ 
+					\SetCell[c=3]{c}{\textbf{Accommodation}}\\ 
 					\hline[3pt]
-					\SetCell{LightGreen}PK & type & \\ 
+					\SetCell{LightGreen}accommodation\_ID & VARCHAR & primarni ključ tablice\\ 
 					\hline
-					fieldName & type & opis \\
+					type & VARCHAR & versta smještaja \\
 					\hline 
-					\SetCell{LightBlue} FK	& type & opis \\
-					\hline 
+					category & VARCHAR & kategorija smještaja \\
+					\hline
+					address & VARCHAR & adresa smještaja \\
+					\hline
+					availability\_start & DATETIME & datum i vrijeme od kada je smještaj dostupan \\
+					\hline
+					availability\_end & DATETIME & datum i vrijeme do kada je smještaj dosupan \\
+					\hline
+					location & POINT & kordinate smještaja \\
+					\hline
 				\end{longtblr}
-				
+			
+			\noindent
+			\textbf{AccommodationOrder}
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[13,l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{AccommodationOrder}}\\ 
+				\hline[3pt]
+				\SetCell{LightGreen}accommodation\_order\_ID & VARCHAR & primarni ključ tablice\\ 
+				\hline
+				arrival\_datetime & DATETIME & vrijeme dolaska pacijenta u državu, od tada mu treba smještaj\\
+				\hline
+				departure\_datetime & DATETIME & vrijeme odlaska pacijenta iz države, do tada treba smještaj \\
+				\hline
+				accommodation\_type & VARCHAR & željeni tip smještaja koji pacijent traži \\
+				\hline
+				accommodation\_category & VARCHAR & željena kategorija smještaja koju pacijent traži \\
+				\hline
+				\SetCell{LightBlue} patient\_ID	& STRING & ID pacijenta koji je napravio ovaj zahtjev \\
+				\hline 
+			\end{longtblr}
+			
+			\noindent
+			\textbf{AccommodationBooking}
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[10, l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{AccommodationBooking}}\\ 
+				\hline[3pt]
+				\SetCell{LightGreen}accommodation\_
+				booking\_ID & VARCHAR & primarni ključ tablice \\ 
+				\hline
+				start\_datetime & DATETIME & datum i vrijeme od kada je pacijent u smještaju \\
+				\hline
+				end\_datetime & DATETIME & datum i vrijeme do kada je pacijent u smještaju \\
+				\hline 
+				\SetCell{LightBlue} accommodation\_ID	& VARCHAR & smještaj u koji je pacijent smješten \\
+				\hline 
+				\SetCell{LightBlue} patient\_ID & VARCHAR & pacijent koji ostaje u smještaju \\
+				\hline
+			\end{longtblr}
+			
+			\noindent
+			\textbf{TransportCompany}
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}\\ 
+				\hline[3pt]
+				\SetCell{LightGreen}PK & type & \\ 
+				\hline
+				fieldName & type & opis \\
+				\hline 
+				\SetCell{LightBlue} FK	& type & opis \\
+				\hline 
+			\end{longtblr}
+			
+			\noindent
+			\textbf{TransportVehicle}
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}\\ 
+				\hline[3pt]
+				\SetCell{LightGreen}PK & type & \\ 
+				\hline
+				fieldName & type & opis \\
+				\hline 
+				\SetCell{LightBlue} FK	& type & opis \\
+				\hline 
+			\end{longtblr}
+			
+			\noindent
+			\textbf{TransportBooking}
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}\\ 
+				\hline[3pt]
+				\SetCell{LightGreen}PK & type & \\ 
+				\hline
+				fieldName & type & opis \\
+				\hline 
+				\SetCell{LightBlue} FK	& type & opis \\
+				\hline 
+			\end{longtblr}
+			
+			\noindent
+			\textbf{MedicalAppointment}
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}\\ 
+				\hline[3pt]
+				\SetCell{LightGreen}PK & type & \\ 
+				\hline
+				fieldName & type & opis \\
+				\hline 
+				\SetCell{LightBlue} FK	& type & opis \\
+				\hline 
+			\end{longtblr}
+			
+			\noindent
+			\textbf{AdminRole}
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}\\ 
+				\hline[3pt]
+				\SetCell{LightGreen}PK & type & \\ 
+				\hline
+				fieldName & type & opis \\
+				\hline 
+				\SetCell{LightBlue} FK	& type & opis \\
+				\hline 
+			\end{longtblr}
+		
+			
+			\noindent
+			\textbf{Admin}
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}\\ 
+				\hline[3pt]
+				\SetCell{LightGreen}PK & type & \\ 
+				\hline
+				fieldName & type & opis \\
+				\hline 
+				\SetCell{LightBlue} FK	& type & opis \\
+				\hline 
+			\end{longtblr}
+			
+			\noindent
+			\textbf{AdminRoles}
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}\\ 
+				\hline[3pt]
+				\SetCell{LightGreen}PK & type & \\ 
+				\hline
+				fieldName & type & opis \\
+				\hline 
+				\SetCell{LightBlue} FK	& type & opis \\
+				\hline 
+			\end{longtblr}			
 				
 			
 			\subsection{Dijagram baze podataka}
