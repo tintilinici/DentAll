@@ -5,13 +5,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FetchMedicalTreatmentsRequest {
+public class MedicalTreatmentDto {
+
+    private String id;
     private String patientId;
-    private LocalDateTime arrivalDateTime;
-    private LocalDateTime departureDateTime;
+    private String description;
+    private String clinicAddress;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
 }
