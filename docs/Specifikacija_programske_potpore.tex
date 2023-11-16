@@ -625,43 +625,7 @@
 						
 					\end{packed_item}
 
-                        \noindent \underbar{\textbf{UC12 - prikaz smještaja na karti}}
-					\begin{packed_item}
-	
-						\item \textbf{Glavni sudionik: }smještajni administrator
-						\item  \textbf{Cilj:} prikazati smještaj na karti
-						\item  \textbf{Sudionici:} OpenMaps
-						\item  \textbf{Preduvjet:} administrator je prijavljen i dodijeljena mu je uloga smještajnog administratora
-						\item  \textbf{Opis osnovnog tijeka:}
-						
-						\item[] \begin{packed_enum}
-	
-							\item Administrator odabire opciju pregleda svih smještaja
-							\item Prikaže se popis svih smještaja koji postoje u sustavu
-							\item Administrator odabere iz popisa traženi smještaj
-							\item Administrator odabere opciju prikaza smještaja na karti
-							\item Otvori se prozor gdje se vidi lokacija smještaja na karti
-						\end{packed_enum}
-						
-						\item  \textbf{Opis mogućih odstupanja:}
-						
-						\item[] \begin{packed_item}
-	
-							\item[3.a] Traženi smještaj ne postoji u sustavu
-							\item[] \begin{packed_enum}
-								
-								\item Sustav obavještava smještajnog administratora da smještaj ne postoji u sustavu
-								
-							\end{packed_enum}
-							\item[4.a] Smještaj se ne može locirati na karti
-							\item[] \begin{packed_enum}
-								
-								\item Sustav obavještava smještajnog administratora da smještaj nije moguće locirati
-								
-							\end{packed_enum}
-							
-						\end{packed_item}
-					\end{packed_item}
+                       
 
                         \noindent \underbar{\textbf{UC23 - dodjeljivanje prijevoznika terminima}}
 					\begin{packed_item}
@@ -680,6 +644,73 @@
                                 \item Administrator pridjeljuje raspoložive prijevoznike za svaki od termina
                                 \item Administrator označava prijevoznike zauzete u tim terminima
 						\end{packed_enum}
+						
+					\end{packed_item}
+
+     				
+
+     			\noindent \underbar{\textbf{UC24 - slanje e-maila prijevozniku}}
+					\begin{packed_item}
+	
+						\item \textbf{Glavni sudionik: }korisnički administrator
+						\item  \textbf{Cilj:} poslati e-mail s podatcima korisnika prijevozniku
+						\item  \textbf{Sudionici:} baza podataka, aplikacija medicinskih usluga
+						\item  \textbf{Preduvjet:} administrator je prijavljen u sustav i ima ulogu korisničkog administratora 
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+	
+							\item Plan o medicinskim uslugama je zaključan
+       				\item Aplikacija dohvaća e-mail adresu prijevoznika
+       				\item Aplikacija unutar predloška za e-mail postavlja podatke o medicinskoj uslugi i pojedinostima 
+	   			\item Na e-mail adresu prijevoznika se šalje plan 
+						\end{packed_enum}
+
+      						\item  \textbf{Opis mogućih odstupanja:}
+						
+						\item[] \begin{packed_item}
+	
+							\item[3.a] Podatci u aplikaciji ne kooperiraju sa podatcima prijevoznika
+							\item[] \begin{packed_enum}
+								
+								\item Sustav upozorava da je došlo do pogrešne korelacije podataka
+								
+							\end{packed_enum}
+							
+						\end{packed_item}
+						
+					\end{packed_item}
+
+
+     			\noindent \underbar{\textbf{UC25 - slanje e-maila pacijentu}}
+					\begin{packed_item}
+	
+						\item \textbf{Glavni sudionik: }korisnički administrator
+						\item  \textbf{Cilj:} poslati e-mail s pojedinostima termina pacijentu
+						\item  \textbf{Sudionici:} baza podataka, aplikacija medicinskih usluga
+						\item  \textbf{Preduvjet:} administrator je prijavljen u sustav i ima ulogu korisničkog administratora 
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+	
+							\item Plan o medicinskim uslugama je zaključan
+       				\item Dohvaća se e-mail adresa pacijenta
+       				\item Aplikacija unutar e-maila postavlja pojedinosti o terminu medicinske usluge - termin, prijevoznika, smještaj
+	   			\item Na e-mail adresu pacijenta se šalje plan
+						\end{packed_enum}
+
+      						\item  \textbf{Opis mogućih odstupanja:}
+						
+						\item[] \begin{packed_item}
+	
+							\item[3.a] Podatci u aplikaciji ne kooperiraju sa pacijentovim podatcima
+							\item[] \begin{packed_enum}
+								
+								\item Sustav upozorava da je došlo do pogrešne korelacije podataka
+								
+							\end{packed_enum}
+							
+						\end{packed_item}
 						
 					\end{packed_item}
                         
