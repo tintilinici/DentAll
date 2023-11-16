@@ -1,55 +1,92 @@
 \chapter{Specifikacija programske potpore}
 		
-	\section{Funkcionalni zahtjevi}
+	\section{Funkcionalni zahtjevi}		
+	
+	\noindent \textbf{Dionici:}
+	
+	\begin{packed_enum}
+		
+		\item Vlasnik ( naručitelj )
+		\item Korisnici
+		\begin{packed_enum}
+			\item Smještajni administrator 
+			\item Administrator prijevoznih usluga 
+			\item Korisnički administrator
+		\end{packed_enum}			
+		\item Razvojni tim 
+		
+	\end{packed_enum}
+	
+	\noindent \textbf{Aktori i njihovi funkcionalni zahtjevi:}
+	
+	
+	\begin{packed_enum}
+		\item  \underbar{Neprijavljeni korisnik (inicijator) može:}
+		
+		\begin{packed_enum}
 			
-			\textbf{\textit{dio 1. revizije}}\\
+			\item se prijaviti u sustav za što su mu potrebni e-mail i lozinka
 			
-			\textit{Navesti \textbf{dionike} koji imaju \textbf{interes u ovom sustavu} ili  \textbf{su nositelji odgovornosti}. To su prije svega korisnici, ali i administratori sustava, naručitelji, razvojni tim.}\\
-				
-			\textit{Navesti \textbf{aktore} koji izravno \textbf{koriste} ili \textbf{komuniciraju sa sustavom}. Oni mogu imati inicijatorsku ulogu, tj. započinju određene procese u sustavu ili samo sudioničku ulogu, tj. obavljaju određeni posao. Za svakog aktora navesti funkcionalne zahtjeve koji se na njega odnose.}\\
+		\end{packed_enum}
+		
+		\item  \underbar{Smještajni administrator ( inicijator ) može:}
+		
+		\begin{packed_enum}
 			
+			\item unositi nove smještaje
+			\item mijenjati osnovne podatke smještaja
+			\item brisati smještaje
+			\item unositi nove korisnike
+			\item dodjeljivati uloge korisnicima
 			
-			\noindent \textbf{Dionici:}
+		\end{packed_enum}
+		
+		\item  \underbar{Administrator prijevoznih usluga ( inicijator ) može:}
+		
+		\begin{packed_enum}
 			
-			\begin{packed_enum}
-				
-				\item Dionik 1
-				\item Dionik 2				
-				\item ...
-				
-			\end{packed_enum}
+			\item unositi nove prijevoznike
+			\item mijenjati podatke prijevoznika
+			\item brisati prijevoznike
+			\item unositi vozila za prijevoznike
+			\item brisati vozila
 			
-			\noindent \textbf{Aktori i njihovi funkcionalni zahtjevi:}
+		\end{packed_enum}
+		
+		\item  \underbar{Korisnički administrator ( inicijator ) može:}
+		
+		\begin{packed_enum}
 			
+			\item unositi pacijente
 			
-			\begin{packed_enum}
-				\item  \underbar{Aktor 1 (inicijator) može:}
-				
-				\begin{packed_enum}
-					
-					\item funkcionalnost 1
-					\item funkcionalnost 2
-					\begin{packed_enum}
-						
-						\item  podfunkcionalnost 1 
-						\item  podfunkcionalnost 2
-				
-					\end{packed_enum}
-					\item  funkcionalnost 3
-					
-				\end{packed_enum}
+		\end{packed_enum}
+		
+		\item  \underbar{Baza podataka ( sudionik ) može:}
+		
+		\begin{packed_enum}
 			
-				\item  \underbar{Aktor 2 (sudionik) može:}
-				
-				\begin{packed_enum}
-					
-					\item funkcionalnost 1
-					\item funkcionalnost 2
-					
-				\end{packed_enum}
-			\end{packed_enum}
+			\item pohranjuje sve podatke o korisnicima i njihovim ovlastima 
+			\item pohranjuje sve podatke o pacijentu
+			\item pohranjuje sve podatke o medicinskoj usluzi 
+			\item pohranjuje sve podatke o smještaju 
+			\item pohranjuje sve podatke o prijevozniku i vozilima
+			\item pohranjuje sve podatke o rezerviranju smještaja 
+			\item pohranjuje sve podatke o rezerviranju prijevoznika 
 			
-			\eject 
+		\end{packed_enum}
+		
+		\item  \underbar{Aplikacija medicinske usluge ( sudionik ):}
+		
+		\begin{packed_enum}
+			
+			\item odgovorna za prikupljanje podatak o medicinskim tretmanima te naša aplikacija putem sučelja dohvaća podatke o tretmanima korisnika
+			
+		\end{packed_enum}
+		
+		
+	\end{packed_enum}
+	
+	\eject 
 			
 			
 				
@@ -656,7 +693,30 @@
 					
 				\subsubsection{Dijagrami obrazaca uporabe}
 					
-					\textit{Prikazati odnos aktora i obrazaca uporabe odgovarajućim UML dijagramom. Nije nužno nacrtati sve na jednom dijagramu. Modelirati po razinama apstrakcije i skupovima srodnih funkcionalnosti.}
+					\begin{figure}[H]
+						\includegraphics[width=\textwidth]{slike/uc1.PNG} %veličina u odnosu na širinu linije
+						\caption{Dijagram obrasca uporabe, osnovne funkcionalnosti administratora}
+						\label{fig:uc1} %label mora biti drugaciji za svaku sliku
+					\end{figure}
+					
+					\begin{figure}[H]
+						\includegraphics[width=\textwidth]{slike/uc2.PNG} %veličina u odnosu na širinu linije
+						\caption{Dijagram obrasca uporabe, funkcionalnosti smještajnog administratora}
+						\label{fig:uc2} %label mora biti drugaciji za svaku sliku
+					\end{figure}
+					
+					\begin{figure}[H]
+						\includegraphics[width=\textwidth]{slike/uc3.PNG} %veličina u odnosu na širinu linije
+						\caption{Dijagram obrasca uporabe, funkcionalnosti administratora prijevoznih usluga} 
+						\label{fig:uc3} %label mora biti drugaciji za svaku sliku
+					\end{figure}
+					
+					\begin{figure}[H]
+						\includegraphics[width=\textwidth]{slike/uc4.PNG} %veličina u odnosu na širinu linije
+						\caption{Dijagram obrasca uporabe, funkcionalnosti korisničkog administratora}
+						\label{fig:uc4} %label mora biti drugaciji za svaku sliku
+					\end{figure}
+					
 				\eject		
 				
 			\subsection{Sekvencijski dijagrami}
