@@ -35,12 +35,9 @@
 		
 			\subsection{Opis tablica}
 			
-
-				\textit{Svaku tablicu je potrebno opisati po zadanom predlošku. Lijevo se nalazi točno ime varijable u bazi podataka, u sredini se nalazi tip podataka, a desno se nalazi opis varijable. Svjetlozelenom bojom označite primarni ključ. Svjetlo plavom označite strani ključ}
-				\newline
 				
 				\noindent
-				\textbf{Patient} Ova entitet sadrži sve informacije o korisniku usluga našeg sustava. Kako su svi korisnici pacijenti odlučili smo ih imenovati tako. Entitet sadrži atribute: patient\_ID, first\_name, last\_name, PIN, email i phone\_number.
+				\textbf{Patient} Ova entitet sadrži sve informacije o korisniku usluga našeg sustava. Kako su svi korisnici pacijenti odlučili smo ih imenovati tako. Entitet sadrži atribute: patient\_ID, first\_name, last\_name, PIN, email i phone\_number. Ovaj entitet je u vezi \textit{One-to-Many} s entitetom AccommodationOrder preko atributa patient\_ID i u \textit{One-to-Many} s entitetom AccommodationBooking preko atributa patient\_ID.
 				
 				\begin{longtblr}[
 					label=none,
@@ -69,7 +66,8 @@
 				\end{longtblr}
 			
 				\noindent
-				\textbf{Accommodation}
+				\textbf{Accommodation} Ovaj entitet sadržava potrebne podatke o nekom smještaju koji je smještajni administrator unio. Entitet sadrži atribute: accommodation\_ID, type, category, address, availibility\_start, availability\_end i location. Ovaj entitet je u \textit{One-to-Many} vezi s entitetom AccommodationBooking preko atributa accommodation\_ID.
+				
 				\begin{longtblr}[
 					label=none,
 					entry=none
@@ -98,7 +96,7 @@
 				\end{longtblr}
 			
 			\noindent
-			\textbf{AccommodationOrder}
+			\textbf{AccommodationOrder} Ovaj entitet se koristi za pohravnjivanje pacijentovih zahtjeva o traženom smještaju. U slučaju da traženi smještaj nije odmah dostupan zahtjev se sprema kako bih se kasnije mogao opet pogledati. Entitet sadrži atribute: accommodation\_order\_ID, arrival\_datetime, departure\_datetime, accommodation\_type, accommodation\_category i patient\_ID. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom Patient preko patient\_ID atributa.
 			\begin{longtblr}[
 				label=none,
 				entry=none
@@ -125,7 +123,7 @@
 			\end{longtblr}
 			
 			\noindent
-			\textbf{AccommodationBooking}
+			\textbf{AccommodationBooking} Ovaj vezni entitet se koristi za pohranjivanje informacije koji pacijent je kada u kojem smještaju. Entitet sadrži atribute: accommodation\_booking\_ID, start\_datetime, end\_datetime, accommodation\_ID, patient\_ID. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom Accommodation preko atributa accommodation\_ID. U \textit{Many-to-One} vezi s entitetom Patient preko atributa patient\_ID. I u \textit{One-to-Many} s entitetom TransportBooking preko accommodation\_booking\_ID.
 			\begin{longtblr}[
 				label=none,
 				entry=none
@@ -151,91 +149,100 @@
 			\end{longtblr}
 			
 			\noindent
-			\textbf{TransportCompany}
+			\textbf{TransportCompany} Ovaj entitet sadržava informacije o transportnoj firmi. Entitet sadrži atribute: transport\_company\_ID, name, phone\_number, email. Ovaj entitet je u \textit{One-to-Many} vezi s entitetom TransportVehicle preko atributa transport\_company\_ID.
 			\begin{longtblr}[
 				label=none,
 				entry=none
 				]{
 					width = \textwidth,
-					colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+					colspec={|X[11,l]|X[6, l]|X[20, l]|}, 
 					rowhead = 1,
 				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 				\hline 
-				\SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}\\ 
+				\SetCell[c=3]{c}{\textbf{TransportCompany}}\\ 
 				\hline[3pt]
-				\SetCell{LightGreen}PK & type & \\ 
+				\SetCell{LightGreen}transport\_company\_ID & VARCHAR & primarni ključ tablice \\ 
 				\hline
-				fieldName & type & opis \\
+				name & VARCHAR & ime firme \\
 				\hline 
-				\SetCell{LightBlue} FK	& type & opis \\
+				phone\_number & VARCHAR & felefonski broj firme \\
+				\hline
+				email & VARCHAR & email firme \\
 				\hline 
 			\end{longtblr}
 			
 			\noindent
-			\textbf{TransportVehicle}
+			\textbf{TransportVehicle} Ovaj entitet sadržava informacije o nekom transportnom vozilu. Entitet sadrži atribute: transport\_comapny\_ID, name, phone\_number, email. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom TransportCompany preko atributa transport\_company\_ID. I u \textit{One-to-Many} vezi s entitetom TransportBooking preko atributa transport\_vehicle\_ID.
 			\begin{longtblr}[
 				label=none,
 				entry=none
 				]{
 					width = \textwidth,
-					colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+					colspec={|X[11,l]|X[6, l]|X[20, l]|}, 
 					rowhead = 1,
 				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 				\hline 
-				\SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}\\ 
+				\SetCell[c=3]{c}{\textbf{TransportVehicle}}\\ 
 				\hline[3pt]
-				\SetCell{LightGreen}PK & type & \\ 
+				\SetCell{LightGreen}transport\_vehicle\_ID & VARCHAR & primarni ključ tablice \\ 
 				\hline
-				fieldName & type & opis \\
+				type & VARCHAR & vrsta vozila \\
 				\hline 
-				\SetCell{LightBlue} FK	& type & opis \\
+				capacity & INT & kapacitet vozila \\
+				\hline
+				\SetCell{LightBlue} transport\_company\_ID	& VARCHAR & transportna firma kojoj pripada ovo vozilo \\
 				\hline 
 			\end{longtblr}
 			
 			\noindent
-			\textbf{TransportBooking}
+			\textbf{TransportBooking} Ovo je slabi vezni entitet koji označava prijevoz pacijenta. Ujedinjuje tri entiteta iz kojih saznajem kojeg pacijenta treba voziti, od kuda će biti transportiran, koje vozilo će se korisiti i do koje klinike će se transportirati. Entitet sadrži atribute: transport\_vehicle\_ID, accommodation\_booking\_ID, medical\_appointment\_ID. Entitet je u \textit{Many-to-One} vezi s entitetom TransportVehicle preko atributa transport\_vehicle\_ID. U \textit{Many-to-One} vezi s entitetom AccommodationBooking preko atributa accommodaton\_booking\_ID. I u \textit{Many-to-One} vezi s entitetom MedicalAppointment preko atributa medical\_appointment\_ID.
 			\begin{longtblr}[
 				label=none,
 				entry=none
 				]{
 					width = \textwidth,
-					colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+					colspec={|X[11,l]|X[6, l]|X[20, l]|}, 
 					rowhead = 1,
 				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 				\hline 
-				\SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}\\ 
-				\hline[3pt]
-				\SetCell{LightGreen}PK & type & \\ 
+				\SetCell{LightBlue} transport\_vehicle\_ID & VARCHAR & vozilo koje obavlja ovaj projevoz \\
+				\hline 
+				\SetCell{LightBlue} accommodation\_
+				booking\_ID & VARCHAR & poveznica na smještaj i pacijenta koje treba prevesti iz tog smještaja \\
 				\hline
-				fieldName & type & opis \\
-				\hline 
-				\SetCell{LightBlue} FK	& type & opis \\
-				\hline 
+				\SetCell{LightBlue} medical\_
+				appointment\_ID & VARCHAR & poveznica na medicinski tretman koji nam daje informaciju gdje pacijenta treba voziti \\
+				\hline
 			\end{longtblr}
 			
 			\noindent
-			\textbf{MedicalAppointment}
+			\textbf{MedicalAppointment} Ovaj entitet korisimo za spremanje podataka o medicinskim tretmanima nekog pacijenta. Informacije o ovom ćemo dobiti iz medicinskog sustava, ali ako nije moguće odmah napravit TransportBooking zbog npr. nedostatka vozila, želimo pospremiti informacije o tretmanu. Entitet sadrži atribute: medical\_appointment\_ID, PIN, clinic\_address, start\_datetime, end\_datetime. Entitet je u \textit{One-to-One} vezi s entitetom TransportBooking preko atributa medical\_appointment\_ID. 
 			\begin{longtblr}[
 				label=none,
 				entry=none
 				]{
 					width = \textwidth,
-					colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+					colspec={|X[10,l]|X[6, l]|X[20, l]|}, 
 					rowhead = 1,
 				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 				\hline 
-				\SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}\\ 
+				\SetCell[c=3]{c}{\textbf{MedicalAppointment}}\\ 
 				\hline[3pt]
-				\SetCell{LightGreen}PK & type & \\ 
+				\SetCell{LightGreen}medical\_
+				appointment\_ID & VARCHAR & primarni ključ tablice \\ 
 				\hline
-				fieldName & type & opis \\
+				PIN & VARCHAR & Personal Identification Number pacijenta za kojeg je ovo medicinski tretman \\
 				\hline 
-				\SetCell{LightBlue} FK	& type & opis \\
-				\hline 
+				clinic\_address & VARCHAR & adresa klinike u kojoj je tretman \\
+				\hline
+				start\_datetime & DATETIME & datum i vrijeme početka tretmana \\
+				\hline
+				end\_datetime & DATETIME & datum i vrijeme kraja tretmana \\
+				\hline
 			\end{longtblr}
 			
 			\noindent
-			\textbf{AdminRole}
+			\textbf{AdminRole} Ovaj entitet označava role admina. Sadrži atribute, admin\_role\_ID i name. Entitet je u \textit{One-to-Many} vezi s entitetom AdminRoles preko atributa admin\_role\_ID. 
 			\begin{longtblr}[
 				label=none,
 				entry=none
@@ -245,19 +252,17 @@
 					rowhead = 1,
 				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 				\hline 
-				\SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}\\ 
+				\SetCell[c=3]{c}{\textbf{AdminRole}}\\ 
 				\hline[3pt]
-				\SetCell{LightGreen}PK & type & \\ 
+				\SetCell{LightGreen}admin\_role\_ID & VARCHAR & primarni ključ tablice \\ 
 				\hline
-				fieldName & type & opis \\
-				\hline 
-				\SetCell{LightBlue} FK	& type & opis \\
+				name & VARCHAR & deskriptivni naziv role \\
 				\hline 
 			\end{longtblr}
 		
 			
 			\noindent
-			\textbf{Admin}
+			\textbf{Admin} Ovaj entitet sadrži podatke o adminima. Entitet sadrži atribute: admin\_ID, email, first\_name, last\_name. Entitet je u \textit{One-to-Many} vezi s entitetom AdminRoles preko atributa admin\_ID. 
 			\begin{longtblr}[
 				label=none,
 				entry=none
@@ -267,18 +272,20 @@
 					rowhead = 1,
 				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 				\hline 
-				\SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}\\ 
+				\SetCell[c=3]{c}{\textbf{Admin}}\\ 
 				\hline[3pt]
-				\SetCell{LightGreen}PK & type & \\ 
+				\SetCell{LightGreen}admin\_ID & VARCHAR & primarni ključ tablice \\ 
 				\hline
-				fieldName & type & opis \\
+				email & VARCHAR & email admina \\
 				\hline 
-				\SetCell{LightBlue} FK	& type & opis \\
+				first\_name & VARCHAR & ime admina \\
+				\hline
+				last\_name & VARCHAR & prezime admina \\
 				\hline 
 			\end{longtblr}
 			
-			\noindent
-			\textbf{AdminRoles}
+			\noindent 
+			\textbf{AdminRoles} Ovaj vezni entitet služi kao spoj nekog admina s njegovom rolom. Atributi entiteta su: admin\_role\_ID i admin\_ID. Entitet je u \textit{Many-to-One} vezi s entitetom AdminRole preko atributa admin\_role\_ID. I entitet je u \textit{Many-to-One} vezi s entitetom Admin preko atributa admin\_ID.
 			\begin{longtblr}[
 				label=none,
 				entry=none
@@ -288,14 +295,12 @@
 					rowhead = 1,
 				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 				\hline 
-				\SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}\\ 
+				\SetCell[c=3]{c}{\textbf{AdminRoles}}\\ 
 				\hline[3pt]
-				\SetCell{LightGreen}PK & type & \\ 
+				\SetCell{LightBlue}admin\_role\_ID	& VARCHAR & poveznica na rolu ovog admina \\
+				\hline 
+				\SetCell{LightBlue}admin\_ID & VARCHAR & poveznica na kojeg admina se odnosi ova rola \\
 				\hline
-				fieldName & type & opis \\
-				\hline 
-				\SetCell{LightBlue} FK	& type & opis \\
-				\hline 
 			\end{longtblr}			
 				
 			
