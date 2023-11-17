@@ -17,7 +17,7 @@
 			\item korisnički administrator
 		\end{packed_item}
 		
-		\noindent Ulaskom u aplikaciju neprijavljeni korisnik dolazi na početnu stranicu “Home”. Može se odlučiti za prijavu u sustav te odabrati opciju “Login”. Korisnika se preusmjerava na “Login” stranicu te tamo upisuje svoje podatke za prijavu “Email” i “Password”. Dalje ga se preusmjerava ovisno o njegovoj ulozi ili ulogama.
+		\noindent Ulaskom u aplikaciju neprijavljeni korisnik dolazi na početnu stranicu. Može se odlučiti za prijavu u sustav te odabrati opciju “Prijava”. Korisnika se preusmjerava na stranicu za prijavu te tamo upisuje svoje podatke e-mail i lozinku. Dalje ga se preusmjerava ovisno o njegovoj ulozi ili ulogama.
 		
 		\subsubsection{\noindent \underbar{Smještajni administrator}}
 		
@@ -57,8 +57,6 @@
 		\begin{packed_item}
 			\item tip vozila 
 			\item kapacitet
-			\item trenutno u uporabi 
-			\item rezervirano za transport 
 		\end{packed_item}
 		
 		 \noindent Odabirom “Uredi podatke” administrator može uređivati osnovne podatke. Osim toga, odabirom opcije “Ukloni vozilo”, administrator ima mogućnost izbrisati odabrano vozilo nakon što dobije poruku potvrde kojom potvrđuje svoju odluku. 
@@ -73,17 +71,20 @@
 			\item PIN
 			\item broj telefona
 			\item e-mail
+			\item datum i vrijeme dolaska i odlaska
+			\item tip smještaja
+			\item kategoriju smještaja 
 		\end{packed_item}
 		
-		\noindent Na kraju završenog korisnik se može odjaviti pritiskom na gumb “Odjava” te se vraća na početnu stranicu “Home”. 
+		\noindent Na kraju završenog korisnik se može odjaviti pritiskom na gumb “Odjava” te se vraća na početnu stranicu. 
 		
 		Pacijent nema direktnu vezu s aplikacijom. Detalji o tretmanima ne unose se ručno u aplikaciju, već postoji umjetno ispitno sučelje koje komunicira s aplikacijom za evidenciju medicinskih usluga za koju se pretpostavlja da je već razvijena.  
 		
-		Nakon unosa novog pacijenta i potrebnih informacija aplikacija dodjeljuje raspoloživi smještaj pacijentu te je označuje kao zauzetu u periodu njegove medicinske usluge. Aplikacija periodički provjerava status unosa medicinskih termina komunikacijom s aplikacijom medicinskih usluga kako bi se osiguralo da aplikacija ima najnovije informacije o rasporedu i tretmanima pacijenata. Ako aplikacija primi odgovor od aplikacije medicinskih usluga da je plan medicinskih usluga zaključan, to znači da su svi medicinski termini pacijenata potvrđeni te se tada može početi organizirati prijevoz za te termine. Potrebno je i označiti dodijeljene prijevoznike zauzetima u tim terminima. 
+		Nakon unosa novog pacijenta i potrebnih informacija aplikacija dodjeljuje raspoloživi smještaj pacijentu te je označuje kao zauzetu u periodu njegove medicinske usluge. Aplikacija periodički provjerava status medicinske usluge komunikacijom s aplikacijom medicinskih usluga. Ako aplikacija primi odgovor od aplikacije medicinskih usluga da je plan medicinskih usluga zaključan, to znači da su svi medicinski termini pacijenata potvrđeni te se tada može početi organizirati prijevoz za te termine. Potrebno je i označiti dodijeljene prijevoznike zauzetima u tim terminima. 
 		
 		Nakon završetka ukupnog plana puta, pacijentu će biti poslan e-mail o detaljima plana puta. Također, poruke će biti poslane i svakom prijevozniku s kontaktnim podacima korisnika te podacima o vremenima i adresama smještaja. 
 		
-		Jedna od mogućih nadogradnji ovoga zadatka bila bi dodavanje pristupa korisničkim iskustvima, točnije, omogućavanje ocjenjivanja smještaja i prijevoza te pisanje recenzija kako bi korisnici mogli što bolje procijeniti kvalitetu usluga.  
+		Jedna od mogućih nadogradnji ovoga zadatka bila bi dodavanje pristupa korisničkim iskustvima, točnije, omogućiti ocjenjivanja smještaja i prijevoza te pisanje recenzija kako bi korisnici mogli što bolje procijeniti kvalitetu usluga.  
 		
 		\eject
 		
