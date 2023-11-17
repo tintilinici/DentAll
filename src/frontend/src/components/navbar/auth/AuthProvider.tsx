@@ -34,7 +34,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   const [token, setToken] = useState<string>("");
   const [userData, setUserData] = useState<TUserData>(null!);
 
-  const login = async (loginData: TLoginData) => {
+  const login = (loginData: TLoginData) => {
     console.log(loginData);
     setToken("token");
     setUserData({
