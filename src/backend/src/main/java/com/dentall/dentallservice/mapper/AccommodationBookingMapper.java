@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface AccommodationBookingMapper {
 
-    @Mapping(target = "customerId", source = "customer.id")
+    @Mapping(target = "patientId", source = "patient.id")
     @Mapping(target = "accommodationId", source = "accommodation.id")
     AccommodationBookingDto modelToDto(AccommodationBooking model);
 

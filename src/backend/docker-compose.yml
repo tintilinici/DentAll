@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dentall
+    ports:
+      - "3308:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql

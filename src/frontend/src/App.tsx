@@ -1,35 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import LandingPage from "./pages/LandingPage";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import AllTransportCompaniesPage from "./pages/transportAdminPages/AllTransportCompaniesPage";
+import routes from "./constants/routes";
+import AuthProvider from "./components/navbar/auth/AuthProvider";
+import ProtectedRoute from "./components/navbar/auth/ProtectedRoute";
+import NoAuthOnlyRoute from "./components/navbar/auth/NoAuthOnlyRoute";
+
+const router = createBrowserRouter([
+  {
+    path: routes.LANDING,
+    element: <LandingPage />,
+    errorElement: <h1>4 oh 4</h1>,
+  },
+  {
+    path: routes.AUTH.LOGIN,
+    element: (
+      <NoAuthOnlyRoute>
+        <LoginPage />
+      </NoAuthOnlyRoute>
+    ),
+  },
+  {
+    path: routes.TRANSPORT.COMPANIES,
+    element: (
+      <ProtectedRoute>
+        <AllTransportCompaniesPage />
+      </ProtectedRoute>
+    ),
+  },
+]);
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <AuthProvider>
+      <RouterProvider router={router} />;
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

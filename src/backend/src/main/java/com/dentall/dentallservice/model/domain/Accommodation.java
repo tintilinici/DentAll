@@ -1,6 +1,7 @@
 package com.dentall.dentallservice.model.domain;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -28,10 +29,11 @@ public class Accommodation {
 
     private String address;
 
-    private LocalDate availability_start;
+    private LocalDate availabilityStart;
 
-    private LocalDate availability_end;
+    private LocalDate availabilityEnd;
 
+    @Column(columnDefinition = "geometry(Point,4326)")
     private Point location;
 
     @OneToMany(mappedBy = "accommodation")

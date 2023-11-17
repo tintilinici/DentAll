@@ -7,13 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Customer {
+public class Patient {
 
     @Id
     private String id;
@@ -22,6 +23,16 @@ public class Customer {
 
     private String lastName;
 
-    @OneToMany(mappedBy = "customer")
+    private String PIN;
+
+    private String phone_number;
+
+    private String email;
+
+    @OneToMany(mappedBy = "patient")
+    private List<AccommodationOrder> accommodationOrders;
+
+
+    @OneToMany(mappedBy = "patient")
     private List<AccommodationBooking> accommodationBookings;
 }

@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class SearchAccommodationBookingRequest {
 
     private String accommodationId;
-    private String customerId;
+    private String patientId;
 }
