@@ -5,9 +5,8 @@ import { Navigate } from "react-router-dom";
 const NoAuthOnlyRoute = ({ children }: PropsWithChildren) => {
   const { isAuthenticated } = useContext(AuthContext);
 
-  // TODO DOESN'T WORK YES
   if (isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/transport-companies" replace />;
   }
 
   return children;

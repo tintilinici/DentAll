@@ -7,7 +7,7 @@ import routes from "../constants/routes";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassowrd, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => setShowPassword(state => !state);
 
@@ -15,7 +15,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    await login({ email, password });
+    login({ email, password });
     navigate(routes.TRANSPORT.COMPANIES);
   };
 
@@ -41,7 +41,7 @@ const LoginPage = () => {
             <InputGroup>
               <Input
                 value={password}
-                type={showPassowrd ? "text" : "password"}
+                type={showPassword ? "text" : "password"}
                 onChange={e => setPassword(e.target.value)}
                 placeholder="yourpassword"
               />
@@ -51,7 +51,7 @@ const LoginPage = () => {
                   size="sm"
                   onClick={togglePasswordVisibility}
                 >
-                  {showPassowrd ? "Hide" : "Show"}
+                  {showPassword ? "Hide" : "Show"}
                 </Button>
               </InputRightElement>
             </InputGroup>
