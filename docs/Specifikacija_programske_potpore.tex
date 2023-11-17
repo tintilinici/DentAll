@@ -781,6 +781,18 @@
 					\label{fig:sd3} %label mora biti drugaciji za svaku sliku
 				\end{figure}
 				
+				\eject
+				
+				\paragraph{Unos pacijenta, dodjeljivanje smještaja, dohvaćanje termina, dodjeljivanje prijevoza terminima, slanje e-maila – obrasci uporabe UC20, UC21, UC22, UC23, UC24, UC25}\mbox{} \\
+				Korisnički administrator unosi podatke o pacijentu te se on unosi u bazu. Odmah se traži smještaj za termin pacijenta, ako se pronađe smještaj se rezervira u tome vremenu, a ako ne pacijenta se stavlja na čekanje. Nakon unosa pacijenta, moramo provjeravati je li aplikacija medicinskih usluga zaključala medicinsku uslugu. Kada je medicinska usluga zaključana spremamo medicinske termine te svima moramo pokušati dodijeliti prijevoznika, to jest, vozilo u vremenu termina usluge. Ako je vozilo pronađeno, rezervira se, a ako nije termin se stavlja na čekanje. Kada se prođu svi termini, moramo dodijeliti smještaj pacijentu ako mu još nije dodijeljen te nakon toga za termine koji nemaju rezerviran prijevoz pronaći i rezervirati vozilo. Nakon rezerviranih prijevoza i smještaja pacijentu se šalje mail o svim rezervacijama, a prijevoznicima kontaktni podaci korisnika te podaci o rezervaciji smještaja.  
+				
+				\begin{figure}[H]
+					\includegraphics[scale=0.42]{slike/sd4.PNG} %veličina u odnosu na širinu linije
+					\centering
+					\caption{Sekvencijski dijagram za UC20, UC21, UC22, UC23, UC24, UC25}
+					\label{fig:sd4} %label mora biti drugaciji za svaku sliku
+				\end{figure}
+				
 	
 				
 				\eject
