@@ -1,115 +1,93 @@
 \chapter{Opis projektnog zadatka}
 		
-		\textbf{\textit{dio 1. revizije}}\\
+		Cilj ovog projekta je razviti programsku potporu za stvaranje web aplikacije \textit{ “DentAll”} koja će omogućiti učinkovito upravljanje smještajem i prijevozom korisnika zdravstvenog turizma.
 		
-		\textit{Na osnovi projektnog zadatka detaljno opisati korisničke zahtjeve. Što jasnije opisati cilj projektnog zadatka, razraditi problematiku zadatka, dodati nove aspekte problema i potencijalnih rješenja. Očekuje se minimalno 3, a poželjno 4-5 stranica opisa.	Teme koje treba dodatno razraditi u ovom poglavlju su:}
+		Porastom zdravstvenog turizma, zdravstvene ustanove trude se privući korisnike nudeći im cjelovite usluge, uključujući smještaj i prijevoz.  U mnogim slučajevima skuplje zdravstvene usluge u državama od kuda strani korisnici dolaze, potiču potrebu za pretragom usluga u drugim državama. Međutim, unatoč pristupačnijim troškovima medicinske usluge, korisnici se suočavaju s mnogim drugim izazovima koji obeshrabruju njihovu odluku za potragom medicinske usluge izvan svoje države. Spomenuti problemi su troškovi putovanja, udaljenost, osjećaj nesigurnosti i nedostatak poznavanja destinacije u kojoj se zdravstvena usluga nudi.
+		
+		Naglasak se sve više stavlja na potrebu razvoja rješenja koje će omogućiti učinkovitu, brzu i jednostavnu koordinaciju smještaja i prijevoza. S obzirom na sve izazove koje bi korisnik trebao proći da se odluči za zdravstvenu uslugu u inozemstvu, zdravstvenim ustanovama nije dovoljno imati samo financijsku prednost već i mnoge druge. Ideja o izradi aplikacije za pomoć potencijalnim korisnicima usluga zdravstvenog turizma u pronalasku smještaja i prijevoza je ključna. Nije dovoljno privući korisnike samo povoljnim cijenama, nego je bitno pružiti im sigurnosti i udobnost tijekom boravka na novoj destinaciji. Organizacija smještaja i prijevoza uvelike bi povećala atraktivnost zdravstvenog turizma. Ovaj pristup omogućio bi korisnicima da se bolje informiraju i pripreme za njihovu medicinsku uslugu, bez potrebe za brigom o putovanju i smještaju. Organizacija smještaja i prijevoza do zdravstvenih ustanova korisnicima bi uzrokovala minimalan stres i smanjivala njihovu izgubljenost. To je ključni korak u motiviranju potencijalnih korisnika da se odluče za ovu uslugu.  
+		
+		Od ovakve aplikacije koristi bi imali korisnici, zdravstvene ustanove, prijevoznici te iznajmljivači smještaja. Aplikacija bi zdravstvenim ustanovama omogućila cjelovite usluge pacijentima povećavajući privlačnost njihove ponude. Prijevoznicima i iznajmljivačima smještaja pomogla bi u upravljanju svojim kapacitetima i vožnjama. Najbitniji korisnici imali bi najbolje moguće iskustvo jer bi im bilo olakšano rezerviranje smještaja i prijevoza.
+		
+		
+		\paragraph{\indent \textmd{U aplikaciji postoje tri uloge korisnika:}}
+		
 		\begin{packed_item}
-			\item \textit{potencijalna korist ovog projekta}
-			\item \textit{postojeća slična rješenja (istražiti i ukratko opisati razlike u odnosu na zadani zadatak). Dodajte slike koja predočavaju slična rješenja.}
-			\item \textit{skup korisnika koji bi mogao biti zainteresiran za ostvareno rješenje.}
-			\item \textit{mogućnost prilagodbe rješenja }
-			\item \textit{opseg projektnog zadatka}
-			\item \textit{moguće nadogradnje projektnog zadatka}
+			\item smještajni administrator
+			\item administrator prijevoznih usluga
+			\item korisnički administrator
 		\end{packed_item}
 		
-		\textit{Za pomoć pogledati reference navedene u poglavlju „Popis literature“, a po potrebi konzultirati sadržaj na internetu koji nudi dobre smjernice u tom pogledu.}
+		\noindent Ulaskom u aplikaciju neprijavljeni korisnik dolazi na početnu stranicu. Može se odlučiti za prijavu u sustav te odabrati opciju “Prijava”. Korisnika se preusmjerava na stranicu za prijavu te tamo upisuje svoje podatke e-mail i lozinku. Dalje ga se preusmjerava ovisno o njegovoj ulozi ili ulogama.
+		
+		\subsubsection{\noindent \underbar{Smještajni administrator}}
+		
+		Preusmjerava ga se na stranicu liste svih unesenih smještaja. Odabirom “Dodaj novi smještaj”  može stvoriti novi smještaj. Također pritiskom na određeni smještaj preusmjerava ga se na stranicu detalja o tom smještaju. Tu se može vidjeti i prikaz smještaja na geografskoj karti. Odabirom “Uredi podatke” administrator može uređivati osnovne podatke te obrisati smještaj odabirom “Ukloni ovaj smještaj” nakon što dobije poruku potvrde kojom potvrđuje svoju odluku. Za kreiranje smještaja potrebni su podaci:
+		 
+		\begin{packed_item}
+			\item adresa smještaja
+			\item vrsta smještaja
+			\item kategorija smještaja
+			\item vremenski period dostupnosti ( dostupno od, dostupno do) 
+			\item lokacija ( u koordinatama ) za grafički prikaz geografskog položaja na karti 
+		\end{packed_item}
+		
+		\noindent Ima najveće ovlasti te može definirati druge korisnike te im dodjeljivati različite uloge ( jedan korisnik može imati i više uloga ). Pritiskom na “Upravljanje administratorima” preusmjerava ga se na stranicu s listom svih administratora. Za kreiranje administratora potrebni su podaci: 
+		
+		\begin{packed_item}
+			\item ime
+			\item prezime
+			\item e-mail
+			\item uloga/e
+		\end{packed_item}
+		
+		\noindent Opcijom “Dodaj novog administratora” može unositi nove korisnike. Odabirom opcije “Promijeni ulogu” korisniku se može dodati nova uloga ili promijeniti postojeća. Također, odabirom “Izbriši administratora”, administrator ima mogućnost obrisati odabranog korisnika nakon što dobije poruku potvrde kojom potvrđuje svoju odluku. 
+		
+		\subsubsection{\noindent \underbar{Administrator prijevoznih usluga}}
+		
+		Preusmjerava ga se na stranicu liste svih unesenih prijevoznika. Odabirom “Dodaj novog prijevoznika” može stvoriti novog prijevoznika. Za kreiranje prijevoznika potrebni su podaci: 
+		
+		\begin{packed_item}
+			\item naziv prijevoznika 
+			\item e-mail
+			\item broj telefona
+		\end{packed_item}
+		
+		\noindent Također pritiskom na određenog prijevoznika preusmjerava ga se na stranicu koja prikazuje listu unesenih transportnih vozila za tog prijevoznika. Za kreiranje vozila potrebni su podaci: 
+		
+		\begin{packed_item}
+			\item tip vozila 
+			\item kapacitet
+		\end{packed_item}
+		
+		 \noindent Odabirom “Uredi podatke” administrator može uređivati osnovne podatke. Osim toga, odabirom opcije “Ukloni vozilo”, administrator ima mogućnost izbrisati odabrano vozilo nakon što dobije poruku potvrde kojom potvrđuje svoju odluku. 
+		
+		\subsubsection{\noindent \underbar{Korisnički administrator}}
+		
+		\noindent Preusmjerava ga se na stranicu liste unesenih pacijenata. Odabirom opcije “Dodaj novog pacijenta” omogućuje se unos novih pacijenata. Za kreiranje korisnika potrebni su podaci:
+
+		\begin{packed_item}
+			\item ime
+			\item prezime
+			\item PIN
+			\item broj telefona
+			\item e-mail
+			\item datum i vrijeme dolaska i odlaska
+			\item tip smještaja
+			\item kategoriju smještaja 
+		\end{packed_item}
+		
+		\noindent Na kraju završenog korisnik se može odjaviti pritiskom na gumb “Odjava” te se vraća na početnu stranicu. 
+		
+		Pacijent nema direktnu vezu s aplikacijom. Detalji o tretmanima ne unose se ručno u aplikaciju, već postoji umjetno ispitno sučelje koje komunicira s aplikacijom za evidenciju medicinskih usluga za koju se pretpostavlja da je već razvijena.  
+		
+		Nakon unosa novog pacijenta i potrebnih informacija aplikacija dodjeljuje raspoloživi smještaj pacijentu te je označuje kao zauzetu u periodu njegove medicinske usluge. Aplikacija periodički provjerava status medicinske usluge komunikacijom s aplikacijom medicinskih usluga. Ako aplikacija primi odgovor od aplikacije medicinskih usluga da je plan medicinskih usluga zaključan, to znači da su svi medicinski termini pacijenata potvrđeni te se tada može početi organizirati prijevoz za te termine. Potrebno je i označiti dodijeljene prijevoznike zauzetima u tim terminima. 
+		
+		Nakon završetka ukupnog plana puta, pacijentu će biti poslan e-mail o detaljima plana puta. Također, poruke će biti poslane i svakom prijevozniku s kontaktnim podacima korisnika te podacima o vremenima i adresama smještaja. 
+		
+		Jedna od mogućih nadogradnji ovoga zadatka bila bi dodavanje pristupa korisničkim iskustvima, točnije, omogućiti ocjenjivanja smještaja i prijevoza te pisanje recenzija kako bi korisnici mogli što bolje procijeniti kvalitetu usluga.  
+		
 		\eject
 		
-		\section{Primjeri u \LaTeX u}
-		
-		\textit{Ovo potpoglavlje izbrisati.}\\
-
-		U nastavku se nalaze različiti primjeri kako koristiti osnovne funkcionalnosti \LaTeX a koje su potrebne za izradu dokumentacije. Za dodatnu pomoć obratiti se asistentu na projektu ili potražiti upute na sljedećim web sjedištima:
-		\begin{itemize}
-			\item Upute za izradu diplomskog rada u \LaTeX u - \url{https://www.fer.unizg.hr/_download/repository/LaTeX-upute.pdf}
-			\item \LaTeX\ projekt - \url{https://www.latex-project.org/help/}
-			\item StackExchange za Tex - \url{https://tex.stackexchange.com/}\\
-		
-		\end{itemize} 	
-
-
-		
-		\noindent \underbar{podcrtani tekst}, \textbf{podebljani tekst}, 	\textit{nagnuti tekst}\\
-		\noindent \normalsize primjer \large primjer \Large primjer \LARGE {primjer} \huge {primjer} \Huge primjer \normalsize
-				
-		\begin{packed_item}
-			
-			\item  primjer
-			\item  primjer
-			\item  primjer
-			\item[] \begin{packed_enum}
-				\item primjer
-				\item[] \begin{packed_enum}
-					\item[1.a] primjer
-					\item[b] primjer
-				\end{packed_enum}
-				\item primjer
-			\end{packed_enum}
-			
-		\end{packed_item}
-		
-		\noindent primjer url-a: \url{https://www.fer.unizg.hr/predmet/proinz/projekt}
-		
-		\noindent posebni znakovi: \# \$ \% \& \{ \} \_ 
-		$|$ $<$ $>$ 
-		\^{} 
-		\~{} 
-		$\backslash$ 
-		
-		
-		\begin{longtblr}[
-			label=none,
-			entry=none
-			]{
-				width = \textwidth,
-				colspec={|X[8,l]|X[8, l]|X[16, l]|}, 
-				rowhead = 1,
-			} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
-			\hline \SetCell[c=3]{c}{\textbf{naslov unutar tablice}}	 \\ \hline[3pt]
-			\SetCell{LightGreen}IDKorisnik & INT	&  	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  	\\ \hline
-			korisnickoIme	& VARCHAR &   	\\ \hline 
-			email & VARCHAR &   \\ \hline 
-			ime & VARCHAR	&  		\\ \hline 
-			\SetCell{LightBlue} primjer	& VARCHAR &   	\\ \hline 
-		\end{longtblr}
-		
-
-		\begin{longtblr}[
-				caption = {Naslov s referencom izvan tablice},
-				entry = {Short Caption},
-			]{
-				width = \textwidth, 
-				colspec = {|X[8,l]|X[8,l]|X[16,l]|}, 
-				rowhead = 1,
-			}
-			\hline
-			\SetCell{LightGreen}IDKorisnik & INT	&  	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  	\\ \hline
-			korisnickoIme	& VARCHAR &   	\\ \hline 
-			email & VARCHAR &   \\ \hline 
-			ime & VARCHAR	&  		\\ \hline 
-			\SetCell{LightBlue} primjer	& VARCHAR &   	\\ \hline 
-		\end{longtblr}
 	
-
-
-		
-		
-		%unos slike
-		\begin{figure}[H]
-			\includegraphics[scale=0.4]{slike/aktivnost.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
-			\centering
-			\caption{Primjer slike s potpisom}
-			\label{fig:promjene}
-		\end{figure}
-		
-		\begin{figure}[H]
-			\includegraphics[width=\textwidth]{slike/aktivnost.PNG} %veličina u odnosu na širinu linije
-			\caption{Primjer slike s potpisom 2}
-			\label{fig:promjene2} %label mora biti drugaciji za svaku sliku
-		\end{figure}
-		
-		Referenciranje slike \ref{fig:promjene2} u tekstu.
-		
-		\eject
 		
 	

@@ -1,31 +1,58 @@
 \chapter{Arhitektura i dizajn sustava}
 		
-		\textbf{\textit{dio 1. revizije}}\\
-
-		\textit{ Potrebno je opisati stil arhitekture te identificirati: podsustave, preslikavanje na radnu platformu, spremišta podataka, mrežne protokole, globalni upravljački tok i sklopovsko-programske zahtjeve. Po točkama razraditi i popratiti odgovarajućim skicama:}
-	\begin{itemize}
-		\item 	\textit{izbor arhitekture temeljem principa oblikovanja pokazanih na predavanjima (objasniti zašto ste baš odabrali takvu arhitekturu)}
-		\item 	\textit{organizaciju sustava s najviše razine apstrakcije (npr. klijent-poslužitelj, baza podataka, datotečni sustav, grafičko sučelje)}
-		\item 	\textit{organizaciju aplikacije (npr. slojevi frontend i backend, MVC arhitektura) }		
-	\end{itemize}
-
-	
+		Arhitektura se može podijeliti na tri glavna dijela:
 		
-
+		\begin{itemize}
+			\item 	\textit{REST API poslužitelj (Spring Boot)}
+			\item 	\textit{Klijentska aplikacija (React)}
+			\item 	\textit{Baza podataka}		
+		\end{itemize}
 		
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=0.8\linewidth]{./slike/arhitektura_sustava.png} 
+			\caption{Arhitektura sustava}
+			\label{fig:arh_sustava}
+		\end{figure}
+		
+		
+		
+		Korisnik interagira s klijentskom aplikacijom putem web preglednika. Ova aplikacija je odvojena od backend sustava te koristi React uz typescript za stvaranje dinamičkog korisničkog sučelja.
+		
+		REST API poslužitelj izgrađen je koristeći Spring Boot, koji omogućuje izradu visoko efikasnih i skalabilnih RESTful servisa. Komunikacija između klijenta i servera odvija se putem HTTP protokola, gdje frontend šalje zahtjeve backendu, a backend odgovara s potrebnim podacima u JSON formatu.
+		
+		Klijentska aplikacija je odgovorna za prikazivanje podataka korisniku i obradu korisničkih interakcija. Ona komunicira s backendom putem REST API-ja za dohvaćanje i slanje podataka.
+		
+		Postgres baza podataka čuva sve podatke potrebne za aplikaciju. Spring Boot aplikacija komunicira s bazom podataka koristeći Spring Data JPA za upravljanje podacima.
+		
+		Odlučili smo se za korištenje Intellij-a kao razvojnog okruženja za backend, a za frontend koristimo Visual Studio Code.
+		Za razliku od tradicionalnog MVC koncepta, naš sustav je podijeljen na odvojene slojeve gdje backend (REST API poslužitelj) i frontend (klijentska aplikacija) rade neovisno jedan o drugome. Uspoređujući s tradicionalnim MVC konceptom, mogli bismo reći da je View (V u MVC) na frontendu, a Model I Controller (M I C u MVC) na backendu. Ovo omogućuje fleksibilnost i lakše skaliranje svakog dijela aplikacije zasebno.
+				
 
 				
 		\section{Baza podataka}
+
+			Za potrebe naše aplikaicje korisiti ćemo relacijsku bazu podataka kako bismo lakše oblikovali stvarni svijet. Baza nam je potrbna za metodičku pohranu podataka te njihovo brzo dohvaćanje. Naša baza podataka se sastoji od sljedećih entiteta:
 			
-			\textbf{\textit{dio 1. revizije}}\\
-			
-		\textit{Potrebno je opisati koju vrstu i implementaciju baze podataka ste odabrali, glavne komponente od kojih se sastoji i slično.}
+			\begin{packed_item}
+				\item Patient
+				\item Accommodation
+				\item AccommodationOrder
+				\item AccommodationBooking
+				\item TransportCompany
+				\item TransportVehicle
+				\item TransportBooking
+				\item MedicalAppointment
+				\item AdminRole
+				\item AdminRoles
+				\item Admin
+			\end{packed_item}
 		
 			\subsection{Opis tablica}
 			
-
-				\textit{Svaku tablicu je potrebno opisati po zadanom predlošku. Lijevo se nalazi točno ime varijable u bazi podataka, u sredini se nalazi tip podataka, a desno se nalazi opis varijable. Svjetlozelenom bojom označite primarni ključ. Svjetlo plavom označite strani ključ}
 				
+				\noindent
+				\textbf{Patient} Ova entitet sadrži sve informacije o korisniku usluga našeg sustava. Kako su svi korisnici pacijenti odlučili smo ih imenovati tako. Entitet sadrži atribute: patient\_ID, first\_name, last\_name, PIN, email i phone\_number. Ovaj entitet je u vezi \textit{One-to-Many} s entitetom AccommodationOrder preko atributa patient\_ID i u \textit{One-to-Many} s entitetom AccommodationBooking preko atributa patient\_ID.
 				
 				\begin{longtblr}[
 					label=none,
@@ -35,29 +62,311 @@
 						colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
 						rowhead = 1,
 					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
-					\hline \SetCell[c=3]{c}{\textbf{korisnik - ime tablice}}	 \\ \hline[3pt]
-					\SetCell{LightGreen}IDKorisnik & INT	&  	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  	\\ \hline
-					korisnickoIme	& VARCHAR &   	\\ \hline 
-					email & VARCHAR &   \\ \hline 
-					ime & VARCHAR	&  		\\ \hline 
-					\SetCell{LightBlue} primjer	& VARCHAR &   	\\ \hline 
-				\end{longtblr}
 				
+					\hline 
+					\SetCell[c=3]{c}{\textbf{Patient}}\\
+					\hline[3pt]
+					\SetCell{LightGreen}patient\_ID & VARCHAR & primarni ključ tablice \\
+					\hline
+					first\_name	& VARCHAR &  ime pacijenta\\ 
+					\hline 
+					last\_name & VARCHAR &  prezime pacijenta \\ 
+					\hline 
+					PIN & VARCHAR	&  Personal Identification Number, kao OIB u hrvatskoj\\ 
+					\hline 
+					email & VARCHAR & pacijentov email\\ 
+					\hline	
+					phone\_number & VARCHAR & pacijentov telefonski broj \\
+					\hline
+				\end{longtblr}
+			
+				\noindent
+				\textbf{Accommodation} Ovaj entitet sadržava potrebne podatke o nekom smještaju koji je smještajni administrator unio. Entitet sadrži atribute: accommodation\_ID, type, category, address, availibility\_start, availability\_end i location. Ovaj entitet je u \textit{One-to-Many} vezi s entitetom AccommodationBooking preko atributa accommodation\_ID.
+				
+				\begin{longtblr}[
+					label=none,
+					entry=none
+					]{
+						width = \textwidth,
+						colspec={|X[10,l]|X[6, l]|X[18, l]|}, 
+						rowhead = 1,
+					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+					\hline 
+					\SetCell[c=3]{c}{\textbf{Accommodation}}\\ 
+					\hline[3pt]
+					\SetCell{LightGreen}accommodation\_ID & VARCHAR & primarni ključ tablice\\ 
+					\hline
+					type & VARCHAR & versta smještaja \\
+					\hline 
+					category & VARCHAR & kategorija smještaja \\
+					\hline
+					address & VARCHAR & adresa smještaja \\
+					\hline
+					availability\_start & DATETIME & datum i vrijeme od kada je smještaj dostupan \\
+					\hline
+					availability\_end & DATETIME & datum i vrijeme do kada je smještaj dosupan \\
+					\hline
+					location & POINT & kordinate smještaja \\
+					\hline
+				\end{longtblr}
+			
+			\noindent
+			\textbf{AccommodationOrder} Ovaj entitet se koristi za pohravnjivanje pacijentovih zahtjeva o traženom smještaju. U slučaju da traženi smještaj nije odmah dostupan zahtjev se sprema kako bih se kasnije mogao opet pogledati. Entitet sadrži atribute: accommodation\_order\_ID, arrival\_datetime, departure\_datetime, accommodation\_type, accommodation\_category i patient\_ID. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom Patient preko patient\_ID atributa.
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[13,l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{AccommodationOrder}}\\ 
+				\hline[3pt]
+				\SetCell{LightGreen}accommodation\_order\_ID & VARCHAR & primarni ključ tablice\\ 
+				\hline
+				arrival\_datetime & DATETIME & vrijeme dolaska pacijenta u državu, od tada mu treba smještaj\\
+				\hline
+				departure\_datetime & DATETIME & vrijeme odlaska pacijenta iz države, do tada treba smještaj \\
+				\hline
+				accommodation\_type & VARCHAR & željeni tip smještaja koji pacijent traži \\
+				\hline
+				accommodation\_category & VARCHAR & željena kategorija smještaja koju pacijent traži \\
+				\hline
+				\SetCell{LightBlue} patient\_ID	& STRING & ID pacijenta koji je napravio ovaj zahtjev \\
+				\hline 
+			\end{longtblr}
+			
+			\noindent
+			\textbf{AccommodationBooking} Ovaj vezni entitet se koristi za pohranjivanje informacije koji pacijent je kada u kojem smještaju. Entitet sadrži atribute: accommodation\_booking\_ID, start\_datetime, end\_datetime, accommodation\_ID, patient\_ID. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom Accommodation preko atributa accommodation\_ID. U \textit{Many-to-One} vezi s entitetom Patient preko atributa patient\_ID. I u \textit{One-to-Many} s entitetom TransportBooking preko accommodation\_booking\_ID.
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[10, l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{AccommodationBooking}}\\ 
+				\hline[3pt]
+				\SetCell{LightGreen}accommodation\_
+				booking\_ID & VARCHAR & primarni ključ tablice \\ 
+				\hline
+				start\_datetime & DATETIME & datum i vrijeme od kada je pacijent u smještaju \\
+				\hline
+				end\_datetime & DATETIME & datum i vrijeme do kada je pacijent u smještaju \\
+				\hline 
+				\SetCell{LightBlue} accommodation\_ID	& VARCHAR & smještaj u koji je pacijent smješten \\
+				\hline 
+				\SetCell{LightBlue} patient\_ID & VARCHAR & pacijent koji ostaje u smještaju \\
+				\hline
+			\end{longtblr}
+			
+			\noindent
+			\textbf{TransportCompany} Ovaj entitet sadržava informacije o transportnoj firmi. Entitet sadrži atribute: transport\_company\_ID, name, phone\_number, email. Ovaj entitet je u \textit{One-to-Many} vezi s entitetom TransportVehicle preko atributa transport\_company\_ID.
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[11,l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{TransportCompany}}\\ 
+				\hline[3pt]
+				\SetCell{LightGreen}transport\_company\_ID & VARCHAR & primarni ključ tablice \\ 
+				\hline
+				name & VARCHAR & ime firme \\
+				\hline 
+				phone\_number & VARCHAR & felefonski broj firme \\
+				\hline
+				email & VARCHAR & email firme \\
+				\hline 
+			\end{longtblr}
+			
+			\noindent
+			\textbf{TransportVehicle} Ovaj entitet sadržava informacije o nekom transportnom vozilu. Entitet sadrži atribute: transport\_comapny\_ID, name, phone\_number, email. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom TransportCompany preko atributa transport\_company\_ID. I u \textit{One-to-Many} vezi s entitetom TransportBooking preko atributa transport\_vehicle\_ID.
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[11,l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{TransportVehicle}}\\ 
+				\hline[3pt]
+				\SetCell{LightGreen}transport\_vehicle\_ID & VARCHAR & primarni ključ tablice \\ 
+				\hline
+				type & VARCHAR & vrsta vozila \\
+				\hline 
+				capacity & INT & kapacitet vozila \\
+				\hline
+				\SetCell{LightBlue} transport\_company\_ID	& VARCHAR & transportna firma kojoj pripada ovo vozilo \\
+				\hline 
+			\end{longtblr}
+			
+			\noindent
+			\textbf{TransportBooking} Ovo je slabi vezni entitet koji označava prijevoz pacijenta. Ujedinjuje tri entiteta iz kojih saznajem kojeg pacijenta treba voziti, od kuda će biti transportiran, koje vozilo će se korisiti i do koje klinike će se transportirati. Entitet sadrži atribute: transport\_vehicle\_ID, accommodation\_booking\_ID, medical\_appointment\_ID. Entitet je u \textit{Many-to-One} vezi s entitetom TransportVehicle preko atributa transport\_vehicle\_ID. U \textit{Many-to-One} vezi s entitetom AccommodationBooking preko atributa accommodaton\_booking\_ID. I u \textit{Many-to-One} vezi s entitetom MedicalAppointment preko atributa medical\_appointment\_ID.
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[11,l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{TransportBooking}}\\ 
+				\hline[3pt]
+				\SetCell{LightBlue} transport\_vehicle\_ID & VARCHAR & vozilo koje obavlja ovaj projevoz \\
+				\hline 
+				\SetCell{LightBlue} accommodation\_
+				booking\_ID & VARCHAR & poveznica na smještaj i pacijenta koje treba prevesti iz tog smještaja \\
+				\hline
+				\SetCell{LightBlue} medical\_
+				appointment\_ID & VARCHAR & poveznica na medicinski tretman koji nam daje informaciju gdje pacijenta treba voziti \\
+				\hline
+			\end{longtblr}
+			
+			\noindent
+			\textbf{MedicalAppointment} Ovaj entitet korisimo za spremanje podataka o medicinskim tretmanima nekog pacijenta. Informacije o ovom ćemo dobiti iz medicinskog sustava, ali ako nije moguće odmah napravit TransportBooking zbog npr. nedostatka vozila, želimo pospremiti informacije o tretmanu. Entitet sadrži atribute: medical\_appointment\_ID, PIN, clinic\_address, start\_datetime, end\_datetime. Entitet je u \textit{One-to-One} vezi s entitetom TransportBooking preko atributa medical\_appointment\_ID. 
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[10,l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{MedicalAppointment}}\\ 
+				\hline[3pt]
+				\SetCell{LightGreen}medical\_
+				appointment\_ID & VARCHAR & primarni ključ tablice \\ 
+				\hline
+				PIN & VARCHAR & Personal Identification Number pacijenta za kojeg je ovo medicinski tretman \\
+				\hline 
+				clinic\_address & VARCHAR & adresa klinike u kojoj je tretman \\
+				\hline
+				start\_datetime & DATETIME & datum i vrijeme početka tretmana \\
+				\hline
+				end\_datetime & DATETIME & datum i vrijeme kraja tretmana \\
+				\hline
+			\end{longtblr}
+			
+			\noindent
+			\textbf{AdminRole} Ovaj entitet označava role admina. Sadrži atribute, admin\_role\_ID i name. Entitet je u \textit{One-to-Many} vezi s entitetom AdminRoles preko atributa admin\_role\_ID. 
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{AdminRole}}\\ 
+				\hline[3pt]
+				\SetCell{LightGreen}admin\_role\_ID & VARCHAR & primarni ključ tablice \\ 
+				\hline
+				name & VARCHAR & deskriptivni naziv role \\
+				\hline 
+			\end{longtblr}
+		
+			
+			\noindent
+			\textbf{Admin} Ovaj entitet sadrži podatke o adminima. Entitet sadrži atribute: admin\_ID, email, first\_name, last\_name. Entitet je u \textit{One-to-Many} vezi s entitetom AdminRoles preko atributa admin\_ID. 
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{Admin}}\\ 
+				\hline[3pt]
+				\SetCell{LightGreen}admin\_ID & VARCHAR & primarni ključ tablice \\ 
+				\hline
+				email & VARCHAR & email admina \\
+				\hline 
+				first\_name & VARCHAR & ime admina \\
+				\hline
+				last\_name & VARCHAR & prezime admina \\
+				\hline 
+			\end{longtblr}
+			
+			\noindent 
+			\textbf{AdminRoles} Ovaj vezni entitet služi kao spoj nekog admina s njegovom rolom. Atributi entiteta su: admin\_role\_ID i admin\_ID. Entitet je u \textit{Many-to-One} vezi s entitetom AdminRole preko atributa admin\_role\_ID. I entitet je u \textit{Many-to-One} vezi s entitetom Admin preko atributa admin\_ID.
+			\begin{longtblr}[
+				label=none,
+				entry=none
+				]{
+					width = \textwidth,
+					colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+					rowhead = 1,
+				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+				\hline 
+				\SetCell[c=3]{c}{\textbf{AdminRoles}}\\ 
+				\hline[3pt]
+				\SetCell{LightBlue}admin\_role\_ID	& VARCHAR & poveznica na rolu ovog admina \\
+				\hline 
+				\SetCell{LightBlue}admin\_ID & VARCHAR & poveznica na kojeg admina se odnosi ova rola \\
+				\hline
+			\end{longtblr}			
 				
 			
 			\subsection{Dijagram baze podataka}
-				\textit{ U ovom potpoglavlju potrebno je umetnuti dijagram baze podataka. Primarni i strani ključevi moraju biti označeni, a tablice povezane. Bazu podataka je potrebno normalizirati. Podsjetite se kolegija "Baze podataka".}
+
+				\begin{figure}[H]
+					\includegraphics[scale=0.32]{slike/dijagram_baze.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+					\centering
+					\caption{ER Dijagram baze podataka}
+					\label{fig:dijagram_baze_podataka}
+				\end{figure}
 			
 			\eject
 			
 			
 		\section{Dijagram razreda}
 		
-			\textit{Potrebno je priložiti dijagram razreda s pripadajućim opisom. Zbog preglednosti je moguće dijagram razlomiti na više njih, ali moraju biti grupirani prema sličnim razinama apstrakcije i srodnim funkcionalnostima.}\\
+			Na slikama \ref{fig:arhitektura_controller_class_diagram}  do \ref{fig:arhitektura_model_class_diagram}  prikazani su ključni elementi backend dijela arhitekture DentAll aplikacije. 
 			
-			\textbf{\textit{dio 1. revizije}}\\
+			Prva slika \ref{fig:arhitektura_controller_class_diagram}  prikazuje dijagram razreda svih Controller razreda koji se koriste u našoj aplikaciji.  Slika \ref{fig:arhitektura_dto_class_diagram} fokusira se na dijagram razreda s DTO razredima koje služe za prijenos podataka između Controllera i Modela. Svaka DTO klasa odgovara određenom razredu iz Modela, osiguravajući učinkovit prijenos podataka unutar aplikacije. Na slici \ref{fig:arhitektura_requests_class_diagram} nalaze se Requests razredi koje predstavljaju zahtjeve od klijenta prema Controller razredima. Ovi razredi sadrže sve potrebne informacije za izvođenje funkcionalnosti poput CREATE i UPDATE. Obuhvaćajući sve domain razrede iz modela DentAll aplikacije, dijagram razreda sa slike  \ref{fig:arhitektura_model_class_diagram} prikazuje relacije i međusobnu povezanost između razreda unutar modela. 
 			
-			\textit{Prilikom prve predaje projekta, potrebno je priložiti potpuno razrađen dijagram razreda vezan uz \textbf{generičku funkcionalnost} sustava. Ostale funkcionalnosti trebaju biti idejno razrađene u dijagramu sa sljedećim komponentama: nazivi razreda, nazivi metoda i vrste pristupa metodama (npr. javni, zaštićeni), nazivi atributa razreda, veze i odnosi između razreda.}\\
+						
+			\begin{figure}[H]
+				\includegraphics[scale=0.10]{slike/arhitektura_controller_class_diagram.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram razreda - dio Controllers}
+				\label{fig:arhitektura_controller_class_diagram}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\includegraphics[scale=0.12]{slike/arhitektura_dto_class_diagram.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram razreda - dio DTO}
+				\label{fig:arhitektura_dto_class_diagram}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\includegraphics[scale=0.08]{slike/arhitektura_requests_class_diagram.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram razreda - dio Requests}
+				\label{fig:arhitektura_requests_class_diagram}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\includegraphics[scale=0.08]{slike/arhitektura_model_class_diagram.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram razreda - dio Model}
+				\label{fig:arhitektura_model_class_diagram}
+			\end{figure}
 			
 			\textbf{\textit{dio 2. revizije}}\\			
 			
