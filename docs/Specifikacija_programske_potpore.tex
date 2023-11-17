@@ -745,10 +745,17 @@
 				\eject		
 				
 			\subsection{Sekvencijski dijagrami}
+			
+				\paragraph{Prijava – obrazac uporabe UC1}\mbox{}
+				\noindent Neregistrirani korisnik odabire gumb “Prijavi se” te ga se preusmjeruje na stranicu s formom za prijavu. Ovdje upisuje svoj e-mail i lozinku te klikom na gumb ”Nastavi” uneseni podaci se šalju na validaciju. Ukoliko se podaci podudaraju s onima pohranjenima  u bazi, dostavljaju se informacije o administratoru te token za određene uloge koje administrator ima. Ovisno o tokenu, administratoru postaje dostupno korisničko sučelje prilagođeno njegovoj ulozi ili ulogama. U suprotnom, ako uneseni podaci ne odgovaraju niti jednom administratoru u bazi, korisnik prima obavijest o pogreški kako bi znao da nije registriran u sustavu. 
 				
-				\textbf{\textit{dio 1. revizije}}\\
+				\begin{figure}[H]
+					\includegraphics[width=\textwidth]{slike/sd1.PNG} %veličina u odnosu na širinu linije
+					\caption{Sekvencijski dijagram za UC1}
+					\label{fig:sd1} %label mora biti drugaciji za svaku sliku
+				\end{figure}
 				
-				\textit{Nacrtati sekvencijske dijagrame koji modeliraju najvažnije dijelove sustava (max. 4 dijagrama). Ukoliko postoji nedoumica oko odabira, razjasniti s asistentom. Uz svaki dijagram napisati detaljni opis dijagrama.}
+				
 				\eject
 	
 		\section{Ostali zahtjevi}
