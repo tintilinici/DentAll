@@ -755,6 +755,13 @@
 					\label{fig:sd1} %label mora biti drugaciji za svaku sliku
 				\end{figure}
 				
+				\eject
+				
+				\paragraph{Stvaranje, brisanje, dodjeljivanje uloga administratorima – obrazac uporabe UC4, UC5, UC6}\mbox{} \\
+				Smještajni administrator ima pristup listi svih administratora u bazi. On je ovlašten unositi nove administratore ukoliko oni već ne postoje u bazi, identificirajući ih prema e-mail adresi. U slučaju da administrator već postoji, sustav generira poruku o pogreški. Nadalje, smještajni administrator ima ovlasti dodjeljivanja uloga drugim administratorima. Također, ima mogućnost uklanjanja drugih administratora, pri čemu mu se šalje upozorenje o nepovratnosti akcije. U tom trenutku, smještajni administrator ima opciju potvrde ili odustajanja. Ukoliko potvrdi brisanje, izmjene se pohranjuju u bazu. 
+				
+				\paragraph{Stvaranje, brisanje i prikaz smještaja na karti – obrasci uporabe UC9, UC11, UC12 }\mbox{} \\
+				Smještajni administrator ima ovlasti i nad smještajem. Može dodavati nove smještaje, a ukoliko takav smještaj već ne postoji, podaci se pohranjuju u bazu. Nadalje, smještajni administrator ima mogućnost pregledavanja lokacije smještaja na karti putem koordinata (latitude i longitude). U postupku brisanja smještaja, sustav provjerava da li je određeni smještaj rezerviran. Ako nije, administratoru se šalje upozorenje o nepovratnosti akcije te ima opciju potvrde ili odustajanja. Ukoliko potvrdi, izmjene se pohranjuju u bazu. 
 				\begin{figure}[H]
 					\includegraphics[scale=0.5]{slike/sd2.PNG} %veličina u odnosu na širinu linije
 					\centering
@@ -762,13 +769,19 @@
 					\label{fig:sd2} %label mora biti drugaciji za svaku sliku
 				\end{figure}
 				
+				\eject
+				
+				\paragraph{Stvaranje i brisanje prijevoznika, stvaranje i brisanje vozila – obrasci uporabe UC15, UC16, UC18, UC19 }\mbox{} \\
+				Administrator prijevoznih usluga ima ovlasti dodavanja novih prijevoznika, pod uvjetom da već nisu prisutni u sustavu. Kada želi obrisati prijevoznika, prvo se provjerava jesu li vozila toga prijevoznika rezervirana u nekom terminu. Ukoliko jesu, šalje se poruka pogreške, a ako nisu administratoru se šalje upozorenje o nepovratnosti akcije te ima mogućnost potvrditi svoj izbor. Ako potvrdi, briše se prijevoznik i sva vozila toga prijevoznika. Dodavanjem novog vozila provjerava se postoji li već isto vozilo, ako ne postoji vozilo se dodaje u bazu. Brisanjem vozila provjerava se je li vozilo rezervirano u nekom terminu. Ukoliko jest, šalje se poruka o pogreški, a ako nije administratoru se šalje upozorenje o nepovratnosti te ima mogućnost potvrditi svoj izbor. Potvrđivanjem akcije briše se odabrano vozilo. 
+				
 				\begin{figure}[H]
-					\includegraphics[scale=0.48]{slike/sd3.PNG} %veličina u odnosu na širinu linije
+					\includegraphics[scale=0.45]{slike/sd3.PNG} %veličina u odnosu na širinu linije
 					\centering
-					\caption{Sekvencijski dijagram za UC14, UC15, UC16, UC18, UC19}
+					\caption{Sekvencijski dijagram za UC15, UC16, UC18, UC19}
 					\label{fig:sd3} %label mora biti drugaciji za svaku sliku
 				\end{figure}
 				
+	
 				
 				\eject
 	
