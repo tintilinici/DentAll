@@ -64,7 +64,7 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     @Override
-    public List<AccommodationDto> createAccommodations() {
+    public List<AccommodationDto> retrieveAccommodations() {
         List<Accommodation> accommodations = accommodationRepository.findAll();
         return accommodationMapper.modelsToDtos(accommodations);
     }

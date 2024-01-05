@@ -25,5 +25,5 @@ public interface AccommodationService {
 
     AccommodationDto updateAccommodation(String id, UpdateAccommodationRequest request);
 
-    List<AccommodationDto> createAccommodations();
+    List<AccommodationDto> retrieveAccommodations();
 }

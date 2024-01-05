@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -55,20 +57,15 @@ public class AccommodationController {
 
     @Operation(
             summary = "Retrieve an Accommodation",
-            description = "Retrieves an Accommodation by it's id."
+            description = "Either retrieves all Accommodations, or one Accommodation if the Accommodation's id is provided"
     )
     @GetMapping("/{id}")
-    public ResponseEntity<AccommodationDto> retrieveAccommodation(@PathVariable("id") String id) {
-        return ResponseEntity.ok(service.retrieveAccommodation(id));
-    }
-
-    @Operation(
-            summary = "Retrieve all Accommodations",
-            description = "Retrieves all Accommodations."
-    )
-    @GetMapping
-    public ResponseEntity<List<AccommodationDto>> retrieveAccommodations() {
-        return ResponseEntity.ok(service.createAccommodations());
+    public ResponseEntity<List<AccommodationDto>> retrieveAccommodation(@PathVariable("id") String id) {
+        if (id == null) {
+            return ResponseEntity.ok(service.retrieveAccommodations());
+        } else {
+            return ResponseEntity.ok(Collections.singletonList(service.retrieveAccommodation(id)));
+        }
     }
 
     @Operation(
