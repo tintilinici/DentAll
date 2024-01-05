@@ -11,15 +11,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class BookAccommodationRequest {
 
-    private String accommodationType;
-
-    private LocalDateTime booking_start;
-
-    private LocalDateTime booking_end;
+    private String accommodationOrderId;
 
     private String latitude;
 
     private String longitude;
-
-    private String patientId;
 }

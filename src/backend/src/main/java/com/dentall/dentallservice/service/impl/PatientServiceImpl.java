@@ -44,6 +44,14 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public List<AccommodationOrderDto> searchAccommodationOrders(String patientId) {
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new PatientNotFoundException(patientId));
+
+        return accommodationOrderMapper.modelsToDtos(patient.getAccommodationOrders());
+    }
+
+    @Override
     public void deletePatient(String id) {
         boolean patientExists = patientRepository.existsById(id);
         if(!patientExists){
@@ -94,6 +102,14 @@ public class PatientServiceImpl implements PatientService {
         Patient patient = patientRepository.findById(request.getPatientId())
                 .orElseThrow(() -> new PatientNotFoundException("Patient with id: '" + request.getPatientId() + "' not found!"));
 
+        accommodationOrderRepository.findByArrivalDateTimeBetweenOrDepartureDateTimeBetween(
+                request.getArrivalDatetime(),
+                request.getDepartureDatetime(),
+                request.getArrivalDatetime(),
+                request.getDepartureDatetime()
+        ).stream().findAny().ifPresent((order) -> {
+            throw new IllegalArgumentException("Patient with id: '" + order.getPatient().getId() + "' already has an order for that time! Order id: '" + order.getId() + "'");
+        });
 
         AccommodationOrder accommodationOrder = AccommodationOrderFactory.create(request, patient);
         accommodationOrderRepository.save(accommodationOrder);

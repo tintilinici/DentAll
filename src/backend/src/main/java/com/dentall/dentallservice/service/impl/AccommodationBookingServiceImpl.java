@@ -8,15 +8,15 @@ import com.dentall.dentallservice.factory.AccommodationBookingFactory;
 import com.dentall.dentallservice.mapper.AccommodationBookingMapper;
 import com.dentall.dentallservice.model.domain.Accommodation;
 import com.dentall.dentallservice.model.domain.AccommodationBooking;
+import com.dentall.dentallservice.model.domain.AccommodationOrder;
 import com.dentall.dentallservice.model.domain.AccommodationType;
 import com.dentall.dentallservice.model.domain.Patient;
 import com.dentall.dentallservice.model.domain.QAccommodation;
 import com.dentall.dentallservice.model.domain.QAccommodationBooking;
 import com.dentall.dentallservice.model.dto.AccommodationBookingDto;
 import com.dentall.dentallservice.model.request.BookAccommodationRequest;
-import com.dentall.dentallservice.model.request.DeleteAccommodationBookingRequest;
-import com.dentall.dentallservice.model.request.SearchAccommodationBookingRequest;
 import com.dentall.dentallservice.repository.AccommodationBookingRepository;
+import com.dentall.dentallservice.repository.AccommodationOrderRepository;
 import com.dentall.dentallservice.repository.AccommodationRepository;
 import com.dentall.dentallservice.repository.PatientRepository;
 import com.dentall.dentallservice.service.AccommodationBookingService;
@@ -47,21 +47,29 @@ public class AccommodationBookingServiceImpl implements AccommodationBookingServ
     @Autowired
     private AccommodationBookingRepository accommodationBookingRepository;
 
+    @Autowired
+    private AccommodationOrderRepository accommodationOrderRepository;
+
     private final double RADIUS = 1000000;
 
     @Override
     public AccommodationBookingDto bookAccommodation(BookAccommodationRequest request) {
-        Patient patient = patientRepository.findById(request.getPatientId())
-                .orElseThrow(() -> new PatientNotFoundException("Patient with id: '" + request.getPatientId() + "' not found!"));
+        AccommodationOrder order = accommodationOrderRepository.findById(request.getAccommodationOrderId())
+                .orElseThrow(() -> new IllegalArgumentException("Accommodation Order with id: '" + request.getAccommodationOrderId() + "' not found!"));
 
-        BooleanBuilder builder = constructBookingRequestWhereClause(request);
+        Patient patient = patientRepository.findById(order.getPatient().getId())
+                .orElseThrow(() -> new PatientNotFoundException("Patient with id: '" + order.getPatient().getId() + "' not found!"));
+
+
+
+        BooleanBuilder builder = constructBookingRequestWhereClause(request, order);
 
         Iterable<Accommodation> accommodationIterable = accommodationRepository.findAll(builder);
         Accommodation accommodation = StreamSupport.stream(accommodationIterable.spliterator(), false)
                 .findFirst()
                 .orElseThrow(NoBookingAvailableException::new);
 
-        AccommodationBooking booking = AccommodationBookingFactory.create(request, patient, accommodation);
+        AccommodationBooking booking = AccommodationBookingFactory.create(order, accommodation);
 
         accommodationBookingRepository.save(booking);
 
@@ -72,7 +80,7 @@ public class AccommodationBookingServiceImpl implements AccommodationBookingServ
     public List<AccommodationBookingDto> searchAccommodationBookings(String accommodationId, String patientId) {
         List<AccommodationBooking> bookings;
         if (patientId != null) {
-            bookings = accommodationBookingRepository.findByPatientId(patientId);
+            bookings = accommodationBookingRepository.findByOrderPatientId(patientId);
         } else {
             bookings = accommodationBookingRepository.findByAccommodationId(accommodationId);
         }
@@ -106,7 +114,7 @@ public class AccommodationBookingServiceImpl implements AccommodationBookingServ
         checkIfPatientExists(patientId);
         LocalDateTime dateTimeStart = startDate.atStartOfDay();
         LocalDateTime dateTimeEnd = startDate.plusDays(1).atStartOfDay().minusSeconds(1);
-        accommodationBookingRepository.deleteByPatientIdAndStartDateBetween(patientId, dateTimeStart, dateTimeEnd);
+        accommodationBookingRepository.deleteByOrderPatientIdAndOrderArrivalDateTimeBetween(patientId, dateTimeStart, dateTimeEnd);
     }
 
     private void checkIfPatientExists(String id) {
@@ -130,7 +138,7 @@ public class AccommodationBookingServiceImpl implements AccommodationBookingServ
         }
     }
 
-    private BooleanBuilder constructBookingRequestWhereClause(BookAccommodationRequest request) {
+    private BooleanBuilder constructBookingRequestWhereClause(BookAccommodationRequest request, AccommodationOrder order) {
         QAccommodation qAccommodation = QAccommodation.accommodation;
 
         BooleanBuilder whereClause = new BooleanBuilder();
@@ -142,19 +150,18 @@ public class AccommodationBookingServiceImpl implements AccommodationBookingServ
             whereClause.and(distanceExpression.loe(RADIUS));
         }
 
-
-        if (request.getAccommodationType() != null) {
-            whereClause.and(qAccommodation.accommodationType.eq(AccommodationType.valueOf(request.getAccommodationType())));
+        if (order.getAccommodationType() != null) {
+            whereClause.and(qAccommodation.accommodationType.eq(AccommodationType.valueOf(String.valueOf(order.getAccommodationType()))));
         }
 
-        whereClause.and(qAccommodation.availabilityStart.loe(LocalDate.from(request.getBooking_start())));
-        whereClause.and(qAccommodation.availabilityEnd.goe(LocalDate.from(request.getBooking_end())));
+        whereClause.and(qAccommodation.availabilityStart.loe(LocalDate.from(order.getArrivalDateTime())));
+        whereClause.and(qAccommodation.availabilityEnd.goe(LocalDate.from(order.getDepartureDateTime())));
 
         QAccommodationBooking qBooking = QAccommodationBooking.accommodationBooking;
 
         BooleanBuilder bookingOverlapClause = new BooleanBuilder();
-        bookingOverlapClause.and(qBooking.startDate.loe(LocalDateTime.from(request.getBooking_start())));
-        bookingOverlapClause.and(qBooking.endDate.goe(LocalDateTime.from(request.getBooking_end())));
+        bookingOverlapClause.and(qBooking.order.arrivalDateTime.loe(LocalDateTime.from(order.getArrivalDateTime())));
+        bookingOverlapClause.and(qBooking.order.departureDateTime.goe(LocalDateTime.from(order.getDepartureDateTime())));
 
         whereClause.and(JPAExpressions.selectFrom(qBooking)
                 .where(qBooking.accommodation.id.eq(qAccommodation.id)

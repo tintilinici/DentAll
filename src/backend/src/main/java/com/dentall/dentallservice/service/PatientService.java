@@ -25,4 +25,5 @@ public interface PatientService {
     void deleteAccommodationOrder(String id);
 
 
+    List<AccommodationOrderDto> searchAccommodationOrders(String patientId);
 }

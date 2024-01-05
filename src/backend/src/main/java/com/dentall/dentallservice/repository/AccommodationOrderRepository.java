@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AccommodationOrderRepository extends JpaRepository<AccommodationOrder, String> {
+    List<AccommodationOrder> findByArrivalDateTimeBetweenOrDepartureDateTimeBetween(LocalDateTime arrivalDatetime, LocalDateTime departureDatetime, LocalDateTime arrivalDatetime1, LocalDateTime departureDatetime1);
 /*
     List<AccommodationOrder> findByAccommodationId(String id);
 

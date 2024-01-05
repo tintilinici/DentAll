@@ -32,7 +32,4 @@ public class Patient {
     @OneToMany(mappedBy = "patient")
     private List<AccommodationOrder> accommodationOrders;
 
-
-    @OneToMany(mappedBy = "patient")
-    private List<AccommodationBooking> accommodationBookings;
 }

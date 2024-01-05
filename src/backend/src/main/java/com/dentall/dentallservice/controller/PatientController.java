@@ -49,6 +49,11 @@ public class PatientController {
         return ResponseEntity.status(201).body(service.createAccommodationOrder(request));
     }
 
+    @GetMapping("/orders")
+    public ResponseEntity<List<AccommodationOrderDto>> searchAccommodationOrders(@RequestParam String patientId) {
+        return ResponseEntity.status(200).body(service.searchAccommodationOrders(patientId));
+    }
+
     @DeleteMapping("/orders/{id}")
     @Transactional
     public ResponseEntity<?> deleteAccommodationOrder(@PathVariable("id") String id){

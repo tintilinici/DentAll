@@ -16,11 +16,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AccommodationOrder {
     @Id
-    private String accommodationOrderId;
+    private String id;
 
-    private LocalDateTime arrivalDatetime;
+    private LocalDateTime arrivalDateTime;
 
-    private LocalDateTime departureDatetime;
+    private LocalDateTime departureDateTime;
 
     private int accommodationSize;
 
