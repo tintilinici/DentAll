@@ -1,45 +1,27 @@
 package com.dentall.dentallservice.service.impl;
 
-import com.dentall.dentallservice.exception.exceptions.AccommodationBookingNotFoundException;
 import com.dentall.dentallservice.exception.exceptions.AccommodationNotDeletableException;
 import com.dentall.dentallservice.exception.exceptions.AccommodationNotFound;
 import com.dentall.dentallservice.exception.exceptions.AccommodationNotFoundException;
-import com.dentall.dentallservice.exception.exceptions.PatientNotFoundException;
-import com.dentall.dentallservice.exception.exceptions.NoBookingAvailableException;
-import com.dentall.dentallservice.factory.AccommodationBookingFactory;
-import com.dentall.dentallservice.mapper.AccommodationBookingMapper;
 import com.dentall.dentallservice.model.domain.Accommodation;
-import com.dentall.dentallservice.model.domain.AccommodationBooking;
-import com.dentall.dentallservice.model.domain.AccommodationType;
-import com.dentall.dentallservice.model.domain.Patient;
 import com.dentall.dentallservice.model.domain.QAccommodation;
-import com.dentall.dentallservice.model.domain.QAccommodationBooking;
-import com.dentall.dentallservice.model.dto.AccommodationBookingDto;
 import com.dentall.dentallservice.model.dto.AccommodationDto;
-import com.dentall.dentallservice.model.request.BadRequestException;
-import com.dentall.dentallservice.model.request.BookAccommodationRequest;
+import com.dentall.dentallservice.exception.exceptions.BadRequestException;
 import com.dentall.dentallservice.model.request.CreateAccommodationRequest;
 import com.dentall.dentallservice.mapper.AccommodationMapper;
-import com.dentall.dentallservice.model.request.DeleteAccommodationBookingRequest;
-import com.dentall.dentallservice.model.request.SearchAccommodationBookingRequest;
-import com.dentall.dentallservice.model.request.SearchAccommodationsRequest;
 import com.dentall.dentallservice.model.request.UpdateAccommodationRequest;
 import com.dentall.dentallservice.repository.AccommodationBookingRepository;
 import com.dentall.dentallservice.repository.AccommodationRepository;
-import com.dentall.dentallservice.repository.PatientRepository;
 import com.dentall.dentallservice.service.AccommodationService;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
-import com.querydsl.jpa.JPAExpressions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 @Service
 public class AccommodationServiceImpl implements AccommodationService {

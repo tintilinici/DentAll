@@ -1,4 +1,4 @@
-package com.dentall.dentallservice.model.request;
+package com.dentall.dentallservice.exception.exceptions;
 
 public class BadRequestException extends RuntimeException {
     public BadRequestException(String message) {
