@@ -56,7 +56,6 @@ public class AccommodationController {
 
     @GetMapping("/bookings")
     public ResponseEntity<List<AccommodationBookingDto>> searchAccommodationBookings(@RequestBody SearchAccommodationBookingRequest request) {
-        //TODO add validation on request bodies
         var result = service.searchAccommodationBookings(request);
         int status = result.isEmpty() ? 204 : 200;
         return ResponseEntity.status(status).body(result);
