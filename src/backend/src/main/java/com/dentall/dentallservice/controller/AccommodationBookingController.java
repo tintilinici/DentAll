@@ -13,24 +13,30 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/bookings")
 public class AccommodationBookingController {
 
     @Autowired
     private AccommodationBookingService service;
 
-    @PostMapping("/bookings")
+    @PostMapping
     public ResponseEntity<AccommodationBookingDto> bookAccommodation(@RequestBody BookAccommodationRequest request) {
         return ResponseEntity.ok(service.bookAccommodation(request));
     }
 
-    @GetMapping("/bookings")
-    public ResponseEntity<List<AccommodationBookingDto>> searchAccommodationBookings(@RequestBody SearchAccommodationBookingRequest request) {
-        var result = service.searchAccommodationBookings(request);
+    @GetMapping
+    public ResponseEntity<List<AccommodationBookingDto>> searchAccommodationBookings(
+            @RequestParam(required = false) String accommodationId,
+            @RequestParam(required = false) String patientId
+    ) {
+        var result = service.searchAccommodationBookings(accommodationId, patientId);
         int status = result.isEmpty() ? 204 : 200;
         return ResponseEntity.status(status).body(result);
     }
@@ -48,9 +54,9 @@ public class AccommodationBookingController {
         return ResponseEntity.ok("Booking successfully deleted!");
     }
 
-    @DeleteMapping("/{id}/bookings")
+    @DeleteMapping("/bookings")
     @Transactional
-    public ResponseEntity<?> deleteAccommodationBookingByAccommodationId(@PathVariable("id") String id) {
+    public ResponseEntity<?> deleteAccommodationBookingByAccommodationId(@RequestParam String id) {
         service.deleteAccommodationBookingByAccommodationId(id);
         return ResponseEntity.ok("Bookings successfully deleted!");
     }

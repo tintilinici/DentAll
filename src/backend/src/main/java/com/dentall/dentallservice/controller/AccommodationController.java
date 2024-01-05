@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -31,9 +32,12 @@ public class AccommodationController {
         return ResponseEntity.status(201).body(service.createAccommodation(request));
     }
 
-    @PostMapping("/search")
-    public ResponseEntity<List<AccommodationDto>> searchAccommodations(@RequestBody SearchAccommodationsRequest request) {
-        var result = service.searchAccommodations(request);
+    @GetMapping
+    public ResponseEntity<List<AccommodationDto>> searchAccommodations(
+            @RequestParam(required = false) String latitude,
+            @RequestParam(required = false) String longitude
+    ) {
+        var result = service.searchAccommodations(latitude, longitude);
         int status = result.isEmpty() ? 204 : 200;
         return ResponseEntity.status(status).body(result);
     }

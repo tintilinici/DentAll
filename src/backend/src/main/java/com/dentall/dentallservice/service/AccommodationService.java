@@ -16,7 +16,7 @@ public interface AccommodationService {
     AccommodationDto createAccommodation(CreateAccommodationRequest request);
 
 
-    List<AccommodationDto> searchAccommodations(SearchAccommodationsRequest request);
+    List<AccommodationDto> searchAccommodations(String latitude, String longitude);
 
 
     AccommodationDto retrieveAccommodation(String id);

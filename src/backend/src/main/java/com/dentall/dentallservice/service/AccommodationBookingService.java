@@ -11,7 +11,7 @@ public interface AccommodationBookingService {
 
     AccommodationBookingDto bookAccommodation(BookAccommodationRequest request);
 
-    List<AccommodationBookingDto> searchAccommodationBookings(SearchAccommodationBookingRequest request);
+    List<AccommodationBookingDto> searchAccommodationBookings(String accommodationId, String patientId);
 
     AccommodationBookingDto retrieveAccommodationBooking(String id);
 

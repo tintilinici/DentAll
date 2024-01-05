@@ -69,12 +69,12 @@ public class AccommodationBookingServiceImpl implements AccommodationBookingServ
     }
 
     @Override
-    public List<AccommodationBookingDto> searchAccommodationBookings(SearchAccommodationBookingRequest request) {
+    public List<AccommodationBookingDto> searchAccommodationBookings(String accommodationId, String patientId) {
         List<AccommodationBooking> bookings;
-        if (request.getPatientId() != null) {
-            bookings = accommodationBookingRepository.findByPatientId(request.getPatientId());
+        if (patientId != null) {
+            bookings = accommodationBookingRepository.findByPatientId(patientId);
         } else {
-            bookings = accommodationBookingRepository.findByAccommodationId(request.getAccommodationId());
+            bookings = accommodationBookingRepository.findByAccommodationId(accommodationId);
         }
 
         return accommodationBookingMapper.modelsToDtos(bookings);
