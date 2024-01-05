@@ -14,7 +14,7 @@ import com.dentall.dentallservice.model.domain.Patient;
 import com.dentall.dentallservice.model.domain.QAccommodation;
 import com.dentall.dentallservice.model.domain.QAccommodationBooking;
 import com.dentall.dentallservice.model.dto.AccommodationBookingDto;
-import com.dentall.dentallservice.model.request.BookAccommodationRequest;
+import com.dentall.dentallservice.model.request.CreateAccommodationBookingRequest;
 import com.dentall.dentallservice.repository.AccommodationBookingRepository;
 import com.dentall.dentallservice.repository.AccommodationOrderRepository;
 import com.dentall.dentallservice.repository.AccommodationRepository;
@@ -53,7 +53,7 @@ public class AccommodationBookingServiceImpl implements AccommodationBookingServ
     private final double RADIUS = 1000000;
 
     @Override
-    public AccommodationBookingDto bookAccommodation(BookAccommodationRequest request) {
+    public AccommodationBookingDto createAccommodationBooking(CreateAccommodationBookingRequest request) {
         AccommodationOrder order = accommodationOrderRepository.findById(request.getAccommodationOrderId())
                 .orElseThrow(() -> new IllegalArgumentException("Accommodation Order with id: '" + request.getAccommodationOrderId() + "' not found!"));
 
@@ -138,7 +138,7 @@ public class AccommodationBookingServiceImpl implements AccommodationBookingServ
         }
     }
 
-    private BooleanBuilder constructBookingRequestWhereClause(BookAccommodationRequest request, AccommodationOrder order) {
+    private BooleanBuilder constructBookingRequestWhereClause(CreateAccommodationBookingRequest request, AccommodationOrder order) {
         QAccommodation qAccommodation = QAccommodation.accommodation;
 
         BooleanBuilder whereClause = new BooleanBuilder();

@@ -42,9 +42,9 @@ public class TransportCompanyController {
         return ResponseEntity.ok(service.retrieveTransportCompanyById(id));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity<?> deleteTransportCompany(@RequestParam String id) {
+    public ResponseEntity<?> deleteTransportCompany(@PathVariable("id") String id) {
         service.deleteTransportCompany(id);
         return ResponseEntity.ok("Successfully deleted!");
     }

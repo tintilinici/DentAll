@@ -38,7 +38,7 @@ public class AccommodationController {
     )
     @PostMapping
     public ResponseEntity<AccommodationDto> createAccommodation(@RequestBody CreateAccommodationRequest request) {
-        return ResponseEntity.status(201).body(service.createAccommodation(request));
+        return ResponseEntity.ok(service.createAccommodation(request));
     }
 
     @Operation(
@@ -51,14 +51,11 @@ public class AccommodationController {
             @RequestParam(required = false) String latitude,
             @RequestParam(required = false) String longitude
     ) {
-        List<AccommodationDto> result;
         if (latitude == null || longitude == null) {
-            result = service.retrieveAccommodations();
-        } else {
-            result = service.searchAccommodations(latitude, longitude);
+            return ResponseEntity.ok(service.retrieveAccommodations());
         }
-        int status = result.isEmpty() ? 204 : 200;
-        return ResponseEntity.status(status).body(result);
+
+        return ResponseEntity.ok(service.searchAccommodations(latitude, longitude));
     }
 
     @Operation(
@@ -66,8 +63,8 @@ public class AccommodationController {
             description = "Retrieves an Accommodation by it's id."
     )
     @GetMapping("/{id}")
-    public ResponseEntity<List<AccommodationDto>> retrieveAccommodation(@PathVariable("id") String id) {
-        return ResponseEntity.ok(Collections.singletonList(service.retrieveAccommodation(id)));
+    public ResponseEntity<AccommodationDto> retrieveAccommodation(@PathVariable("id") String id) {
+        return ResponseEntity.ok(service.retrieveAccommodation(id));
     }
 
     @Operation(

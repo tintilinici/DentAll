@@ -26,7 +26,7 @@ public class TransportVehicleController {
     )
     @PostMapping
     public ResponseEntity<TransportVehicleDto> createTransportVehicle(@RequestBody CreateTransportVehicleRequest request){
-        return ResponseEntity.status(201).body(service.createTransportVehicle(request));
+        return ResponseEntity.ok(service.createTransportVehicle(request));
     }
 
     @Operation(

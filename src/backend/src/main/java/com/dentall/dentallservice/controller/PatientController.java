@@ -47,7 +47,7 @@ public class PatientController {
     )
     @PostMapping
     public ResponseEntity<PatientDto> createPatient(@RequestBody CreatePatientRequest request){
-        return ResponseEntity.status(201).body(service.createPatient(request));
+        return ResponseEntity.ok(service.createPatient(request));
     }
 
     @Operation(
@@ -68,7 +68,7 @@ public class PatientController {
     )
     @PostMapping("/orders")
     public ResponseEntity<AccommodationOrderDto> createAccommodationOrder(@RequestBody CreateAccommodationOrderRequest request){
-        return ResponseEntity.status(201).body(service.createAccommodationOrder(request));
+        return ResponseEntity.ok(service.createAccommodationOrder(request));
     }
 
     @Operation(
@@ -77,7 +77,7 @@ public class PatientController {
     )
     @GetMapping("/orders")
     public ResponseEntity<List<AccommodationOrderDto>> searchAccommodationOrders(@RequestParam String patientId) {
-        return ResponseEntity.status(200).body(service.searchAccommodationOrders(patientId));
+        return ResponseEntity.ok(service.searchAccommodationOrders(patientId));
     }
 
     @Operation(
