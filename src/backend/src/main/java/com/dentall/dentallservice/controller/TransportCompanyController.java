@@ -33,12 +33,13 @@ public class TransportCompanyController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TransportCompanyDto>> retrieveTransportCompanies(@RequestParam(required = false) String id) {
-        if (id != null) {
-            return ResponseEntity.ok(Collections.singletonList(service.retrieveTransportCompanyById(id)));
-        } else {
-            return ResponseEntity.ok(service.retrieveALlTransportCompanies());
-        }
+    public ResponseEntity<List<TransportCompanyDto>> retrieveTransportCompanies() {
+        return ResponseEntity.ok(service.retrieveALlTransportCompanies());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TransportCompanyDto> retrieveTransportCompany(@PathVariable("id") String id) {
+        return ResponseEntity.ok(service.retrieveTransportCompanyById(id));
     }
 
     @DeleteMapping
@@ -48,11 +49,11 @@ public class TransportCompanyController {
         return ResponseEntity.ok("Successfully deleted!");
     }
 
-    @PostMapping("/{id}/assign-vehicles")
-    public ResponseEntity<TransportCompanyDto> assignTransportVehicles(
-            @PathVariable("id") String id,
-            @RequestBody List<String> vehiclesIds
-    ) {
-        return ResponseEntity.ok(service.assignVehicles(id, vehiclesIds));
-    }
+//    @PostMapping("/{id}/assign-vehicles")
+//    public ResponseEntity<TransportCompanyDto> assignTransportVehicles(
+//            @PathVariable("id") String id,
+//            @RequestBody List<String> vehiclesIds
+//    ) {
+//        return ResponseEntity.ok(service.assignVehicles(id, vehiclesIds));
+//    }
 }

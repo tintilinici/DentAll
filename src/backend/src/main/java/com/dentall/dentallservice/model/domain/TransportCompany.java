@@ -28,7 +28,7 @@ public class TransportCompany {
 
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "transportCompany", cascade = {CascadeType.PERSIST})
+    @OneToMany(mappedBy = "transportCompany", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<TransportVehicle> transportVehicles;
 
     public void addTransportVehicle(TransportVehicle transportVehicle) {

@@ -43,29 +43,31 @@ public class AccommodationController {
 
     @Operation(
             summary = "Retrieve Accommodations",
-            description = "Retrieve all Accommodations around a given point. (10km radius)"
+            description = "Retrieve all Accommodations around a given point. (10km radius) or just All accommodations " +
+                    "if a point is not provided"
     )
     @GetMapping
     public ResponseEntity<List<AccommodationDto>> searchAccommodations(
             @RequestParam(required = false) String latitude,
             @RequestParam(required = false) String longitude
     ) {
-        var result = service.searchAccommodations(latitude, longitude);
+        List<AccommodationDto> result;
+        if (latitude == null || longitude == null) {
+            result = service.retrieveAccommodations();
+        } else {
+            result = service.searchAccommodations(latitude, longitude);
+        }
         int status = result.isEmpty() ? 204 : 200;
         return ResponseEntity.status(status).body(result);
     }
 
     @Operation(
             summary = "Retrieve an Accommodation",
-            description = "Either retrieves all Accommodations, or one Accommodation if the Accommodation's id is provided"
+            description = "Retrieves an Accommodation by it's id."
     )
     @GetMapping("/{id}")
     public ResponseEntity<List<AccommodationDto>> retrieveAccommodation(@PathVariable("id") String id) {
-        if (id == null) {
-            return ResponseEntity.ok(service.retrieveAccommodations());
-        } else {
-            return ResponseEntity.ok(Collections.singletonList(service.retrieveAccommodation(id)));
-        }
+        return ResponseEntity.ok(Collections.singletonList(service.retrieveAccommodation(id)));
     }
 
     @Operation(

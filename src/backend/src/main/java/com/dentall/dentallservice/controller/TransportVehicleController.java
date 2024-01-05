@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/transportVehicles")
 @Tag(name = "Transport Vehicle", description = "Transport Vehicle API")
@@ -37,5 +39,15 @@ public class TransportVehicleController {
         //TODO FORBID DELETING IF IT IS IN TRANSPORT PROCESS (WHEN TransportBooking IS IMPLEMENTED)
         service.deleteTransportVehicle(id);
         return ResponseEntity.ok("Successfully deleted");
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TransportVehicleDto>> retrieveTransportVehicles() {
+        return ResponseEntity.ok(service.retrieveAllTransportVehicles());
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<TransportVehicleDto> retrieveTransportVehicle(@PathVariable("id") String id) {
+        return ResponseEntity.ok(service.retrieveTransportVehicleById(id));
     }
 }

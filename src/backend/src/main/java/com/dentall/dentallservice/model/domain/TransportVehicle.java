@@ -22,5 +22,6 @@ public class TransportVehicle {
     private TransportVehicleType transportVehicleType;
 
     @ManyToOne
+    @JoinColumn(name = "transportCompanyId")
     private TransportCompany transportCompany;
 }
