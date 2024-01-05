@@ -18,21 +18,10 @@ public interface AccommodationService {
 
     List<AccommodationDto> searchAccommodations(SearchAccommodationsRequest request);
 
-    AccommodationBookingDto bookAccommodation(BookAccommodationRequest request);
 
     AccommodationDto retrieveAccommodation(String id);
 
-    List<AccommodationBookingDto> searchAccommodationBookings(SearchAccommodationBookingRequest request);
-
-    AccommodationBookingDto retrieveAccommodationBooking(String id);
-
     void deleteAccommodation(String id);
-
-    void deleteAccommodationBooking(String id);
-
-    void deleteAccommodationBookingByAccommodationId(String id);
-
-    void deleteAccommodationBooking(DeleteAccommodationBookingRequest request);
 
     AccommodationDto updateAccommodation(String id, UpdateAccommodationRequest request);
 }
