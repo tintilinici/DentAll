@@ -2,11 +2,12 @@ version: "3"
 
 services:
   db:
-    image: mysql:latest
+    image: postgis/postgis:latest
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: dentall
+      POSTGRES_DB: dentall
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
-      - "3308:3306"
+      - "5433:5432"
     volumes:
-      - ./mysql:/var/lib/mysql
+      - ./psql/data:/var/lib/postgresql/data
