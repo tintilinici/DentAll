@@ -12,6 +12,8 @@ public interface AccommodationBookingMapper {
 
     @Mapping(target = "patientId", source = "patient.id")
     @Mapping(target = "accommodationId", source = "accommodation.id")
+    @Mapping(target = "startDate", source = "startDate")
+    @Mapping(target = "endDate", source = "endDate")
     AccommodationBookingDto modelToDto(AccommodationBooking model);
 
     List<AccommodationBookingDto> modelsToDtos(List<AccommodationBooking> models);
