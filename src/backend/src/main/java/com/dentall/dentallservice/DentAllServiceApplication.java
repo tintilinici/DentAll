@@ -7,11 +7,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.util.StreamUtils;
 
 import java.nio.charset.Charset;
 
 @SpringBootApplication
+@EnableScheduling
 public class DentAllServiceApplication {
 
     public static void main(String[] args) {

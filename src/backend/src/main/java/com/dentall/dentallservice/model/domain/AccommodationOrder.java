@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -30,5 +31,6 @@ public class AccommodationOrder {
     @ManyToOne
     private Patient patient;
 
-
+    @OneToMany(mappedBy = "accommodationOrder")
+    private List<MedicalTreatment> medicalTreatments;
 }
