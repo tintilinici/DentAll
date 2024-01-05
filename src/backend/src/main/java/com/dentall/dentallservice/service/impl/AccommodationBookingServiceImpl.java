@@ -102,11 +102,11 @@ public class AccommodationBookingServiceImpl implements AccommodationBookingServ
     }
 
     @Override
-    public void deleteAccommodationBooking(DeleteAccommodationBookingRequest request) {
-        checkIfPatientExists(request.getPatientId());
-        LocalDateTime dateTimeStart = request.getStartDate().atStartOfDay();
-        LocalDateTime dateTimeEnd = request.getStartDate().plusDays(1).atStartOfDay().minusSeconds(1);
-        accommodationBookingRepository.deleteByPatientIdAndStartDateBetween(request.getPatientId(), dateTimeStart, dateTimeEnd);
+    public void deleteAccommodationBooking(String patientId, LocalDate startDate) {
+        checkIfPatientExists(patientId);
+        LocalDateTime dateTimeStart = startDate.atStartOfDay();
+        LocalDateTime dateTimeEnd = startDate.plusDays(1).atStartOfDay().minusSeconds(1);
+        accommodationBookingRepository.deleteByPatientIdAndStartDateBetween(patientId, dateTimeStart, dateTimeEnd);
     }
 
     private void checkIfPatientExists(String id) {

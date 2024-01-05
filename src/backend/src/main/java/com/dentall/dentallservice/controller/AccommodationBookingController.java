@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -56,15 +57,16 @@ public class AccommodationBookingController {
 
     @DeleteMapping("/bookings")
     @Transactional
-    public ResponseEntity<?> deleteAccommodationBookingByAccommodationId(@RequestParam String id) {
-        service.deleteAccommodationBookingByAccommodationId(id);
-        return ResponseEntity.ok("Bookings successfully deleted!");
-    }
-
-    @DeleteMapping("/bookings")
-    @Transactional
-    public ResponseEntity<?> deleteAccommodationBooking(@RequestBody DeleteAccommodationBookingRequest request) {
-        service.deleteAccommodationBooking(request);
+    public ResponseEntity<?> deleteAccommodationBookingByAccommodationId(
+            @RequestParam(required = false) String id,
+            @RequestParam(required = false) String patientId,
+            @RequestParam(required = false) LocalDate startDate
+            ) {
+        if (id != null) {
+            service.deleteAccommodationBookingByAccommodationId(id);
+        } else {
+            service.deleteAccommodationBooking(patientId, startDate);
+        }
         return ResponseEntity.ok("Bookings successfully deleted!");
     }
 }
