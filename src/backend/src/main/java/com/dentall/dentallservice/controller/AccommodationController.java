@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-//TODO add validation on request bodies
-
 @RestController
 @RequestMapping("/accommodations")
 public class AccommodationController {
