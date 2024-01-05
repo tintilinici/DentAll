@@ -3,6 +3,8 @@ package com.dentall.dentallservice.controller;
 import com.dentall.dentallservice.model.dto.TransportVehicleDto;
 import com.dentall.dentallservice.model.request.CreateTransportVehicleRequest;
 import com.dentall.dentallservice.service.TransportVehicleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,16 +12,25 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/transportVehicles")
+@Tag(name = "Transport Vehicle", description = "Transport Vehicle API")
 public class TransportVehicleController {
 
     @Autowired
     private TransportVehicleService service;
 
+    @Operation(
+            summary = "Creates a TransportVehicle",
+            description = "Creates a TransportVehicle. All params are required."
+    )
     @PostMapping
     public ResponseEntity<TransportVehicleDto> createTransportVehicle(@RequestBody CreateTransportVehicleRequest request){
         return ResponseEntity.status(201).body(service.createTransportVehicle(request));
     }
 
+    @Operation(
+            summary = "Deletes a TransportVehicle",
+            description = "Deletes a TransportVehicle by it's id."
+    )
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<?> deleteTransportVehicle(@PathVariable("id") String id){

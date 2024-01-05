@@ -12,7 +12,7 @@ public interface AccommodationBookingService {
 
     AccommodationBookingDto bookAccommodation(BookAccommodationRequest request);
 
-    List<AccommodationBookingDto> searchAccommodationBookings(String accommodationId, String patientId);
+    List<AccommodationBookingDto> retrieveAccommodationBookings(String accommodationId, String patientId);
 
     AccommodationBookingDto retrieveAccommodationBooking(String id);
 

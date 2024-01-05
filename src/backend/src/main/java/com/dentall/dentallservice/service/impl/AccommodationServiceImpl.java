@@ -64,6 +64,12 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     @Override
+    public List<AccommodationDto> createAccommodations() {
+        List<Accommodation> accommodations = accommodationRepository.findAll();
+        return accommodationMapper.modelsToDtos(accommodations);
+    }
+
+    @Override
     public AccommodationDto retrieveAccommodation(String id) {
         Accommodation accommodation = accommodationRepository.findById(id)
                 .orElseThrow(() -> new AccommodationNotFoundException("Accommodation with id: '" + id + "' not found!"));

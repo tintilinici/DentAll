@@ -24,4 +24,6 @@ public interface AccommodationService {
     void deleteAccommodation(String id);
 
     AccommodationDto updateAccommodation(String id, UpdateAccommodationRequest request);
+
+    List<AccommodationDto> createAccommodations();
 }

@@ -2,9 +2,9 @@ package com.dentall.dentallservice.controller;
 
 import com.dentall.dentallservice.model.dto.AccommodationBookingDto;
 import com.dentall.dentallservice.model.request.BookAccommodationRequest;
-import com.dentall.dentallservice.model.request.DeleteAccommodationBookingRequest;
-import com.dentall.dentallservice.model.request.SearchAccommodationBookingRequest;
 import com.dentall.dentallservice.service.AccommodationBookingService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,32 +22,50 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/bookings")
+@Tag(name = "Accommodation Booking", description = "Accommodation Booking API")
 public class AccommodationBookingController {
 
     @Autowired
     private AccommodationBookingService service;
 
+    @Operation(
+            summary = "Create an AccommodationBooking",
+            description = "Books an accommodation for a specific AccommodationOrder if there are Accommodations that " +
+                    "match the AccommodationOrder criteria in a circle of 10km around the provided point."
+    )
     @PostMapping
     public ResponseEntity<AccommodationBookingDto> bookAccommodation(@RequestBody BookAccommodationRequest request) {
         return ResponseEntity.ok(service.bookAccommodation(request));
     }
 
+    @Operation(
+            summary = "Retrieve AccommodationBookings",
+            description = "Retrieve AccommodationBookings either by Accommodation's id or by Patient's id. " +
+                    "If both are provided search will be done by Patient's id and Accommodation's id will be ignored."
+    )
     @GetMapping
-    public ResponseEntity<List<AccommodationBookingDto>> searchAccommodationBookings(
+    public ResponseEntity<List<AccommodationBookingDto>> retrieveAccommodationBookings(
             @RequestParam(required = false) String accommodationId,
             @RequestParam(required = false) String patientId
     ) {
-        var result = service.searchAccommodationBookings(accommodationId, patientId);
+        var result = service.retrieveAccommodationBookings(accommodationId, patientId);
         int status = result.isEmpty() ? 204 : 200;
         return ResponseEntity.status(status).body(result);
     }
 
+    @Operation(
+            summary = "Retrieve AccommodationBookings by id",
+            description = "Retrieve an AccommodationBooking by it's id."
+    )
     @GetMapping("/bookings/{id}")
     public ResponseEntity<AccommodationBookingDto> retrieveAccommodationBooking(@PathVariable("id") String id) {
         return ResponseEntity.ok(service.retrieveAccommodationBooking(id));
     }
 
-
+    @Operation(
+            summary = "Delete AccommodationBooking",
+            description = "Delete an AccommodationBooking by it's id."
+    )
     @DeleteMapping("/bookings/{id}")
     @Transactional
     public ResponseEntity<?> deleteAccommodationBooking(@PathVariable("id") String id) {
@@ -55,15 +73,20 @@ public class AccommodationBookingController {
         return ResponseEntity.ok("Booking successfully deleted!");
     }
 
+    @Operation(
+            summary = "Delete AccommodationBooking either by the Accommodation's id ",
+            description = "Delete AccommodationBookings either by Accommodation's id or by Patient's id and " +
+                    "the booking's start date"
+    )
     @DeleteMapping("/bookings")
     @Transactional
-    public ResponseEntity<?> deleteAccommodationBookingByAccommodationId(
-            @RequestParam(required = false) String id,
+    public ResponseEntity<?> deleteAccommodationBooking(
+            @RequestParam(required = false) String accommodationId,
             @RequestParam(required = false) String patientId,
             @RequestParam(required = false) LocalDate startDate
             ) {
-        if (id != null) {
-            service.deleteAccommodationBookingByAccommodationId(id);
+        if (accommodationId != null) {
+            service.deleteAccommodationBookingByAccommodationId(accommodationId);
         } else {
             service.deleteAccommodationBooking(patientId, startDate);
         }

@@ -5,6 +5,8 @@ import com.dentall.dentallservice.model.request.CreateAccommodationRequest;
 import com.dentall.dentallservice.model.request.SearchAccommodationsRequest;
 import com.dentall.dentallservice.model.request.UpdateAccommodationRequest;
 import com.dentall.dentallservice.service.AccommodationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,16 +24,25 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/accommodations")
+@Tag(name = "Accommodation", description = "Accommodation API")
 public class AccommodationController {
 
     @Autowired
     private AccommodationService service;
 
+    @Operation(
+            summary = "Create an Accommodation",
+            description = "Creates an Accommodation. All params are required."
+    )
     @PostMapping
     public ResponseEntity<AccommodationDto> createAccommodation(@RequestBody CreateAccommodationRequest request) {
         return ResponseEntity.status(201).body(service.createAccommodation(request));
     }
 
+    @Operation(
+            summary = "Retrieve Accommodations",
+            description = "Retrieve all Accommodations around a given point. (10km radius)"
+    )
     @GetMapping
     public ResponseEntity<List<AccommodationDto>> searchAccommodations(
             @RequestParam(required = false) String latitude,
@@ -42,11 +53,28 @@ public class AccommodationController {
         return ResponseEntity.status(status).body(result);
     }
 
+    @Operation(
+            summary = "Retrieve an Accommodation",
+            description = "Retrieves an Accommodation by it's id."
+    )
     @GetMapping("/{id}")
     public ResponseEntity<AccommodationDto> retrieveAccommodation(@PathVariable("id") String id) {
         return ResponseEntity.ok(service.retrieveAccommodation(id));
     }
 
+    @Operation(
+            summary = "Retrieve all Accommodations",
+            description = "Retrieves all Accommodations."
+    )
+    @GetMapping
+    public ResponseEntity<List<AccommodationDto>> retrieveAccommodations() {
+        return ResponseEntity.ok(service.createAccommodations());
+    }
+
+    @Operation(
+            summary = "Delete an Accommodation",
+            description = "Deletes and Accommodation by it's id."
+    )
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<?> deleteAccommodation(@PathVariable("id") String id) {
@@ -54,6 +82,10 @@ public class AccommodationController {
         return ResponseEntity.ok("Successfully deleted");
     }
 
+    @Operation(
+            summary = "Update an Accommodation",
+            description = "Updates an Accommodation by it's id. All params are optional."
+    )
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<AccommodationDto> updateAccommodation(
