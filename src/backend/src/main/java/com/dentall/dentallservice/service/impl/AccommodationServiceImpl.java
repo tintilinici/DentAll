@@ -221,7 +221,7 @@ public class AccommodationServiceImpl implements AccommodationService {
         if (request.getLongitude() != null && request.getLatitude() != null) {
             String template = "ST_DistanceSphere({0}, ST_MakePoint({1}, {2}))";
             NumberExpression<Double> distanceExpression = Expressions.numberTemplate(Double.class, template,
-                    qAccommodation.location, Expressions.constant(request.getLongitude()), Expressions.constant(request.getLatitude()));
+                    qAccommodation.location, Expressions.constant(Double.parseDouble(request.getLongitude())), Expressions.constant(Double.parseDouble(request.getLatitude())));
             whereClause.and(distanceExpression.loe(RADIUS));
         }
 

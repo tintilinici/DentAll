@@ -35,7 +35,7 @@ public class AccommodationController {
         return ResponseEntity.status(201).body(service.createAccommodation(request));
     }
 
-    @GetMapping
+    @PostMapping("/search")
     public ResponseEntity<List<AccommodationDto>> searchAccommodations(@RequestBody SearchAccommodationsRequest request) {
         var result = service.searchAccommodations(request);
         int status = result.isEmpty() ? 204 : 200;
