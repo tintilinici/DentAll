@@ -13,4 +13,6 @@ public interface TransportCompanyService {
     List<TransportCompanyDto> retrieveALlTransportCompanies();
 
     void deleteTransportCompany(String id);
+
+    TransportCompanyDto assignVehicles(String id, List<String> vehiclesIds);
 }
