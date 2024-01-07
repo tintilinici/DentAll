@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class FetchMedicalTreatmentsRequest {
-    private String patientId;
+    private String accommodationOrderId;
     private LocalDateTime arrivalDateTime;
     private LocalDateTime departureDateTime;
 }

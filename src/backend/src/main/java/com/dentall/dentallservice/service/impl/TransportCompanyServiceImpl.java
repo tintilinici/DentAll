@@ -36,7 +36,7 @@ public class TransportCompanyServiceImpl implements TransportCompanyService {
         });
 
         TransportCompany transportCompany = TransportCompanyFactory.create(request);
-
+        transportCompanyRepository.save(transportCompany);
         return transportCompanyMapper.modelToDto(transportCompany);
     }
 

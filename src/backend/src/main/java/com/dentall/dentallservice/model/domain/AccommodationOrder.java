@@ -33,4 +33,7 @@ public class AccommodationOrder {
 
     @OneToMany(mappedBy = "accommodationOrder")
     private List<MedicalTreatment> medicalTreatments;
+
+    @OneToOne
+    private AccommodationBooking accommodationBooking;
 }

@@ -41,7 +41,7 @@ public class Service {
                 String clinicAddress = "Clinic Address " + (int) (Math.random() * 10);
                 String description = "Description " + (int) (Math.random() * 10);
                 String id = UUID.randomUUID().toString();
-                MedicalTreatmentDto treatment = new MedicalTreatmentDto(id, request.getPatientId(), description, clinicAddress, appointmentStart, appointmentEnd);
+                MedicalTreatmentDto treatment = new MedicalTreatmentDto(id, request.getAccommodationOrderId(), description, clinicAddress, appointmentStart, appointmentEnd);
                 treatments.add(treatment);
             });
         }

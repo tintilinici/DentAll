@@ -1,5 +1,6 @@
 package com.dentall.dentallservice.service;
 
+import com.dentall.dentallservice.model.domain.MedicalTreatment;
 import com.dentall.dentallservice.model.dto.TransportVehicleDto;
 import com.dentall.dentallservice.model.request.CreateTransportVehicleRequest;
 
@@ -13,4 +14,6 @@ public interface TransportVehicleService {
     TransportVehicleDto retrieveTransportVehicleById(String id);
 
     List<TransportVehicleDto> retrieveAllTransportVehicles();
+
+    void assignVehicles(List<MedicalTreatment> mtWithMissingBookings);
 }

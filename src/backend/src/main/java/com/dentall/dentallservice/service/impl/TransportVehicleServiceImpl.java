@@ -2,10 +2,14 @@ package com.dentall.dentallservice.service.impl;
 
 import com.dentall.dentallservice.exception.exceptions.TransportVehicleNotFoundException;
 import com.dentall.dentallservice.mapper.TransportVehicleMapper;
+import com.dentall.dentallservice.model.domain.MedicalTreatment;
+import com.dentall.dentallservice.model.domain.TransportBooking;
 import com.dentall.dentallservice.model.domain.TransportCompany;
 import com.dentall.dentallservice.model.domain.TransportVehicle;
 import com.dentall.dentallservice.model.dto.TransportVehicleDto;
 import com.dentall.dentallservice.model.request.CreateTransportVehicleRequest;
+import com.dentall.dentallservice.repository.MedicalTreatmentRepository;
+import com.dentall.dentallservice.repository.TransportBookingRepository;
 import com.dentall.dentallservice.repository.TransportCompanyRepository;
 import com.dentall.dentallservice.repository.TransportVehicleRepository;
 import com.dentall.dentallservice.service.TransportVehicleService;
@@ -13,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TransportVehicleServiceImpl implements TransportVehicleService {
@@ -21,10 +26,16 @@ public class TransportVehicleServiceImpl implements TransportVehicleService {
     private TransportVehicleMapper transportVehicleMapper;
 
     @Autowired
+    private TransportBookingRepository transportBookingRepository;
+
+    @Autowired
     private TransportVehicleRepository transportVehicleRepository;
 
     @Autowired
     private TransportCompanyRepository transportCompanyRepository;
+
+    @Autowired
+    private MedicalTreatmentRepository medicalTreatmentRepository;
 
     @Override
     public TransportVehicleDto createTransportVehicle(CreateTransportVehicleRequest request) {
@@ -60,5 +71,37 @@ public class TransportVehicleServiceImpl implements TransportVehicleService {
     public List<TransportVehicleDto> retrieveAllTransportVehicles() {
         List<TransportVehicle> transportVehicles = transportVehicleRepository.findAll();
         return transportVehicleMapper.modelsToDtos(transportVehicles);
+    }
+
+    //check that vehicle does not have associated medical bookings for that time period
+    @Override
+    public void assignVehicles(List<MedicalTreatment> mtWithMissingBookings) {
+
+        mtWithMissingBookings.forEach(medicalTreatment -> {
+            if (medicalTreatment.getAccommodationOrder().getAccommodationBooking() != null) {
+                List<TransportVehicle> availableVehicles = transportVehicleRepository
+                        .findAvailableVehicles(
+                                medicalTreatment.getStartDateTime(),
+                                medicalTreatment.getEndDatetime()
+                        );
+
+                if (!availableVehicles.isEmpty()) {
+                    TransportVehicle vehicle = availableVehicles.get(0);
+                    TransportBooking booking = TransportBooking.builder()
+                            .id(UUID.randomUUID().toString())
+                            .medicalTreatment(medicalTreatment)
+                            .build();
+
+                    transportBookingRepository.save(booking);
+                    vehicle.addTransportBooking(booking);
+                    transportVehicleRepository.save(vehicle);
+                    medicalTreatment.setTransportBooking(booking);
+                    medicalTreatmentRepository.save(medicalTreatment);
+
+                    System.out.println("Assigned vehicle: '" + vehicle.getId() + "' to medical" +
+                            " treatment: '" + medicalTreatment.getId() + "'.");
+                }
+            }
+        });
     }
 }

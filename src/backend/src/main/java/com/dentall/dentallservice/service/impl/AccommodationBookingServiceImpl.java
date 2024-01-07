@@ -70,8 +70,10 @@ public class AccommodationBookingServiceImpl implements AccommodationBookingServ
                 .orElseThrow(NoBookingAvailableException::new);
 
         AccommodationBooking booking = AccommodationBookingFactory.create(order, accommodation);
-
         accommodationBookingRepository.save(booking);
+
+        order.setAccommodationBooking(booking);
+        accommodationOrderRepository.save(order);
 
         return accommodationBookingMapper.modelToDto(booking);
     }

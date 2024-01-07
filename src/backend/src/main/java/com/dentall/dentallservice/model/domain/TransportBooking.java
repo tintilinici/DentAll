@@ -1,6 +1,5 @@
 package com.dentall.dentallservice.model.domain;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -11,22 +10,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
-@Entity
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class AccommodationBooking {
+@NoArgsConstructor
+@Entity
+public class TransportBooking {
 
     @Id
     private String id;
 
-    @ManyToOne
-    private Accommodation accommodation;
+    @OneToOne
+    @JoinColumn(name = "medical_treatment_id", referencedColumnName = "id")
+    private MedicalTreatment medicalTreatment;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
-    private AccommodationOrder order;
+    @ManyToOne
+    private TransportVehicle transportVehicle;
 }
