@@ -114,6 +114,8 @@ public class TransportVehicleServiceImpl implements TransportVehicleService {
                             .getAccommodation()
                             .getAddress();
                     emailService.sendBookingEmailToDriver(driverEmail, patientEmail, patientPhoneNumber, clinicAddress, accommodationAddress);
+                    //TODO ovdje poslati email i pacijentu
+
 
                     System.out.println("Assigned vehicle: '" + vehicle.getId() + "' to medical" +
                             " treatment: '" + medicalTreatment.getId() + "'.");
