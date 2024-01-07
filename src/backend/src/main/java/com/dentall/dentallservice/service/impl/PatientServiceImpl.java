@@ -80,8 +80,8 @@ public class PatientServiceImpl implements PatientService {
         if(request.getPIN() != null){
             patient.setPIN(request.getPIN());
         }
-        if(request.getPhone_number() != null){
-            patient.setPhone_number(request.getPhone_number());
+        if(request.getPhoneNumber() != null){
+            patient.setPhoneNumber(request.getPhoneNumber());
         }
         if(request.getEmail() != null){
             patient.setEmail(request.getEmail());

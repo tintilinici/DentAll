@@ -14,7 +14,7 @@ public class UpdatePatientRequest {
 
     private String PIN;
 
-    private String phone_number;
+    private String phoneNumber;
 
     private String email;
 }

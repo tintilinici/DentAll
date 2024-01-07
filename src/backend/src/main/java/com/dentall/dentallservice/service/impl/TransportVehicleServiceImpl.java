@@ -3,6 +3,7 @@ package com.dentall.dentallservice.service.impl;
 import com.dentall.dentallservice.exception.exceptions.TransportVehicleNotFoundException;
 import com.dentall.dentallservice.mapper.TransportVehicleMapper;
 import com.dentall.dentallservice.model.domain.MedicalTreatment;
+import com.dentall.dentallservice.model.domain.Patient;
 import com.dentall.dentallservice.model.domain.TransportBooking;
 import com.dentall.dentallservice.model.domain.TransportCompany;
 import com.dentall.dentallservice.model.domain.TransportVehicle;
@@ -12,6 +13,7 @@ import com.dentall.dentallservice.repository.MedicalTreatmentRepository;
 import com.dentall.dentallservice.repository.TransportBookingRepository;
 import com.dentall.dentallservice.repository.TransportCompanyRepository;
 import com.dentall.dentallservice.repository.TransportVehicleRepository;
+import com.dentall.dentallservice.service.EmailService;
 import com.dentall.dentallservice.service.TransportVehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,9 @@ public class TransportVehicleServiceImpl implements TransportVehicleService {
 
     @Autowired
     private TransportVehicleMapper transportVehicleMapper;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private TransportBookingRepository transportBookingRepository;
@@ -97,6 +102,18 @@ public class TransportVehicleServiceImpl implements TransportVehicleService {
                     transportVehicleRepository.save(vehicle);
                     medicalTreatment.setTransportBooking(booking);
                     medicalTreatmentRepository.save(medicalTreatment);
+
+                    String driverEmail = booking.getTransportVehicle().getTransportCompany().getEmail();
+                    Patient patient = medicalTreatment.getAccommodationOrder().getPatient();
+                    String patientEmail = patient.getEmail();
+                    String patientPhoneNumber = patient.getPhoneNumber();
+                    String clinicAddress = medicalTreatment.getClinicAddress();
+                    String accommodationAddress = medicalTreatment
+                            .getAccommodationOrder()
+                            .getAccommodationBooking()
+                            .getAccommodation()
+                            .getAddress();
+                    emailService.sendBookingEmailToDriver(driverEmail, patientEmail, patientPhoneNumber, clinicAddress, accommodationAddress);
 
                     System.out.println("Assigned vehicle: '" + vehicle.getId() + "' to medical" +
                             " treatment: '" + medicalTreatment.getId() + "'.");

@@ -3,6 +3,7 @@ package com.dentall.dentallservice.controller;
 import com.dentall.dentallservice.model.dto.AccommodationBookingDto;
 import com.dentall.dentallservice.model.request.CreateAccommodationBookingRequest;
 import com.dentall.dentallservice.service.AccommodationBookingService;
+import com.dentall.dentallservice.service.EmailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class AccommodationBookingController {
 
     @Autowired
     private AccommodationBookingService service;
+
+    @Autowired
+    private EmailService emailService;
 
     @Operation(
             summary = "Create an AccommodationBooking",
@@ -69,6 +73,13 @@ public class AccommodationBookingController {
     public ResponseEntity<?> deleteAccommodationBooking(@PathVariable("id") String id) {
         service.deleteAccommodationBooking(id);
         return ResponseEntity.ok("Booking successfully deleted!");
+    }
+
+    @GetMapping("/testMail")
+    public ResponseEntity<?> testMail() {
+        emailService.sendBookingEmailToDriver("asd", "rokorokic@gmail.com",
+                "0915601017", "Clinic address1", "accommodation address 1");
+        return ResponseEntity.ok("Sent!");
     }
 
     @Operation(

@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,7 +24,7 @@ public class Patient {
 
     private String PIN;
 
-    private String phone_number;
+    private String phoneNumber;
 
     private String email;
 
