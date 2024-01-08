@@ -1,9 +1,9 @@
 export default {
-  LANDING: "/",
+  LANDING: '/',
   AUTH: {
-    LOGIN: "/login",
+    LOGIN: '/login',
   },
   TRANSPORT: {
-    COMPANIES: "/transport-companies",
+    COMPANIES: '/transport-companies',
   },
-};
+} as const
