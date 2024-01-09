@@ -6,13 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint . --fix --report-unused-disable-directives",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings=0",
+    "lint:fix": "eslint . --fix",
     "preview": "vite preview",
     "prepare": "cd ../.. && husky install src/frontend/.husky"
   },
   "lint-staged": {
-    "*": "prettier --check",
-    "*.{ts,tsx}": "eslint --report-unused-disable-directives"
+    "*.{ts,tsx}": ["prettier --write", "eslint --report-unused-disable-directives"]
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.1",
