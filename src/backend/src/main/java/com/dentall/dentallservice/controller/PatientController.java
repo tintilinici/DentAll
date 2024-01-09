@@ -4,6 +4,7 @@ import com.dentall.dentallservice.model.dto.AccommodationOrderDto;
 import com.dentall.dentallservice.model.dto.PatientDto;
 import com.dentall.dentallservice.model.request.CreateAccommodationOrderRequest;
 import com.dentall.dentallservice.model.request.CreatePatientRequest;
+import com.dentall.dentallservice.model.request.UpdateAccommodationOrderRequest;
 import com.dentall.dentallservice.model.request.UpdatePatientRequest;
 import com.dentall.dentallservice.service.PatientService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -62,6 +63,22 @@ public class PatientController {
     }
 
     @Operation(
+            summary = "Update a Patient",
+            description = "Updates a Patient by it's Id. All params are optional."
+    )
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<PatientDto> updatePatient(
+            @PathVariable("id") String id,
+            @RequestBody UpdatePatientRequest request){
+        return ResponseEntity.ok(service.updatePatient(id, request));
+    }
+
+    /*Now starts the Accommodation Order part of the controller.
+    Based on the correlation with the patient
+    these functionalities are not part of a separate controller.*/
+
+    @Operation(
             summary = "Creates an AccommodationOrder",
             description = "Creates an AccommodationOrder. AccommodationType must be one of the following: " +
                     "'ROOM, 'HOUSE', 'APARTMENT'"
@@ -92,15 +109,15 @@ public class PatientController {
     }
 
     @Operation(
-            summary = "Update a Patient",
-            description = "Updates a Patient by it's Id. All params are optional."
+            summary = "Update a AccommodationOrder",
+            description = "Updates a AccommodationOrder by it's Id."
     )
-    @PutMapping("/{id}")
+    @PutMapping("orders/{id}")
     @Transactional
-    public ResponseEntity<PatientDto> updatePatient(
+    public ResponseEntity<AccommodationOrderDto> updateAccommodationOrder(
             @PathVariable("id") String id,
-            @RequestBody UpdatePatientRequest request){
-        return ResponseEntity.ok(service.updatePatient(id, request));
+            @RequestBody UpdateAccommodationOrderRequest request){
+        return ResponseEntity.ok(service.updateAccommodationOrder(id, request));
     }
 
 }
