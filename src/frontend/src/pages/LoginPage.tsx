@@ -1,7 +1,7 @@
 import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { AuthContext } from '../components/navbar/auth/AuthProvider'
+import { AuthContext } from '../components/auth/AuthProvider'
 import routes from '../constants/routes'
 
 const LoginPage = () => {

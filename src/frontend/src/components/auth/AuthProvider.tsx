@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, useState } from 'react'
-import routes from '../../../constants/routes'
+import routes from '../../constants/routes'
 
 export enum ROLE {
   USER_ADMIN = 'user_admin',
