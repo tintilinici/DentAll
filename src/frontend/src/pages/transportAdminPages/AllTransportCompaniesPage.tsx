@@ -1,5 +1,6 @@
 import {
   Button,
+  Skeleton,
   Table,
   TableContainer,
   Tbody,
@@ -35,8 +36,6 @@ const AllTransportCompaniesPage = () => {
     navigate(`${routes.TRANSPORT_COMPANIES}/${id}`)
   }
 
-  if (isLoading) return <span>Loading....</span>
-
   if (error) return <span>{error.message}</span>
 
   return (
@@ -57,41 +56,43 @@ const AllTransportCompaniesPage = () => {
         </Card>
       </div>
       <Card>
-        <TableContainer>
-          <Table variant={'simple'}>
-            <Thead>
-              <Tr>
-                <Th>Name</Th>
-                <Th>Email</Th>
-                <Th>Phone number</Th>
-                <Th>Number of vehicles</Th>
-                <Th>Remove</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {data?.map((transportCompany) => (
-                <Tr
-                  key={transportCompany.id}
-                  onClick={() => handleOnRowClick(transportCompany.id)}
-                >
-                  <Td>{transportCompany.name}</Td>
-                  <Td>{transportCompany.email}</Td>
-                  <Td>{transportCompany.phoneNumber}</Td>
-                  <Td>{transportCompany.transportVehiclesIds.length}</Td>
-                  <Td>
-                    <Button
-                      size={'sm'}
-                      fontWeight={'semibold'}
-                      colorScheme='red'
-                    >
-                      Remove
-                    </Button>
-                  </Td>
+        <Skeleton isLoaded={!isLoading}>
+          <TableContainer>
+            <Table variant={'simple'}>
+              <Thead>
+                <Tr>
+                  <Th>Name</Th>
+                  <Th>Email</Th>
+                  <Th>Phone number</Th>
+                  <Th>Number of vehicles</Th>
+                  <Th>Remove</Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+              </Thead>
+              <Tbody>
+                {data?.map((transportCompany) => (
+                  <Tr
+                    key={transportCompany.id}
+                    onClick={() => handleOnRowClick(transportCompany.id)}
+                  >
+                    <Td>{transportCompany.name}</Td>
+                    <Td>{transportCompany.email}</Td>
+                    <Td>{transportCompany.phoneNumber}</Td>
+                    <Td>{transportCompany.transportVehiclesIds.length}</Td>
+                    <Td>
+                      <Button
+                        size={'sm'}
+                        fontWeight={'semibold'}
+                        colorScheme='red'
+                      >
+                        Remove
+                      </Button>
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Skeleton>
       </Card>
     </SidebarLayout>
   )

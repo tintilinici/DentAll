@@ -15,23 +15,30 @@ import {
 } from '@chakra-ui/react'
 
 import { useForm, SubmitHandler } from 'react-hook-form'
+import { usePostTransportCompany } from '../hooks/usePostTransportCompany'
+import { TransportCompanyPostDTO } from '../lib/api.types'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
 }
 
-type Inputs = {
-  name: string
-  email: string
-  phoneNumber: number
-}
-
 const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
-  const { register, handleSubmit } = useForm<Inputs>()
+  const { register, handleSubmit, reset } = useForm<TransportCompanyPostDTO>()
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data)
+  const postTansportCompany = usePostTransportCompany()
+
+  const onSubmit: SubmitHandler<TransportCompanyPostDTO> = (data) => {
+    postTansportCompany.mutate(data, {
+      onSuccess: () => {
+        onClose()
+        reset()
+      },
+      onError: (error) => {
+        // FIXME: needs to be converted to toast
+        console.log(error)
+      },
+    })
   }
 
   return (
