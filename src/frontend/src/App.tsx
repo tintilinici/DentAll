@@ -56,6 +56,7 @@ const router = createBrowserRouter([
   // accommodation admin routes
   {
     path: routes.ACCOMMODATION,
+    // TODO: add protection here for the accomodation admin
     element: <AccommodationAdminDashboardPage />,
   },
 ])

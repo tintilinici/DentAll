@@ -1,10 +1,30 @@
-import { Button, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  useDisclosure,
+} from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 import Card from '../../components/Card'
 import SidebarLayout from '../../components/SidebarLayout'
-import { getTransportCompanies } from '../../lib/api'
-import { useNavigate } from 'react-router-dom'
 import routes from '../../constants/routes'
+import { getTransportCompanies } from '../../lib/api'
 
 type TransportCompany = {
   id: string
@@ -15,6 +35,8 @@ type TransportCompany = {
 }
 
 const AllTransportCompaniesPage = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   const { data, isLoading, error } = useQuery<TransportCompany[]>({
     queryKey: ['transport-companies'],
     queryFn: getTransportCompanies,
@@ -32,9 +54,69 @@ const AllTransportCompaniesPage = () => {
 
   return (
     <SidebarLayout className='bg-blue-50'>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add a new transport company</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <FormControl>
+              <FormLabel>Name</FormLabel>
+              <Input
+                placeholder='First name'
+                type='text'
+              />
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>Email</FormLabel>
+              <Input
+                placeholder='Last name'
+                type='email'
+              />
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>Phone number</FormLabel>
+              <Input
+                placeholder='Last name'
+                type='number'
+              />
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter className='space-x-2'>
+            <Button
+              onClick={onClose}
+              variant={'outline'}
+              colorScheme='red'
+              w={'full'}
+            >
+              Cancel
+            </Button>
+            <Button
+              colorScheme='green'
+              mr={3}
+              w={'full'}
+            >
+              Add
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       <div className='w-full flex justify-end'>
         <Card className='w-min mb-6'>
-          <Button colorScheme='whatsapp'>Add new company</Button>
+          <Button
+            colorScheme='whatsapp'
+            onClick={onOpen}
+          >
+            Add new company
+          </Button>
         </Card>
       </div>
       <Card>
