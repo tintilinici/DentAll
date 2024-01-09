@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import AuthProvider, { ROLE } from './components/auth/AuthProvider'
+import AuthProvider from './components/auth/AuthProvider'
 import NoAuthOnlyRoute from './components/auth/NoAuthOnlyRoute'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import routes from './constants/routes'
@@ -12,6 +12,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import TransportCompanyDetailsPage from './pages/transportAdminPages/TransportCompanyDetailsPage'
 import UserAdminDashboard from './pages/userAdminPages/UserAdminDashboard'
 import AccommodationAdminDashboardPage from './pages/accommodationAdminPages/AccommodationAdminDashboard'
+import { ROLE } from './components/auth/authTypes'
 
 const queryClient = new QueryClient()
 

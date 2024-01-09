@@ -1,7 +1,7 @@
 import { PropsWithChildren, useContext } from 'react'
-import { AuthContext, roleDefaultRoutes } from './AuthProvider'
+import { AuthContext } from './AuthProvider'
 import { Navigate } from 'react-router-dom'
-import { ROLE } from './AuthProvider'
+import { ROLE, roleDefaultRoutes } from './authTypes'
 
 interface Props {
   allowRoles: ROLE[] | 'any'
@@ -18,8 +18,6 @@ const ProtectedRoute = ({ children, allowRoles }: PropsWithChildren<Props>) => {
       />
     )
   } else if (allowRoles !== 'any' && !allowRoles.includes(userData.role)) {
-    // TODO: redirect the role to it's matching dashboard if they try to acces a page they don't have access to
-
     // FIXME: fix the flasing before redirecting, the page tries to load before redirecting
     // mby use somekind of loader to check the role and then redirect before render
     return (
