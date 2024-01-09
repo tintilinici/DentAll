@@ -12,7 +12,10 @@
     "prepare": "cd ../.. && husky install src/frontend/.husky"
   },
   "lint-staged": {
-    "*.{ts,tsx}": ["prettier --write", "eslint --report-unused-disable-directives"]
+    "*.{ts,tsx}": [
+      "prettier --check --write",
+      "eslint --report-unused-disable-directives --max-warnings=0"
+    ]
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.1",
