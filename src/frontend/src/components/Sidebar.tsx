@@ -11,8 +11,7 @@ interface SidebarLinkProps {
 }
 
 const SidebarLink = (props: PropsWithChildren<SidebarLinkProps>) => {
-
-  const {pathname} = useLocation()
+  const { pathname } = useLocation()
 
   return (
     <Link
