@@ -8,7 +8,7 @@ interface Props {
 
 const SidebarLayout = (props: PropsWithChildren<Props>) => {
   return (
-    <div className={cn('flex h-full', props.className)}>
+    <div className={cn('flex h-full bg-blue-50', props.className)}>
       <Sidebar />
       <div className='p-8 flex-1'>{props.children}</div>
     </div>

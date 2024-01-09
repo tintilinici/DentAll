@@ -23,7 +23,7 @@ const AllTransportCompaniesPage = () => {
   const navigate = useNavigate()
 
   const handleOnRowClick = (id: string) => {
-    navigate(`${routes.TRANSPORT.COMPANIES}/${id}`)
+    navigate(`${routes.TRANSPORT_COMPANIES}/${id}`)
   }
 
   if (isLoading) return <span>Loading....</span>

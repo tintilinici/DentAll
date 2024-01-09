@@ -37,8 +37,9 @@ const Sidebar = () => {
       <hr className='border-gray-200' />
       <div className='flex flex-col justify-between h-full py-10'>
         <ul className='flex flex-col space-y-4'>
-          <SidebarLink to={routes.TRANSPORT.COMPANIES}>Prijevoznici</SidebarLink>
-          <SidebarLink to='test'>Stanodavci</SidebarLink>
+          <SidebarLink to={routes.TRANSPORT_COMPANIES}>Prijevoznici</SidebarLink>
+          <SidebarLink to={routes.USERS}>Korisnici</SidebarLink>
+          <SidebarLink to={routes.ACCOMMODATION}>Smještaji</SidebarLink>
           <SidebarLink to='/profile'>Profil</SidebarLink>
         </ul>
         <SidebarLink

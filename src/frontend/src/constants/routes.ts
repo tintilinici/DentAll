@@ -3,7 +3,7 @@ export default {
   AUTH: {
     LOGIN: '/login',
   },
-  TRANSPORT: {
-    COMPANIES: '/transport-companies',
-  },
+  TRANSPORT_COMPANIES: '/transport-companies',
+  USERS: '/users',
+  ACCOMMODATION: '/accommodation',
 } as const

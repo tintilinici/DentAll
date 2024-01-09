@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import AuthProvider from './components/navbar/auth/AuthProvider'
+import AuthProvider, { ROLE } from './components/navbar/auth/AuthProvider'
 import NoAuthOnlyRoute from './components/navbar/auth/NoAuthOnlyRoute'
 import ProtectedRoute from './components/navbar/auth/ProtectedRoute'
 import routes from './constants/routes'
@@ -10,6 +10,8 @@ import AllTransportCompaniesPage from './pages/transportAdminPages/AllTransportC
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import TransportCompanyDetailsPage from './pages/transportAdminPages/TransportCompanyDetailsPage'
+import UserAdminDashboard from './pages/userAdminPages/UserAdminDashboard'
+import AccommodationAdminDashboardPage from './pages/accommodationAdminPages/AccommodationAdminDashboard'
 
 const queryClient = new QueryClient()
 
@@ -28,16 +30,32 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: routes.TRANSPORT.COMPANIES,
+    path: routes.TRANSPORT_COMPANIES,
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute allowRoles={[ROLE.TRANSPORT_ADMIN]}>
         <AllTransportCompaniesPage />
       </ProtectedRoute>
     ),
   },
   {
-    path: `${routes.TRANSPORT.COMPANIES}/:id`,
+    path: `${routes.TRANSPORT_COMPANIES}/:id`,
     element: <TransportCompanyDetailsPage />,
+  },
+
+  // user admin routes
+  {
+    path: routes.USERS,
+    element: (
+      <ProtectedRoute allowRoles={[ROLE.USER_ADMIN]}>
+        <UserAdminDashboard />
+      </ProtectedRoute>
+    ),
+  },
+
+  // accommodation admin routes
+  {
+    path: routes.ACCOMMODATION,
+    element: <AccommodationAdminDashboardPage />,
   },
 ])
 
