@@ -31,7 +31,7 @@ const SidebarLink = (props: PropsWithChildren<SidebarLinkProps>) => {
 
 const Sidebar = () => {
   return (
-    <div className='bg-white w-72 flex flex-col'>
+    <div className='bg-white w-72 flex-shrink-0 flex flex-col'>
       <h1 className='mx-auto my-8 italic text-4xl font-bold text-orange-400'>DentAll</h1>
       <hr className='border-gray-200' />
       <div className='flex flex-col justify-between h-full py-10'>

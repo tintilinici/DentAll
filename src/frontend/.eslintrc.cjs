@@ -10,7 +10,7 @@ module.exports = {
   ],
   ignorePatterns: ['dist', '!*.ts', '!*.tsx'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
+  plugins: ['react-refresh', '@stylistic'],
   rules: {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
   },
