@@ -24,8 +24,8 @@ const TransportCompanyDetailsPage = () => {
 
   return (
     <SidebarLayout className='bg-blue-50'>
-      {error ? (
-        <Card>{error.message}</Card>
+      {error || !data ? (
+        <Card>{error ? error.message : 'Data for company not avalible'}</Card>
       ) : (
         <>
           <div className='w-full flex justify-end'>
@@ -34,7 +34,7 @@ const TransportCompanyDetailsPage = () => {
             </Card>
           </div>
           <Card>
-            <Skeleton isLoaded={!isLoading}>{data?.name}</Skeleton>
+            <Skeleton isLoaded={!isLoading}>{data.name}</Skeleton>
           </Card>
         </>
       )}
