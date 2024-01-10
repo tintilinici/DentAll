@@ -12,6 +12,7 @@ import {
   ModalOverlay,
   NumberInput,
   NumberInputField,
+  useToast,
 } from '@chakra-ui/react'
 
 import { useForm, SubmitHandler } from 'react-hook-form'
@@ -26,17 +27,23 @@ interface Props {
 const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
   const { register, handleSubmit, reset } = useForm<TransportCompanyPostDTO>()
 
-  const postTansportCompany = usePostTransportCompany()
+  const postTansportCompanyMutation = usePostTransportCompany()
+  const toast = useToast()
 
   const onSubmit: SubmitHandler<TransportCompanyPostDTO> = (data) => {
-    postTansportCompany.mutate(data, {
+    postTansportCompanyMutation.mutate(data, {
       onSuccess: () => {
         onClose()
         reset()
       },
       onError: (error) => {
-        // FIXME: needs to be converted to toast
-        console.log(error)
+        toast({
+          title: 'Error',
+          description: error.message,
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
       },
     })
   }
@@ -93,6 +100,7 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
           <ModalFooter className='space-x-2'>
             <Button
               onClick={onClose}
+              isDisabled={postTansportCompanyMutation.isPending}
               variant={'outline'}
               colorScheme='red'
               w={'full'}
@@ -104,6 +112,7 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
               mr={3}
               w={'full'}
               type='submit'
+              isLoading={postTansportCompanyMutation.isPending}
             >
               Add
             </Button>

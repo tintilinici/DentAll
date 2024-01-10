@@ -1,14 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { customFetch } from '../lib/customFetch'
-import { TransportCompanyPostDTO } from '../lib/api.types'
 
-export const usePostTransportCompany = () => {
+export const useDeleteTransportCompanyMutation = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationKey: ['postTransportCompany'],
-    mutationFn: (companyData: TransportCompanyPostDTO) =>
-      customFetch('transportCompanies', { method: 'POST' }, companyData),
+    mutationKey: ['deleteTransportCompany'],
+    mutationFn: (companyId: string) =>
+      customFetch(`transportCompanies/${companyId}`, { method: 'DELETE' }),
     onSuccess: () => {
       return queryClient.invalidateQueries({ queryKey: ['transportCompanies'] })
     },
