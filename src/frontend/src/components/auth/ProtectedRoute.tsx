@@ -1,14 +1,14 @@
-import { PropsWithChildren, useContext } from 'react'
-import { AuthContext } from './AuthProvider'
+import { PropsWithChildren } from 'react'
 import { Navigate } from 'react-router-dom'
 import { ROLE, roleDefaultRoutes } from './authTypes'
+import { useAuth } from './useAuth'
 
 interface Props {
   allowRoles: ROLE[] | 'any'
 }
 
 const ProtectedRoute = ({ children, allowRoles }: PropsWithChildren<Props>) => {
-  const { isAuthenticated, userData } = useContext(AuthContext)
+  const { isAuthenticated, userData } = useAuth()
 
   if (!isAuthenticated) {
     return (

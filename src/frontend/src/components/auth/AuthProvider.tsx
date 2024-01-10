@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useState } from 'react'
+import { createContext, PropsWithChildren, useEffect, useState } from 'react'
 import { ROLE, TLoginData, TUserData } from './authTypes'
 
 type IAuthContext = {
@@ -17,6 +17,20 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   const [token, setToken] = useState<string>('')
   const [userData, setUserData] = useState<TUserData>(null!)
 
+  // TODO: TESTING PURPOSES ONLY remove this before production
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem('isAuthenticated')
+    if (isAuthenticated) {
+      setIsAuthenticated(true)
+      setUserData({
+        firstName: 'Marko',
+        lastName: 'Markić',
+        email: 'marko.markic@gmail.com',
+        role: ROLE.TRANSPORT_ADMIN,
+      })
+    }
+  }, [])
+
   const login = (loginData: TLoginData) => {
     console.log(loginData)
     setToken('token')
@@ -27,13 +41,15 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
       role: ROLE.TRANSPORT_ADMIN,
     })
     setIsAuthenticated(true)
+    localStorage.setItem('isAuthenticated', 'true')
     return
   }
 
   const logout = () => {
     setIsAuthenticated(false)
-    setToken('')
+    // setToken('')
     setUserData(null!)
+    localStorage.removeItem('isAuthenticated')
   }
 
   const getFullName = () => {

@@ -1,8 +1,8 @@
 import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { AuthContext } from '../components/auth/AuthProvider'
 import routes from '../constants/routes'
+import { useAuth } from '../components/auth/useAuth'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('')
@@ -11,7 +11,7 @@ const LoginPage = () => {
 
   const togglePasswordVisibility = () => setShowPassword((state) => !state)
 
-  const { login } = useContext(AuthContext)
+  const { login } = useAuth()
   const navigate = useNavigate()
 
   const handleLogin = async () => {

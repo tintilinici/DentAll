@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom'
-import { useContext } from 'react'
-import { AuthContext } from '../components/auth/AuthProvider'
+import { useAuth } from '../components/auth/useAuth'
 
 const LandingPage = () => {
-  const { isAuthenticated } = useContext(AuthContext)
+  const { isAuthenticated } = useAuth()
 
   return (
     <div className='bg-white h-full'>

@@ -1,9 +1,9 @@
-import { PropsWithChildren, useContext } from 'react'
-import { AuthContext } from './AuthProvider'
+import { PropsWithChildren } from 'react'
 import { Navigate } from 'react-router-dom'
+import { useAuth } from './useAuth'
 
 const NoAuthOnlyRoute = ({ children }: PropsWithChildren) => {
-  const { isAuthenticated } = useContext(AuthContext)
+  const { isAuthenticated } = useAuth()
 
   if (isAuthenticated) {
     return (

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import Card from '../../components/Card'
 import SidebarLayout from '../../components/SidebarLayout'
 import { getTransportCompanyDetails } from '../../lib/api'
+import { Button, Skeleton } from '@chakra-ui/react'
 
 type TransportCompany = {
   id: string
@@ -21,11 +22,22 @@ const TransportCompanyDetailsPage = () => {
     retry: false,
   })
 
-  if (isLoading) return <span>Loading....</span>
-
   return (
     <SidebarLayout className='bg-blue-50'>
-      {error ? <Card>{error.message}</Card> : <Card>{data && JSON.stringify(data)}</Card>}
+      {error ? (
+        <Card>{error.message}</Card>
+      ) : (
+        <>
+          <div className='w-full flex justify-end'>
+            <Card className='w-min mb-6'>
+              <Button colorScheme='whatsapp'>Add vehicle</Button>
+            </Card>
+          </div>
+          <Card>
+            <Skeleton isLoaded={!isLoading}>{data?.name}</Skeleton>
+          </Card>
+        </>
+      )}
     </SidebarLayout>
   )
 }
