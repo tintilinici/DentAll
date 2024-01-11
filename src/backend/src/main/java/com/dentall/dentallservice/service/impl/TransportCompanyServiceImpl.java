@@ -60,7 +60,7 @@ public class TransportCompanyServiceImpl implements TransportCompanyService {
         TransportCompany transportCompany = transportCompanyRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transport company with id: '" + id + "' not found!"));
 
-        if (transportCompany.getTransportVehicles() == null || transportCompany.getTransportVehicles().isEmpty()) {
+        if (transportCompany.getTransportVehicles() != null && transportCompany.getTransportVehicles().isEmpty()) {
             throw new IllegalArgumentException("You first need to delete companies' transport vehicles to delete the " +
                     "company!");
         }
