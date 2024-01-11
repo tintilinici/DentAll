@@ -6,11 +6,13 @@ import com.dentall.dentallservice.model.request.CreateAccommodationOrderRequest;
 import com.dentall.dentallservice.model.request.CreatePatientRequest;
 import com.dentall.dentallservice.model.request.UpdateAccommodationOrderRequest;
 import com.dentall.dentallservice.model.request.UpdatePatientRequest;
+import com.dentall.dentallservice.repository.AccommodationBookingRepository;
 import com.dentall.dentallservice.service.PatientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,9 @@ public class PatientController {
 
     @Autowired
     private PatientService service;
+
+    @Autowired
+    private AccommodationBookingRepository accommodationBookingRepository;
 
     @Operation(
             summary = "Retrieve a Patient",
@@ -117,7 +122,12 @@ public class PatientController {
     public ResponseEntity<AccommodationOrderDto> updateAccommodationOrder(
             @PathVariable("id") String id,
             @RequestBody UpdateAccommodationOrderRequest request){
-        return ResponseEntity.ok(service.updateAccommodationOrder(id, request));
+        if(accommodationBookingRepository.existsByOrderId(id)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }else {
+            return ResponseEntity.ok(service.updateAccommodationOrder(id, request));
+        }
+
     }
 
 }

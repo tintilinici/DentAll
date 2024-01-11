@@ -26,7 +26,7 @@ public class AccommodationBooking {
     @ManyToOne
     private Accommodation accommodation;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private AccommodationOrder order;
 }
