@@ -18,3 +18,12 @@ export type TransportVehicle = {
   transportVehicleType: 'BUS' | 'CAR' | 'VAN'
   transportCompanyId: string
 }
+
+export type Patient = {
+  id: string
+  firstName: string
+  lastName: string
+  phoneNumber: string
+  email: string
+  pin: string
+}
