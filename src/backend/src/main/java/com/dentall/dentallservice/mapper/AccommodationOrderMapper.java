@@ -13,6 +13,7 @@ import java.util.List;
 public interface AccommodationOrderMapper {
 
     @Mapping(target = "patientId", source = "patient.id")
+    @Mapping(target = "accommodationBookingId", source = "accommodationBooking.id")
     AccommodationOrderDto modelToDto(AccommodationOrder model);
 
     List<AccommodationOrderDto> modelsToDtos(List<AccommodationOrder> models);
