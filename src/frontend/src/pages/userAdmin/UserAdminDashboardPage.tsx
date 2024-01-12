@@ -14,12 +14,16 @@ import SidebarLayout from '../../components/SidebarLayout'
 import { useGetPatients } from '../../hooks/useGetPatients'
 import { useDeletePatientMutation } from '../../hooks/useDeletePatient'
 import Card from '../../components/Card'
+import { useNavigate } from 'react-router-dom'
+import routes from '../../constants/routes'
 
 const UserAdminDashboard = () => {
   const { data, isLoading, error } = useGetPatients()
 
   const toast = useToast()
   const deletePatientMutation = useDeletePatientMutation()
+
+  const navigate = useNavigate()
 
   const handleDeletePatientButtonClick = (id: string) => {
     deletePatientMutation.mutate(id, {
@@ -33,6 +37,10 @@ const UserAdminDashboard = () => {
         })
       },
     })
+  }
+
+  const handleOnRowClick = (id: string) => {
+    navigate(`${routes.USERS.DASHBOARD}/${id}`)
   }
 
   if (error) return <span>{error.message}</span>
@@ -56,7 +64,7 @@ const UserAdminDashboard = () => {
                 {data?.map((patient) => (
                   <Tr
                     key={patient.id}
-                    //TODO on click
+                    onClick={() => handleOnRowClick(patient.id)}
                   >
                     <Td>{patient.firstName}</Td>
                     <Td>{patient.lastName}</Td>
