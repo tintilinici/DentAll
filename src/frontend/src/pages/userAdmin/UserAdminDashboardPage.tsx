@@ -1,12 +1,39 @@
-import { Skeleton, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import {
+  Button,
+  Skeleton,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  useToast,
+} from '@chakra-ui/react'
 import SidebarLayout from '../../components/SidebarLayout'
 import { useGetPatients } from '../../hooks/useGetPatients'
+import { useDeletePatientMutation } from '../../hooks/useDeletePatient'
 import Card from '../../components/Card'
 
 const UserAdminDashboard = () => {
   const { data, isLoading, error } = useGetPatients()
 
-  console.log(data)
+  const toast = useToast()
+  const deletePatientMutation = useDeletePatientMutation()
+
+  const handleDeletePatientButtonClick = (id: string) => {
+    deletePatientMutation.mutate(id, {
+      onError: (error) => {
+        toast({
+          title: 'Error',
+          description: error.message,
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      },
+    })
+  }
 
   if (error) return <span>{error.message}</span>
 
@@ -36,7 +63,19 @@ const UserAdminDashboard = () => {
                     <Td>{patient.phoneNumber}</Td>
                     <Td>{patient.email}</Td>
                     <Td>{patient.pin}</Td>
-                    //TODO delete patient
+                    <Td>
+                      <Button
+                        size={'sm'}
+                        fontWeight={'semibold'}
+                        colorScheme='red'
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDeletePatientButtonClick(patient.id)
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    </Td>
                   </Tr>
                 ))}
               </Tbody>
