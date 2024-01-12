@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/patients")
 @Tag(name = "Patient", description = "Patient API")
 public class PatientController {
