@@ -1,24 +1,20 @@
-package com.dentall.dentallservice.model.dto;
+package com.dentall.dentallservice.model.request;
 
+import com.dentall.dentallservice.model.domain.AccommodationBooking;
 import com.dentall.dentallservice.model.domain.AccommodationType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import com.dentall.dentallservice.model.domain.MedicalTreatment;
+import com.dentall.dentallservice.model.domain.Patient;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-
+import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccommodationOrderDto {
-
-    private String id;
-
-    private String patientId;
-
+public class UpdateAccommodationOrderRequest {
     private LocalDateTime arrivalDateTime;
 
     private LocalDateTime departureDateTime;
@@ -26,9 +22,5 @@ public class AccommodationOrderDto {
     private int accommodationSize;
 
     private AccommodationType accommodationType;
-
-    private String accommodationBookingId;
-
-
 
 }
