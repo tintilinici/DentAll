@@ -19,14 +19,6 @@ import routes from '../../constants/routes'
 import { useGetTransportCompanies } from '../../hooks/useGetTransportCompanies'
 import { useDeleteTransportCompanyMutation } from '../../hooks/useDeleteTransportCompany'
 
-export type TransportCompany = {
-  id: string
-  name: string
-  email: string
-  phoneNumber: string
-  transportVehiclesIds: string[]
-}
-
 const AllTransportCompaniesPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -36,7 +28,7 @@ const AllTransportCompaniesPage = () => {
 
   const navigate = useNavigate()
 
-  const handleDeleteCompanyButtonClick = (id: TransportCompany['id']) => {
+  const handleDeleteCompanyButtonClick = (id: string) => {
     deleteTransportCompanyMutation.mutate(id, {
       onError: (error) => {
         toast({
@@ -95,7 +87,7 @@ const AllTransportCompaniesPage = () => {
                     <Td>{transportCompany.name}</Td>
                     <Td>{transportCompany.email}</Td>
                     <Td>{transportCompany.phoneNumber}</Td>
-                    <Td>{transportCompany.transportVehiclesIds.length}</Td>
+                    <Td>{transportCompany.transportVehicles.length}</Td>
                     <Td>
                       <Button
                         size={'sm'}
