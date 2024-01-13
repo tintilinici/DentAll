@@ -5,3 +5,35 @@
 #root {
   height: 100vh;
 }
+
+.accommodation-type span {
+  display: flex;
+  padding: 5px 15px;
+  border-radius: 6px;
+  font-weight: bold;
+  width: fit-content;
+}
+
+.house {
+  background-color: lightcoral;
+}
+
+.apartment {
+  background-color: lightgreen;
+}
+
+.room {
+  background-color: lightblue;
+}
+
+.row-hover td:not(:last-of-type){
+  cursor: pointer;
+}
+
+.row-hover tr:hover{
+  background-color: #EA580C40;
+}
+
+.leaflet-container {
+  width: 100%
+}
