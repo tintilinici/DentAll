@@ -15,8 +15,8 @@ const TransportCompanyDetailsPage = () => {
         <Card>{error ? error.message : 'Data for company not avalible'}</Card>
       ) : (
         <>
-          <div className='w-full flex justify-end'>
-            <Card className='w-min mb-6'>
+          <div className='flex w-full justify-end'>
+            <Card className='mb-6 w-min'>
               <Button colorScheme='whatsapp'>Add vehicle</Button>
             </Card>
           </div>

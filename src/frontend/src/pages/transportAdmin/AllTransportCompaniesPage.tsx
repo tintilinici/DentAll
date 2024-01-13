@@ -55,8 +55,8 @@ const AllTransportCompaniesPage = () => {
         onClose={onClose}
       />
 
-      <div className='w-full flex justify-end'>
-        <Card className='w-min mb-6'>
+      <div className='flex w-full justify-end'>
+        <Card className='mb-6 w-min'>
           <Button
             colorScheme='whatsapp'
             onClick={onOpen}

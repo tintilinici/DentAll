@@ -19,9 +19,9 @@ const SidebarLink = (props: PropsWithChildren<SidebarLinkProps>) => {
     <Link
       to={props.to}
       className={cn(
-        'text-gray-400 px-10 font-normal text-lg bg-white',
+        'bg-white px-10 text-lg font-normal text-gray-400',
         props.selected || pathname.startsWith(props.to)
-          ? 'text-orange-600 font-medium border-orange-500 border-r-4'
+          ? 'border-r-4 border-orange-500 font-medium text-orange-600'
           : 'hover:text-orange-400',
         props.className
       )}
@@ -63,10 +63,10 @@ const Sidebar = () => {
   const { getRoles } = useAuth()
 
   return (
-    <div className='bg-white w-72 flex-shrink-0 flex flex-col'>
-      <h1 className='mx-auto my-8 italic text-4xl font-bold text-orange-400'>DentAll</h1>
+    <div className='flex w-72 flex-shrink-0 flex-col bg-white'>
+      <h1 className='mx-auto my-8 text-4xl font-bold italic text-orange-400'>DentAll</h1>
       <hr className='border-gray-200' />
-      <div className='flex flex-col justify-between h-full py-10'>
+      <div className='flex h-full flex-col justify-between py-10'>
         <ul className='flex flex-col space-y-4'>
           {links.map((data) => {
             if (getRoles().some((role) => data.visibleToRoles.includes(role))) {
