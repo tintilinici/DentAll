@@ -27,3 +27,11 @@ export type Patient = {
   email: string
   pin: string
 }
+
+export type PatientPostDTO = {
+  firstName: string
+  lastName: string
+  phoneNumber: string
+  email: string
+  pin: string
+}

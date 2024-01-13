@@ -8,9 +8,11 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
   useToast,
 } from '@chakra-ui/react'
 import SidebarLayout from '../../components/SidebarLayout'
+import AddPatientModal from '../../components/AddPatientModal'
 import { useGetPatients } from '../../hooks/useGetPatients'
 import { useDeletePatientMutation } from '../../hooks/useDeletePatient'
 import Card from '../../components/Card'
@@ -18,10 +20,12 @@ import { useNavigate } from 'react-router-dom'
 import routes from '../../constants/routes'
 
 const PatientAdminDashboard = () => {
+  const { isOpen, onClose } = useDisclosure()
+
   const { data, isLoading, error } = useGetPatients()
+  const deletePatientMutation = useDeletePatientMutation()
 
   const toast = useToast()
-  const deletePatientMutation = useDeletePatientMutation()
 
   const navigate = useNavigate()
 
@@ -47,6 +51,11 @@ const PatientAdminDashboard = () => {
 
   return (
     <SidebarLayout>
+      <AddPatientModal
+        isOpen={isOpen}
+        onClose={onClose}
+      />
+
       <Card>
         <Skeleton isLoaded={!isLoading}>
           <TableContainer>
