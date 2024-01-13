@@ -83,6 +83,7 @@ const AllTransportCompaniesPage = () => {
                   <Tr
                     key={transportCompany.id}
                     onClick={() => handleOnRowClick(transportCompany.id)}
+                    className='cursor-pointer hover:bg-gray-100'
                   >
                     <Td>{transportCompany.name}</Td>
                     <Td>{transportCompany.email}</Td>

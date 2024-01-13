@@ -4,12 +4,12 @@ import { Accommodation } from '../lib/api.types'
 import { useAuth } from '../components/auth/useAuth'
 
 export const useGetAccommodations = () => {
-    const { token } = useAuth()
+  const { token } = useAuth()
 
-    return useQuery({
-        queryFn: () => customFetch<Accommodation[]>('/accommodations', {}, token),
+  return useQuery({
+    queryFn: () => customFetch<Accommodation[]>('/accommodations', {}, token),
 
-        // eslint-disable-next-line @tanstack/query/exhaustive-deps
-        queryKey: ['accommodations'],
-    })
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
+    queryKey: ['accommodations'],
+  })
 }

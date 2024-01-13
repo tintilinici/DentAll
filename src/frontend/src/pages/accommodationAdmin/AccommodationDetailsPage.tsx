@@ -1,11 +1,22 @@
 import { useParams } from 'react-router-dom'
 import Card from '../../components/Card'
 import SidebarLayout from '../../components/SidebarLayout'
-import {Button, Flex, Skeleton, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react'
-import {useGetAccommodationDetails} from "../../hooks/useGetAccommodationDetails.ts";
-import {MapContainer, Marker, Popup, TileLayer, useMap} from 'react-leaflet';
-import "leaflet/dist/leaflet.css";
-import {LatLngExpression} from "leaflet";
+import {
+  Button,
+  Flex,
+  Skeleton,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from '@chakra-ui/react'
+import { useGetAccommodationDetails } from '../../hooks/useGetAccommodationDetails.ts'
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import 'leaflet/dist/leaflet.css'
+import AccommodationTypeTag from '../../components/AccomodationTypeTag.tsx'
 
 const AccommodationDetailsPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -18,14 +29,14 @@ const AccommodationDetailsPage = () => {
         <Card>{error ? error.message : 'Data for accommodation not available'}</Card>
       ) : (
         <>
-          <div className='w-full flex justify-end'>
-            <Card className='w-min mb-6'>
+          <div className='flex w-full justify-end'>
+            <Card className='mb-6 w-min'>
               <Button colorScheme='whatsapp'>Edit accommodation</Button>
             </Card>
           </div>
           <Card>
             <Skeleton isLoaded={!isLoading}>
-              <TableContainer marginBottom="24px">
+              <TableContainer marginBottom='24px'>
                 <Table variant={'simple'}>
                   <Thead>
                     <Tr>
@@ -38,7 +49,9 @@ const AccommodationDetailsPage = () => {
                   <Tbody>
                     <Tr>
                       <Td>{data.address}</Td>
-                      <Td className="lowercase accommodation-type"><span className={data.accommodationType.toLowerCase()}>{data.accommodationType}</span></Td>
+                      <Td>
+                        <AccommodationTypeTag accommodationType={data.accommodationType} />
+                      </Td>
                       <Td>{new Date(data.availabilityStart).toLocaleDateString()}</Td>
                       <Td>{new Date(data.availabilityEnd).toLocaleDateString()}</Td>
                     </Tr>
@@ -46,16 +59,26 @@ const AccommodationDetailsPage = () => {
                 </Table>
               </TableContainer>
 
-              <Flex w="100%" height="500px">
-                <MapContainer center={[data.latitude as number, data.longitude as number]} zoom={13} scrollWheelZoom={false}>
+              <Flex
+                w='100%'
+                height='500px'
+              >
+                <MapContainer
+                  center={[data.latitude as unknown as number, data.longitude as unknown as number]}
+                  zoom={13}
+                  scrollWheelZoom={false}
+                >
                   <TileLayer
-                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                   />
-                  <Marker position={[data.latitude as number, data.longitude as number]}>
-                    <Popup>
-                      {data.address}
-                    </Popup>
+                  <Marker
+                    position={[
+                      data.latitude as unknown as number,
+                      data.longitude as unknown as number,
+                    ]}
+                  >
+                    <Popup>{data.address}</Popup>
                   </Marker>
                 </MapContainer>
               </Flex>

@@ -14,7 +14,7 @@ import UserAdminDashboard from './pages/userAdmin/UserAdminDashboardPage'
 import AccommodationAdminDashboardPage from './pages/accommodationAdmin/AccommodationAdminDashboard'
 import AdminsManagmentPage from './pages/userAdmin/AdminsManagmentPage'
 import { ROLE } from './components/auth/authTypes'
-import AccommodationDetailsPage from "./pages/accommodationAdmin/AccommodationDetailsPage.tsx";
+import AccommodationDetailsPage from './pages/accommodationAdmin/AccommodationDetailsPage.tsx'
 
 const queryClient = new QueryClient()
 

@@ -20,9 +20,9 @@ const TransportCompanyDetailsPage = () => {
               <Button colorScheme='whatsapp'>Add vehicle</Button>
             </Card>
           </div>
-          <Card>
-            <Skeleton isLoaded={!isLoading}>{data.name}</Skeleton>
-          </Card>
+          <Skeleton isLoaded={!isLoading}>
+            <Card>{data.name}</Card>
+          </Skeleton>
         </>
       )}
     </SidebarLayout>
