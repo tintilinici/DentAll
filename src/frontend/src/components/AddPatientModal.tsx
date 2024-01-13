@@ -35,6 +35,13 @@ const AddPatientModal = ({ isOpen, onClose }: Props) => {
       onSuccess: () => {
         onClose()
         reset()
+        toast({
+          title: 'Success',
+          description: 'New patient added successfully.',
+          status: 'success',
+          duration: 2000,
+          isClosable: true,
+        })
       },
       onError: (error) => {
         toast({
