@@ -1,3 +1,5 @@
+import { ROLE } from '../components/auth/authTypes'
+
 export type TransportCompanyPostDTO = {
   name: string
   email: string
@@ -17,4 +19,9 @@ export type TransportVehicle = {
   capacity: number
   transportVehicleType: 'BUS' | 'CAR' | 'VAN'
   transportCompanyId: string
+}
+
+export type JwtPayload = {
+  roles: ROLE[]
+  email: string
 }
