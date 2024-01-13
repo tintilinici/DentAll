@@ -14,6 +14,8 @@ public interface AccommodationBookingRepository extends JpaRepository<Accommodat
 
     List<AccommodationBooking> findByOrderPatientId(String id);
 
+    boolean existsByOrderId(String id);
+
     boolean existsByAccommodationId(String id);
 
     void deleteByAccommodationId(String id);

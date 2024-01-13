@@ -18,5 +18,5 @@ public class TransportCompanyDto {
 
     private String phoneNumber;
 
-    private List<String> transportVehiclesIds;
+    private List<TransportVehicleDto> transportVehicles;
 }

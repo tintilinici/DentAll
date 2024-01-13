@@ -7,7 +7,7 @@ export const useDeleteTransportCompanyMutation = () => {
   return useMutation({
     mutationKey: ['deleteTransportCompany'],
     mutationFn: (companyId: string) =>
-      customFetch(`transportCompanies/${companyId}`, { method: 'DELETE' }),
+      customFetch(`transportCompanies/${companyId}`, { method: 'DELETE', interesedInData: false }),
     onSuccess: () => {
       return queryClient.invalidateQueries({ queryKey: ['transportCompanies'] })
     },

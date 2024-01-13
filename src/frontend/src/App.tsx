@@ -57,14 +57,6 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-  {
-    path: routes.USERS.ADMIN_MANAGMENT,
-    element: (
-      <ProtectedRoute allowRoles={'any'}>
-        <AdminsManagmentPage />
-      </ProtectedRoute>
-    ),
-  },
 
   // accommodation admin routes
   {
@@ -73,6 +65,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowRoles={'any'}>
         <AccommodationAdminDashboardPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: routes.USERS.ADMIN_MANAGMENT,
+    element: (
+      <ProtectedRoute allowRoles={'any'}>
+        <AdminsManagmentPage />
       </ProtectedRoute>
     ),
   },

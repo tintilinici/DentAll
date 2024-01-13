@@ -11,6 +11,7 @@ import com.dentall.dentallservice.model.dto.AccommodationOrderDto;
 import com.dentall.dentallservice.model.dto.PatientDto;
 import com.dentall.dentallservice.model.request.CreateAccommodationOrderRequest;
 import com.dentall.dentallservice.model.request.CreatePatientRequest;
+import com.dentall.dentallservice.model.request.UpdateAccommodationOrderRequest;
 import com.dentall.dentallservice.model.request.UpdatePatientRequest;
 import com.dentall.dentallservice.repository.AccommodationOrderRepository;
 import com.dentall.dentallservice.repository.PatientRepository;
@@ -123,5 +124,26 @@ public class PatientServiceImpl implements PatientService {
             throw new AccommodationOrderNotFoundException("Order with id: " + id + " doesn't exist.");
         }
         accommodationOrderRepository.deleteById(id);
-    };
+    }
+
+    @Override
+    public AccommodationOrderDto updateAccommodationOrder(String id, UpdateAccommodationOrderRequest request) {
+        AccommodationOrder accommodationOrder = accommodationOrderRepository.findById(id).orElseThrow(() -> new AccommodationOrderNotFoundException(id));
+
+        if(request.getArrivalDateTime() != null){
+            accommodationOrder.setArrivalDateTime(request.getArrivalDateTime());
+        }
+        if(request.getDepartureDateTime() != null){
+            accommodationOrder.setDepartureDateTime(request.getDepartureDateTime());
+        }
+        if(request.getAccommodationSize() > 0){
+            accommodationOrder.setAccommodationSize(request.getAccommodationSize());
+        }
+        if (request.getAccommodationType() != null) {
+            accommodationOrder.setAccommodationType(request.getAccommodationType());
+        }
+
+        accommodationOrderRepository.save(accommodationOrder);
+        return accommodationOrderMapper.modelToDto(accommodationOrder);
+    }
 }
