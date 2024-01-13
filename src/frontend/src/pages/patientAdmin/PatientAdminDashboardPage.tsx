@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom'
 import routes from '../../constants/routes'
 
 const PatientAdminDashboard = () => {
-  const { isOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const { data, isLoading, error } = useGetPatients()
   const deletePatientMutation = useDeletePatientMutation()
@@ -55,6 +55,17 @@ const PatientAdminDashboard = () => {
         isOpen={isOpen}
         onClose={onClose}
       />
+
+      <div className='w-full flex justify-end'>
+        <Card className='w-min mb-6'>
+          <Button
+            colorScheme='whatsapp'
+            onClick={onOpen}
+          >
+            Add new patient
+          </Button>
+        </Card>
+      </div>
 
       <Card>
         <Skeleton isLoaded={!isLoading}>

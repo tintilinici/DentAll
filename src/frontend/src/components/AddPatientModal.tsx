@@ -98,15 +98,13 @@ const AddPatientModal = ({ isOpen, onClose }: Props) => {
 
             <FormControl isRequired>
               <FormLabel>Email</FormLabel>
-              <NumberInput>
-                <NumberInputField
-                  type='email'
-                  placeholder='example@domain.com'
-                  minLength={5}
-                  maxLength={50}
-                  {...register('email')}
-                />
-              </NumberInput>
+              <Input
+                type='email'
+                placeholder='example@example.com'
+                minLength={5}
+                maxLength={50}
+                {...register('email')}
+              />
             </FormControl>
 
             <FormControl isRequired>
