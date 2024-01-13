@@ -17,7 +17,7 @@ import Card from '../../components/Card'
 import { useNavigate } from 'react-router-dom'
 import routes from '../../constants/routes'
 
-const UserAdminDashboard = () => {
+const PatientAdminDashboard = () => {
   const { data, isLoading, error } = useGetPatients()
 
   const toast = useToast()
@@ -95,4 +95,4 @@ const UserAdminDashboard = () => {
   )
 }
 
-export default UserAdminDashboard
+export default PatientAdminDashboard

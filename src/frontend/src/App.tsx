@@ -10,10 +10,10 @@ import AllTransportCompaniesPage from './pages/transportAdmin/AllTransportCompan
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import TransportCompanyDetailsPage from './pages/transportAdmin/TransportCompanyDetailsPage'
-import UserAdminDashboard from './pages/userAdmin/UserAdminDashboardPage'
+import PatientAdminDashboard from './pages/patientAdmin/PatientAdminDashboardPage'
 import AccommodationAdminDashboardPage from './pages/accommodationAdmin/AccommodationAdminDashboard'
 import AccountPage from './pages/AccountPage'
-import AdminsManagmentPage from './pages/userAdmin/AdminsManagmentPage'
+import AdminsManagmentPage from './pages/accommodationAdmin/AdminsManagmentPage'
 
 const queryClient = new QueryClient()
 
@@ -48,12 +48,12 @@ const router = createBrowserRouter([
     ),
   },
 
-  // user admin routes
+  // patient admin routes
   {
     path: routes.USERS.DASHBOARD,
     element: (
       <ProtectedRoute allowRoles={'any'}>
-        <UserAdminDashboard />
+        <PatientAdminDashboard />
       </ProtectedRoute>
     ),
   },
