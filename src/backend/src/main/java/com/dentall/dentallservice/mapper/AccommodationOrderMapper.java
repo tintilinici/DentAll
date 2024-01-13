@@ -12,11 +12,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface AccommodationOrderMapper {
 
-
-
     @Mapping(target = "patientId", source = "patient.id")
-
+    @Mapping(target = "accommodationBookingId", source = "accommodationBooking.id")
     AccommodationOrderDto modelToDto(AccommodationOrder model);
 
-    List<AccommodationBookingDto> modelToDtos(List<AccommodationOrder> models);
+    List<AccommodationOrderDto> modelsToDtos(List<AccommodationOrder> models);
 }

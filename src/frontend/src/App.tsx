@@ -1,11 +1,21 @@
-import LandingPage from "./pages/LandingPage";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import AllTransportCompaniesPage from "./pages/transportAdminPages/AllTransportCompaniesPage";
-import routes from "./constants/routes";
-import AuthProvider from "./components/navbar/auth/AuthProvider";
-import ProtectedRoute from "./components/navbar/auth/ProtectedRoute";
-import NoAuthOnlyRoute from "./components/navbar/auth/NoAuthOnlyRoute";
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import AuthProvider from './components/auth/AuthProvider'
+import NoAuthOnlyRoute from './components/auth/NoAuthOnlyRoute'
+import ProtectedRoute from './components/auth/ProtectedRoute'
+import routes from './constants/routes'
+import LandingPage from './pages/LandingPage'
+import LoginPage from './pages/LoginPage'
+import AllTransportCompaniesPage from './pages/transportAdmin/AllTransportCompaniesPage'
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import TransportCompanyDetailsPage from './pages/transportAdmin/TransportCompanyDetailsPage'
+import UserAdminDashboard from './pages/userAdmin/UserAdminDashboardPage'
+import AccommodationAdminDashboardPage from './pages/accommodationAdmin/AccommodationAdminDashboard'
+import AccountPage from './pages/AccountPage'
+import AdminsManagmentPage from './pages/userAdmin/AdminsManagmentPage'
+
+const queryClient = new QueryClient()
 
 const router = createBrowserRouter([
   {
@@ -22,21 +32,70 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: routes.TRANSPORT.COMPANIES,
+    path: routes.TRANSPORT_COMPANIES,
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute allowRoles={'any'}>
         <AllTransportCompaniesPage />
       </ProtectedRoute>
     ),
   },
-]);
+  {
+    path: `${routes.TRANSPORT_COMPANIES}/:id`,
+    element: (
+      <ProtectedRoute allowRoles={'any'}>
+        <TransportCompanyDetailsPage />
+      </ProtectedRoute>
+    ),
+  },
+
+  // user admin routes
+  {
+    path: routes.USERS.DASHBOARD,
+    element: (
+      <ProtectedRoute allowRoles={'any'}>
+        <UserAdminDashboard />
+      </ProtectedRoute>
+    ),
+  },
+
+  // accommodation admin routes
+  {
+    path: routes.ACCOMMODATION,
+    // TODO: add protection here for the accomodation admin
+    element: (
+      <ProtectedRoute allowRoles={'any'}>
+        <AccommodationAdminDashboardPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: routes.USERS.ADMIN_MANAGMENT,
+    element: (
+      <ProtectedRoute allowRoles={'any'}>
+        <AdminsManagmentPage />
+      </ProtectedRoute>
+    ),
+  },
+
+  {
+    path: routes.ACCOUNT,
+    element: (
+      <ProtectedRoute allowRoles={'any'}>
+        <AccountPage />,
+      </ProtectedRoute>
+    ),
+  },
+])
 
 function App() {
   return (
-    <AuthProvider>
-      <RouterProvider router={router} />;
-    </AuthProvider>
-  );
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </QueryClientProvider>
+  )
 }
 
-export default App;
+export default App

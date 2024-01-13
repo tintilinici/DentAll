@@ -19,7 +19,7 @@ public class PatientDto {
 
     private String PIN;
 
-    private String phone_number;
+    private String phoneNumber;
 
     private String email;
 }

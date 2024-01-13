@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class MedicalTreatmentDto {
 
     private String id;
-    private String patientId;
+    private String accommodationOrderId;
     private String description;
     private String clinicAddress;
     private LocalDateTime startDateTime;

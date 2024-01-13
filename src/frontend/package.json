@@ -6,22 +6,37 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "lint": "eslint . --report-unused-disable-directives --max-warnings=0",
+    "lint:fix": "eslint . --fix",
+    "preview": "vite preview",
+    "prepare": "cd ../.. && husky install src/frontend/.husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "prettier --check --write",
+      "eslint --report-unused-disable-directives --max-warnings=0"
+    ]
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@tanstack/react-query": "^5.17.9",
+    "clsx": "^2.1.0",
     "framer-motion": "^10.16.4",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.49.3",
     "react-router-dom": "^6.18.0",
-    "sort-by": "^1.2.0"
+    "sort-by": "^1.2.0",
+    "tailwind-merge": "^2.2.0"
   },
   "devDependencies": {
+    "@stylistic/eslint-plugin": "^1.5.3",
+    "@tanstack/eslint-plugin-query": "^5.17.7",
+    "@tanstack/react-query-devtools": "^5.17.9",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
@@ -29,9 +44,13 @@
     "@vitejs/plugin-react": "^4.0.3",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.45.0",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
     "postcss": "^8.4.31",
+    "prettier": "3.1.1",
     "tailwindcss": "^3.3.5",
     "typescript": "^5.0.2",
     "vite": "^4.4.5"

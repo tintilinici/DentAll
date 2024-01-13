@@ -11,6 +11,8 @@ import com.dentall.dentallservice.model.dto.AccommodationOrderDto;
 import com.dentall.dentallservice.model.dto.PatientDto;
 import com.dentall.dentallservice.model.request.CreateAccommodationOrderRequest;
 import com.dentall.dentallservice.model.request.CreatePatientRequest;
+import com.dentall.dentallservice.model.request.UpdateAccommodationOrderRequest;
+import com.dentall.dentallservice.model.request.UpdatePatientRequest;
 import com.dentall.dentallservice.repository.AccommodationOrderRepository;
 import com.dentall.dentallservice.repository.PatientRepository;
 import com.dentall.dentallservice.service.PatientService;
@@ -43,6 +45,14 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public List<AccommodationOrderDto> searchAccommodationOrders(String patientId) {
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new PatientNotFoundException(patientId));
+
+        return accommodationOrderMapper.modelsToDtos(patient.getAccommodationOrders());
+    }
+
+    @Override
     public void deletePatient(String id) {
         boolean patientExists = patientRepository.existsById(id);
         if(!patientExists){
@@ -59,6 +69,29 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public PatientDto updatePatient(String id, UpdatePatientRequest request) {
+        Patient patient = patientRepository.findById(id).orElseThrow(() -> new PatientNotFoundException(id));
+
+        if(request.getFirstName() != null){
+            patient.setFirstName(request.getFirstName());
+        }
+        if(request.getLastName() != null){
+            patient.setLastName(request.getLastName());
+        }
+        if(request.getPIN() != null){
+            patient.setPIN(request.getPIN());
+        }
+        if(request.getPhoneNumber() != null){
+            patient.setPhoneNumber(request.getPhoneNumber());
+        }
+        if(request.getEmail() != null){
+            patient.setEmail(request.getEmail());
+        }
+        patientRepository.save(patient);
+        return patientMapper.modelToDto(patient);
+    }
+
+    @Override
     public List<PatientDto> retrieveAllPatients() {
         List<Patient> patients = patientRepository.findAll();
 
@@ -70,6 +103,14 @@ public class PatientServiceImpl implements PatientService {
         Patient patient = patientRepository.findById(request.getPatientId())
                 .orElseThrow(() -> new PatientNotFoundException("Patient with id: '" + request.getPatientId() + "' not found!"));
 
+        accommodationOrderRepository.findByArrivalDateTimeBetweenOrDepartureDateTimeBetween(
+                request.getArrivalDatetime(),
+                request.getDepartureDatetime(),
+                request.getArrivalDatetime(),
+                request.getDepartureDatetime()
+        ).stream().findAny().ifPresent((order) -> {
+            throw new IllegalArgumentException("Patient with id: '" + order.getPatient().getId() + "' already has an order for that time! Order id: '" + order.getId() + "'");
+        });
 
         AccommodationOrder accommodationOrder = AccommodationOrderFactory.create(request, patient);
         accommodationOrderRepository.save(accommodationOrder);
@@ -83,5 +124,26 @@ public class PatientServiceImpl implements PatientService {
             throw new AccommodationOrderNotFoundException("Order with id: " + id + " doesn't exist.");
         }
         accommodationOrderRepository.deleteById(id);
-    };
+    }
+
+    @Override
+    public AccommodationOrderDto updateAccommodationOrder(String id, UpdateAccommodationOrderRequest request) {
+        AccommodationOrder accommodationOrder = accommodationOrderRepository.findById(id).orElseThrow(() -> new AccommodationOrderNotFoundException(id));
+
+        if(request.getArrivalDateTime() != null){
+            accommodationOrder.setArrivalDateTime(request.getArrivalDateTime());
+        }
+        if(request.getDepartureDateTime() != null){
+            accommodationOrder.setDepartureDateTime(request.getDepartureDateTime());
+        }
+        if(request.getAccommodationSize() > 0){
+            accommodationOrder.setAccommodationSize(request.getAccommodationSize());
+        }
+        if (request.getAccommodationType() != null) {
+            accommodationOrder.setAccommodationType(request.getAccommodationType());
+        }
+
+        accommodationOrderRepository.save(accommodationOrder);
+        return accommodationOrderMapper.modelToDto(accommodationOrder);
+    }
 }
