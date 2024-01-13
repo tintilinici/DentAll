@@ -75,7 +75,8 @@ const AddPatientModal = ({ isOpen, onClose }: Props) => {
               <Input
                 placeholder='First name'
                 type='text'
-                minLength={5}
+                pattern='^[A-Za-z]+$'
+                minLength={3}
                 maxLength={100}
                 {...register('firstName')}
               />
@@ -86,7 +87,8 @@ const AddPatientModal = ({ isOpen, onClose }: Props) => {
               <Input
                 type='text'
                 placeholder='Last name'
-                minLength={5}
+                pattern='^[A-Za-z]+$'
+                minLength={3}
                 maxLength={100}
                 {...register('lastName')}
               />
@@ -118,6 +120,7 @@ const AddPatientModal = ({ isOpen, onClose }: Props) => {
               <FormLabel>PIN</FormLabel>
               <NumberInput>
                 <NumberInputField
+                  type='number'
                   placeholder='1234'
                   minLength={4}
                   maxLength={4}
