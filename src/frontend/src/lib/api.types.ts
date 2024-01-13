@@ -25,3 +25,13 @@ export type JwtPayload = {
   roles: ROLE[]
   email: string
 }
+
+export type Accommodation = {
+  id: string,
+  accommodationType: string,
+  address: string,
+  availabilityStart: Date,
+  availabilityEnd: Date,
+  latitude: string,
+  longitude: string,
+}

@@ -14,6 +14,7 @@ import UserAdminDashboard from './pages/userAdmin/UserAdminDashboardPage'
 import AccommodationAdminDashboardPage from './pages/accommodationAdmin/AccommodationAdminDashboard'
 import AdminsManagmentPage from './pages/userAdmin/AdminsManagmentPage'
 import { ROLE } from './components/auth/authTypes'
+import AccommodationDetailsPage from "./pages/accommodationAdmin/AccommodationDetailsPage.tsx";
 
 const queryClient = new QueryClient()
 
@@ -61,10 +62,17 @@ const router = createBrowserRouter([
   // accommodation admin routes
   {
     path: routes.ACCOMMODATION,
-    // TODO: add protection here for the accomodation admin
     element: (
       <ProtectedRoute allowRoles={[ROLE.ROLE_ACCOMMODATION]}>
         <AccommodationAdminDashboardPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: `${routes.ACCOMMODATION}/:id`,
+    element: (
+      <ProtectedRoute allowRoles={[ROLE.ROLE_ACCOMMODATION]}>
+        <AccommodationDetailsPage />
       </ProtectedRoute>
     ),
   },
