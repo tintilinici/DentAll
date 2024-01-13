@@ -69,10 +69,8 @@ public class EmailService {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
         helper.setText(body,true);
-        helper.setTo("filipbuljan2002@gmail.com");
+        helper.setTo(driverEmail);
         helper.setSubject(subject);
-        helper.setFrom("madzarmaksim@gmail.com");
         mailSender.send(mimeMessage);
     }
-
 }
