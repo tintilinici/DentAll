@@ -15,7 +15,7 @@ public class CreatePatientRequest {
 
     private String PIN;
 
-    private String phoneNumber;
+    private String phone_number;
 
     private String email;
 }

@@ -17,14 +17,10 @@ public interface AccommodationMapper {
 
     @Mapping(target = "id", expression = "java(java.util.UUID.randomUUID().toString())")
     @Mapping(target = "location", expression = "java(toPoint(request.getLongitude(), request.getLatitude()))")
-    @Mapping(target = "availabilityStart", source = "availabilityStart")
-    @Mapping(target = "availabilityEnd", source = "availabilityEnd")
     Accommodation requestToModel(CreateAccommodationRequest request);
 
     @Mapping(target = "longitude", expression = "java(String.valueOf(accommodation.getLocation().getX()))")
     @Mapping(target = "latitude", expression = "java(String.valueOf(accommodation.getLocation().getY()))")
-    @Mapping(target = "availabilityStart", source = "availabilityStart")
-    @Mapping(target = "availabilityEnd", source = "availabilityEnd")
     AccommodationDto modelToDto(Accommodation accommodation);
 
     List<AccommodationDto> modelsToDtos(List<Accommodation> accommodations);

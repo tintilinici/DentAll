@@ -12,11 +12,11 @@ public class AccommodationOrderFactory {
 
     public static AccommodationOrder create(CreateAccommodationOrderRequest request, Patient patient){
         return AccommodationOrder.builder()
-                .id(UUID.randomUUID().toString())
+                .accommodationOrderId(UUID.randomUUID().toString())
                 .patient(patient)
                 .accommodationSize(request.getAccommodationSize())
-                .arrivalDateTime(LocalDateTime.from(request.getArrivalDatetime()))
-                .departureDateTime(LocalDateTime.from(request.getDepartureDatetime()))
+                .arrivalDatetime(LocalDateTime.from(request.getArrivalDatetime()))
+                .departureDatetime(LocalDateTime.from(request.getDepartureDatetime()))
                 .accommodationType(AccommodationType.valueOf(request.getAccommodationType()))
                 .build();
     }

@@ -14,7 +14,6 @@ public interface TransportVehicleMapper {
     @Mapping(target = "id", expression = "java(java.util.UUID.randomUUID().toString())")
     TransportVehicle requestToModel(CreateTransportVehicleRequest request);
 
-    @Mapping(target = "transportCompanyId", source = "transportCompany.id")
     TransportVehicleDto modelToDto(TransportVehicle transportVehicle);
 
     List<TransportVehicleDto> modelsToDtos(List<TransportVehicle> transportVehicles);

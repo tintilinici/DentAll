@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FetchMedicalTreatmentsRequest {
-    private String accommodationOrderId;
+    private String patientId;
     private LocalDateTime arrivalDateTime;
     private LocalDateTime departureDateTime;
 }

@@ -15,9 +15,9 @@ public class CreateAccommodationRequest {
 
     private String address;
 
-    private LocalDate availabilityStart;
+    private LocalDate availability_start;
 
-    private LocalDate availabilityEnd;
+    private LocalDate availability_end;
 
     private String latitude;
 

@@ -3,19 +3,13 @@ package com.example.service;
 import com.example.models.FetchMedicalTreatmentsRequest;
 import com.example.models.MedicalTreatmentDto;
 import jakarta.enterprise.context.ApplicationScoped;
-import javafx.util.Pair;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-
-import static com.example.common.TimeSplitter.END_TIME;
-import static com.example.common.TimeSplitter.START_TIME;
-import static com.example.common.TimeSplitter.splitFullTimeIntoParts;
 
 @ApplicationScoped
 public class Service {
@@ -30,65 +24,39 @@ public class Service {
 
     private List<MedicalTreatmentDto> generateTreatmentsRandomly(FetchMedicalTreatmentsRequest request) {
         List<MedicalTreatmentDto> treatments = new ArrayList<>();
+
         int numOfTreatments = generateNumber();
-
-        if (numOfTreatments > 0) {
-            var appointments = getRandomAppointments(request.getArrivalDateTime(), request.getDepartureDateTime(), numOfTreatments);
-
-            appointments.forEach(appointment -> {
-                LocalDateTime appointmentStart = appointment.getKey();
-                LocalDateTime appointmentEnd = appointment.getValue();
-                String clinicAddress = "Clinic Address " + (int) (Math.random() * 10);
-                String description = "Description " + (int) (Math.random() * 10);
-                String id = UUID.randomUUID().toString();
-                MedicalTreatmentDto treatment = new MedicalTreatmentDto(id, request.getAccommodationOrderId(), description, clinicAddress, appointmentStart, appointmentEnd);
-                treatments.add(treatment);
-            });
+        for (int i = 0; i < numOfTreatments; i++) {
+            LocalDateTime startDateTime = getRandomDateTime(request.getArrivalDateTime(), request.getDepartureDateTime());
+            LocalDateTime endDateTime = getRandomDateTime(startDateTime, request.getDepartureDateTime());
+            String clinicAddress = "Clinic Address " + (int) (Math.random() * 10);
+            String description = "Description " + (int) (Math.random() * 10);
+            String id = UUID.randomUUID().toString();
+            MedicalTreatmentDto treatment = new MedicalTreatmentDto(id, request.getPatientId(), description, clinicAddress, startDateTime, endDateTime);
+            treatments.add(treatment);
         }
 
         return treatments;
     }
 
-    private List<Pair<LocalDateTime, LocalDateTime>> getRandomAppointments(LocalDateTime arrivalDateTime, LocalDateTime departureDateTime, int numberOfTreatments) {
-        List<Pair<LocalDateTime, LocalDateTime>> appointments = new ArrayList<>();
+    public static LocalDateTime getRandomDateTime(LocalDateTime arrivalDateTime, LocalDateTime departureDateTime) {
+        // Define the time constraints
+        LocalTime startTime = LocalTime.of(8, 0); // 8 AM
+        LocalTime endTime = LocalTime.of(18, 0); // 6 PM
 
-        List<Pair<LocalDateTime, LocalDateTime>> workdayParts = splitFullTimeIntoParts(arrivalDateTime, departureDateTime, numberOfTreatments);
-        workdayParts.forEach(part -> {
-            appointments.add(generateRandomAppointment(part.getKey(), part.getValue()));
-        });
+        // Adjust arrival and departure times to fit within the constraints
+        LocalDateTime adjustedArrival = arrivalDateTime.toLocalTime().isBefore(startTime) ? arrivalDateTime.with(startTime) : arrivalDateTime;
+        LocalDateTime adjustedDeparture = departureDateTime.toLocalTime().isAfter(endTime) ? departureDateTime.with(endTime) : departureDateTime;
 
-        return appointments;
+        // Calculate the duration in minutes between the adjusted times
+        long durationMinutes = java.time.Duration.between(adjustedArrival, adjustedDeparture).toMinutes();
+
+        // Generate a random offset in minutes
+        long randomOffsetMinutes = (long) (random.nextDouble() * durationMinutes);
+
+        // Add the random offset to the adjusted arrival time
+        return adjustedArrival.plusMinutes(randomOffsetMinutes);
     }
-
-    private Pair<LocalDateTime, LocalDateTime> generateRandomAppointment(LocalDateTime partStartDateTime, LocalDateTime partEndDateTime) {
-        LocalDateTime appointmentStartDateTime;
-        LocalDateTime appointmentEndDateTime;
-        LocalTime partStartTime = partStartDateTime.toLocalTime();
-        LocalTime partEndTime = partEndDateTime.toLocalTime();
-
-        if (partStartTime.isAfter(END_TIME.minusMinutes(15))) {
-            appointmentStartDateTime = partStartDateTime.plusDays(1).with(START_TIME);
-        } else if (partStartTime.isBefore(START_TIME)) {
-            appointmentStartDateTime = partStartDateTime.with(START_TIME);
-        } else {
-            appointmentStartDateTime = partStartDateTime;
-        }
-
-        long duration;
-        long minutesUntilEndOfWorkDay = Duration.between(partStartTime, END_TIME).toMinutes();
-        long minutesUntilEndOfPart = Duration.between(partStartTime, partEndTime).toMinutes();
-        long minutesUntilEnd = Math.min(minutesUntilEndOfWorkDay, minutesUntilEndOfPart);
-
-        if (minutesUntilEnd < 120) {
-            duration = (long) (Math.random() * minutesUntilEnd + 15);
-        } else {
-            duration = (long) (Math.random() * 105 + 15);
-        }
-
-        appointmentEndDateTime = appointmentStartDateTime.plusMinutes(duration);
-        return new Pair<>(appointmentStartDateTime, appointmentEndDateTime);
-    }
-
 
     private static int generateNumber() {
 

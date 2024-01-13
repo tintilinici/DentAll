@@ -12,7 +12,11 @@ import java.time.LocalDateTime;
 public class AccommodationBookingDto {
     private String id;
 
+    private LocalDateTime startDate;
+
+    private LocalDateTime endDate;
+
     private String accommodationId;
 
-    private String orderId;
+    private String patientId;
 }
