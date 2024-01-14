@@ -46,6 +46,7 @@ public class WebConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/v3/**", "/swagger-ui/**", "/security/login**").permitAll()
                         .requestMatchers(antMatcher("/security/register**")).hasRole("TRANSPORT")
+                        .requestMatchers(antMatcher("/security/users**")).hasRole("TRANSPORT")
                         .requestMatchers(antMatcher("/security/change-role**")).hasRole("TRANSPORT")
                         .requestMatchers(antMatcher("/transport**")).hasRole("TRANSPORT")
                         .requestMatchers(antMatcher("/patient**")).hasRole("PATIENT")
