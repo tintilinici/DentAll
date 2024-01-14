@@ -37,3 +37,9 @@ export type Accommodation = {
   latitude: string,
   longitude: string,
 }
+
+export type User = {
+  email: string,
+  roles: string[],
+  createdAt: string
+}
