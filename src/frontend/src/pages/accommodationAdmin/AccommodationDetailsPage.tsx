@@ -1,11 +1,11 @@
 import { useParams } from 'react-router-dom'
 import Card from '../../components/Card'
 import SidebarLayout from '../../components/SidebarLayout'
-import {Button, Flex, Skeleton, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure} from '@chakra-ui/react'
-import {useGetAccommodationDetails} from "../../hooks/useGetAccommodationDetails.ts";
-import {MapContainer, Marker, Popup, TileLayer, useMap} from 'react-leaflet';
+import { Button, Flex, Skeleton, Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react'
+import { useGetAccommodationDetails } from "../../hooks/useGetAccommodationDetails.ts";
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
-import {LatLngExpression} from "leaflet";
+import { LatLngExpression } from "leaflet";
 import AddEditAccommodationModal from "../../components/AddEditAccommodationModal.tsx";
 
 const AccommodationDetailsPage = () => {

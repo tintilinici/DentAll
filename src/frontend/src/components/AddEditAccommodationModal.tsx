@@ -23,8 +23,6 @@ import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from "react-leaflet";
 import { usePostAccommodation } from "../hooks/usePostAccommodation.ts";
-import {Simulate} from "react-dom/test-utils";
-import reset = Simulate.reset;
 
 interface Props {
     isOpen: boolean
