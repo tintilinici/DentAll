@@ -83,62 +83,92 @@ const TransportCompanyDetailsPage = () => {
               </Button>
             </Card>
           </div>
-          <Skeleton isLoaded={!isLoading}>
-            <Card>
-              <Heading
-                size='lg'
-                mb={8}
-                color='gray.600'
-              >
-                {companyData.name}
-              </Heading>
+
+          <Card>
+            <Skeleton isLoaded={!isLoading}>
               <TableContainer>
                 <Table variant={'simple'}>
                   <Thead>
                     <Tr>
-                      <Th>Type of vehicle</Th>
-                      <Th>Capacity</Th>
-                      <Th>Remove</Th>
+                      <Th>Name</Th>
+                      <Th>Email</Th>
+                      <Th>Phone number</Th>
+                      <Th>Number of vehicles</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {companyData.transportVehicles.map((vehicleData) => (
-                      <Tr
-                        key={vehicleData.id}
-                        // onClick={() => handleOnRowClick(vehicleData.id)}
-                        className='cursor-pointer hover:bg-gray-100'
-                      >
-                        <Td>
-                          <Tag
-                            size='lg'
-                            bgColor={getVehicleTagColor(vehicleData.transportVehicleType)}
-                          >
-                            <TagLabel>
-                              {vehicleData.transportVehicleType.toLocaleLowerCase()}
-                            </TagLabel>
-                          </Tag>
-                        </Td>
-                        <Td>{vehicleData.capacity}</Td>
-                        <Td>
-                          <Button
-                            size={'sm'}
-                            fontWeight={'semibold'}
-                            colorScheme='red'
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleDeleteVehicleButtonClick(vehicleData.id)
-                            }}
-                          >
-                            Remove
-                          </Button>
-                        </Td>
-                      </Tr>
-                    ))}
+                    <Tr className='cursor-pointer hover:bg-gray-100'>
+                      <Td>{companyData.name}</Td>
+                      <Td>{companyData.email}</Td>
+                      <Td>{companyData.phoneNumber}</Td>
+                      <Td>{companyData.transportVehicles.length}</Td>
+                    </Tr>
                   </Tbody>
                 </Table>
               </TableContainer>
-            </Card>
-          </Skeleton>
+
+              <Heading
+                size={'lg'}
+                color='gray.600'
+                mt='10'
+                ml={5}
+              >
+                {companyData.transportVehicles.length > 0
+                  ? 'Vehicles'
+                  : 'This company has no vehicles'}
+              </Heading>
+
+              {companyData.transportVehicles.length > 0 ? (
+                <>
+                  <TableContainer mt='10'>
+                    <Table variant={'simple'}>
+                      <Thead>
+                        <Tr>
+                          <Th>Type of vehicle</Th>
+                          <Th>Capacity</Th>
+                          <Th>Remove</Th>
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        {companyData.transportVehicles.map((vehicleData) => (
+                          <Tr
+                            key={vehicleData.id}
+                            // onClick={() => handleOnRowClick(vehicleData.id)}
+                            className='hover:bg-gray-100'
+                          >
+                            <Td>
+                              <Tag
+                                size='lg'
+                                bgColor={getVehicleTagColor(vehicleData.transportVehicleType)}
+                              >
+                                <TagLabel>
+                                  {vehicleData.transportVehicleType.toLocaleLowerCase()}
+                                </TagLabel>
+                              </Tag>
+                            </Td>
+                            <Td>{vehicleData.capacity}</Td>
+                            <Td>
+                              <Button
+                                size={'sm'}
+                                fontWeight={'semibold'}
+                                colorScheme='red'
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  handleDeleteVehicleButtonClick(vehicleData.id)
+                                }}
+                              >
+                                Remove
+                              </Button>
+                            </Td>
+                          </Tr>
+                        ))}
+                      </Tbody>
+                    </Table>
+                  </TableContainer>
+                </>
+              ) : null}
+            </Skeleton>
+          </Card>
         </>
       )}
     </SidebarLayout>
