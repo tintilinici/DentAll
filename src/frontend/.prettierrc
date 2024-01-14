@@ -10,5 +10,6 @@
   "bracketSameLine": false,
   "trailingComma": "es5",
   "singleAttributePerLine": true,
-  "printWidth": 100
+  "printWidth": 100,
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
