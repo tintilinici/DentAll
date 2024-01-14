@@ -29,11 +29,11 @@ export type JwtPayload = {
 }
 
 export type Accommodation = {
-  id: string
-  accommodationType: string
-  address: string
-  availabilityStart: Date
-  availabilityEnd: Date
-  latitude: string
-  longitude: string
+  id: string,
+  accommodationType: string,
+  address: string,
+  availabilityStart: string,
+  availabilityEnd: string,
+  latitude: string,
+  longitude: string,
 }
