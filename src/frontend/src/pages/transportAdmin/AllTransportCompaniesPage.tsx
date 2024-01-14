@@ -39,6 +39,15 @@ const AllTransportCompaniesPage = () => {
           isClosable: true,
         })
       },
+      onSuccess: () => {
+        toast({
+          title: 'Success',
+          description: 'Transport company was deleted successfully',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+      },
     })
   }
 

@@ -10,12 +10,7 @@ export const usePostTransportVehicle = (companyId: string) => {
   return useMutation({
     mutationKey: ['postTransportVehicle'],
     mutationFn: (transportVehicleData: TransportVehiclePostDTO) =>
-      customFetch(
-        '/transportVehicles',
-        { method: 'POST', interesedInData: false },
-        token,
-        transportVehicleData
-      ),
+      customFetch('/transportVehicles', { method: 'POST' }, token, transportVehicleData),
     onSuccess: () => {
       return queryClient.invalidateQueries({ queryKey: ['transportComapnyDetails', companyId] })
     },

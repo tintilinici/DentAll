@@ -37,12 +37,17 @@ const AddTransportVehicleModal = ({ isOpen, onClose, companyId }: Props) => {
   const toast = useToast()
 
   const onSubmit: SubmitHandler<TransportVehiclePostDTO> = (data) => {
-    console.log(data)
     postTransportVehicle.mutate(data, {
       onSuccess: () => {
         onClose()
         reset()
-        // why this not ressetin phone number
+        toast({
+          title: 'Success',
+          description: 'Transport vehicle was added successfully',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
       },
       onError: (error) => {
         toast({
