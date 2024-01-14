@@ -10,6 +10,7 @@ interface SidebarLinkProps {
   selected?: boolean
   className?: string
   activeOn?: string[]
+  onClick?: () => void
 }
 
 const SidebarLink = (props: PropsWithChildren<SidebarLinkProps>) => {
@@ -25,6 +26,7 @@ const SidebarLink = (props: PropsWithChildren<SidebarLinkProps>) => {
           : 'hover:text-orange-400',
         props.className
       )}
+      onClick={props.onClick}
     >
       {props.children}
     </Link>
@@ -60,7 +62,7 @@ const links: SidebarLinkMetadata[] = [
 ]
 
 const Sidebar = () => {
-  const { getRoles } = useAuth()
+  const { getRoles, logout } = useAuth()
 
   return (
     <div className='flex w-72 flex-shrink-0 flex-col bg-white'>
@@ -84,6 +86,7 @@ const Sidebar = () => {
         <SidebarLink
           to='/'
           className=''
+          onClick={logout}
         >
           Logout
         </SidebarLink>

@@ -21,6 +21,8 @@ export type TransportVehicle = {
   transportCompanyId: string
 }
 
+export type TransportVehiclePostDTO = Omit<TransportVehicle, 'id'>
+
 export type JwtPayload = {
   roles: ROLE[]
   email: string
