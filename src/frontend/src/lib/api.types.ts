@@ -35,3 +35,11 @@ export type PatientPostDTO = {
   email: string
   pin: string
 }
+
+export type AccommodationOrderPostDTO = {
+  arrivalDatetime: string
+  departureDatetime: string
+  accommodationSize: number
+  accommodationType: 'ROOM' | 'HOUSE' | 'APARTMENT'
+  patientId: string
+}
