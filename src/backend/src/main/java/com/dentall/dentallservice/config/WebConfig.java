@@ -45,9 +45,9 @@ public class WebConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/v3/**", "/swagger-ui/**", "/security/login**").permitAll()
-                        .requestMatchers(antMatcher("/security/register**")).hasRole("TRANSPORT")
-                        .requestMatchers(antMatcher("/security/users**")).hasRole("TRANSPORT")
-                        .requestMatchers(antMatcher("/security/change-role**")).hasRole("TRANSPORT")
+                        .requestMatchers(antMatcher("/security/register**")).hasRole("ACCOMMODATION")
+                        .requestMatchers(antMatcher("/security/users**")).hasRole("ACCOMMODATION")
+                        .requestMatchers(antMatcher("/security/change-role**")).hasRole("ACCOMMODATION")
                         .requestMatchers(antMatcher("/transport**")).hasRole("TRANSPORT")
                         .requestMatchers(antMatcher("/patient**")).hasRole("PATIENT")
                         .requestMatchers(antMatcher("/accommodation**")).hasRole("ACCOMMODATION")
