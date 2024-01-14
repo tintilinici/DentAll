@@ -20,6 +20,7 @@ import {
 } from '@chakra-ui/react'
 import SidebarLayout from '../../components/SidebarLayout'
 import AddPatientModal from '../../components/AddPatientModal'
+import AddAccommodationOrderModal from '../../components/AddAccommodationOrderModal'
 import { useGetPatients } from '../../hooks/useGetPatients'
 import { useDeletePatientMutation } from '../../hooks/useDeletePatient'
 import Card from '../../components/Card'
@@ -32,7 +33,13 @@ const PatientAdminDashboard = () => {
     onOpen: onAddPatientModalOpen,
     onClose: onAddPatientModalClose,
   } = useDisclosure()
+
   const { isOpen: isAlertOpen, onOpen: onAlertOpen, onClose: onAlertClose } = useDisclosure()
+
+  //track modal state for each patient
+  const [isAccommodationOrderModalOpen, setIsAccommodationOrderModalOpen] = React.useState<{
+    [key: string]: boolean
+  }>({})
 
   const cancelRef = React.useRef<HTMLButtonElement | null>(null)
   const [selectedPatientId, setSelectedPatientId] = React.useState<string | null>(null)
@@ -47,6 +54,16 @@ const PatientAdminDashboard = () => {
   const handleDeletePatientButtonClick = (id: string) => {
     onAlertOpen()
     setSelectedPatientId(id)
+  }
+
+  const handleAddOrderButtonClick = (id: string) => {
+    // Set the modal state for the specific patient to true
+    setIsAccommodationOrderModalOpen((prevState) => ({ ...prevState, [id]: true }))
+  }
+
+  const onCloseAccommodationOrderModal = (id: string) => {
+    // Set the modal state for the specific patient to false
+    setIsAccommodationOrderModalOpen((prevState) => ({ ...prevState, [id]: false }))
   }
 
   const confirmDeletePatient = () => {
@@ -75,7 +92,7 @@ const PatientAdminDashboard = () => {
     }
   }
 
-  const handleOnRowClick = (id: string) => {
+  const handleOnPatientNameClick = (id: string) => {
     navigate(`${routes.USERS.DASHBOARD}/${id}`)
   }
 
@@ -114,15 +131,27 @@ const PatientAdminDashboard = () => {
               </Thead>
               <Tbody>
                 {data?.map((patient) => (
-                  <Tr
-                    key={patient.id}
-                    onClick={() => handleOnRowClick(patient.id)}
-                  >
-                    <Td>{patient.firstName}</Td>
+                  <Tr key={patient.id}>
+                    <Td onClick={() => handleOnPatientNameClick(patient.id)}>
+                      {patient.firstName}
+                    </Td>
                     <Td>{patient.lastName}</Td>
                     <Td>{patient.phoneNumber}</Td>
                     <Td>{patient.email}</Td>
                     <Td>{patient.pin}</Td>
+                    <Td>
+                      <AddAccommodationOrderModal
+                        isOpen={isAccommodationOrderModalOpen[patient.id] || false}
+                        onClose={() => onCloseAccommodationOrderModal(patient.id)}
+                        patientId={patient.id}
+                      />
+                      <Button
+                        colorScheme='whatsapp'
+                        onClick={() => handleAddOrderButtonClick(patient.id)}
+                      >
+                        Add accommodation order
+                      </Button>
+                    </Td>
                     <Td>
                       <Button
                         size={'sm'}
