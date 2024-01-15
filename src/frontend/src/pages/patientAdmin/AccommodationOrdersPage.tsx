@@ -113,7 +113,7 @@ const AccommodationOrdersPage = () => {
                       <Th>Departure</Th>
                       <Th>Accommodation size</Th>
                       <Th>Accommodation type</Th>
-                      <Th>Edit accommodation order</Th>
+                      <Th>Edit</Th>
                       <Th>Remove</Th>
                     </Tr>
                   </Thead>
@@ -138,7 +138,7 @@ const AccommodationOrdersPage = () => {
                             colorScheme='whatsapp'
                             onClick={onEditAccommodationOrderModalOpen}
                           >
-                            Edit accommodation order
+                            Edit
                           </Button>
                         </Td>
                         <Td>
