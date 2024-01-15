@@ -148,6 +148,7 @@ const PatientAdminDashboard = () => {
                         isOpen={isAccommodationOrderModalOpen[patient.id] || false}
                         onClose={() => onCloseAccommodationOrderModal(patient.id)}
                         patientId={patient.id}
+                        orderId={''}
                       />
                       <Button
                         colorScheme='whatsapp'

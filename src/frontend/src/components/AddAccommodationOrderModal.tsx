@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { usePostAccommodationOrder } from '../hooks/usePostAccommodationOrder'
+import { usePutAccommodationOrder } from '../hooks/usePutAccommodationOrder'
 import { AccommodationOrderPostDTO } from '../lib/api.types'
 import { AccommodationType } from '../enums/accommodation-type.enum'
 
@@ -24,9 +25,10 @@ interface Props {
   isOpen: boolean
   onClose: () => void
   patientId: string
+  orderId: string
 }
 
-const AddAccommodationOrderModal = ({ isOpen, onClose, patientId }: Props) => {
+const AddAccommodationOrderModal = ({ isOpen, onClose, patientId, orderId }: Props) => {
   const { register, handleSubmit, reset } = useForm<AccommodationOrderPostDTO>({
     defaultValues: {
       patientId: patientId,
@@ -34,10 +36,13 @@ const AddAccommodationOrderModal = ({ isOpen, onClose, patientId }: Props) => {
   })
 
   const postAccommodationOrder = usePostAccommodationOrder(patientId)
+  const putAccommodationOrder = usePutAccommodationOrder(patientId, orderId)
   const toast = useToast()
 
   const onSubmit: SubmitHandler<AccommodationOrderPostDTO> = (data) => {
-    postAccommodationOrder.mutate(data, {
+    console.log(data)
+    const handleSubmit = orderId ? putAccommodationOrder : postAccommodationOrder
+    handleSubmit.mutate(data, {
       onSuccess: () => {
         onClose()
         reset()
@@ -49,7 +54,7 @@ const AddAccommodationOrderModal = ({ isOpen, onClose, patientId }: Props) => {
           isClosable: true,
         })
       },
-      onError: (error) => {
+      onError: (error: Error) => {
         toast({
           title: 'Error',
           description: error.message,
@@ -69,7 +74,8 @@ const AddAccommodationOrderModal = ({ isOpen, onClose, patientId }: Props) => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Add a new accommodation order</ModalHeader>
+        {!orderId && <ModalHeader>Add a new accommodation order</ModalHeader>}
+        {orderId && <ModalHeader>Edit accommodation order</ModalHeader>}
         <ModalCloseButton />
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalBody
@@ -82,7 +88,7 @@ const AddAccommodationOrderModal = ({ isOpen, onClose, patientId }: Props) => {
                 placeholder='Select Date and Time'
                 size='md'
                 type='datetime-local'
-                {...register('arrivalDatetime')}
+                {...register('arrivalDateTime')}
               />
             </FormControl>
 
@@ -92,7 +98,7 @@ const AddAccommodationOrderModal = ({ isOpen, onClose, patientId }: Props) => {
                 placeholder='Select Date and Time'
                 size='md'
                 type='datetime-local'
-                {...register('departureDatetime')}
+                {...register('departureDateTime')}
               />
             </FormControl>
 
@@ -127,24 +133,50 @@ const AddAccommodationOrderModal = ({ isOpen, onClose, patientId }: Props) => {
           </ModalBody>
 
           <ModalFooter className='space-x-2'>
-            <Button
-              onClick={onClose}
-              isDisabled={postAccommodationOrder.isPending}
-              variant={'outline'}
-              colorScheme='red'
-              w={'full'}
-            >
-              Cancel
-            </Button>
-            <Button
-              colorScheme='green'
-              mr={3}
-              w={'full'}
-              type='submit'
-              isLoading={postAccommodationOrder.isPending}
-            >
-              Create
-            </Button>
+            {!orderId && (
+              <Button
+                onClick={onClose}
+                isDisabled={postAccommodationOrder.isPending}
+                variant={'outline'}
+                colorScheme='red'
+                w={'full'}
+              >
+                Cancel
+              </Button>
+            )}
+            {orderId && (
+              <Button
+                onClick={onClose}
+                isDisabled={putAccommodationOrder.isPending}
+                variant={'outline'}
+                colorScheme='red'
+                w={'full'}
+              >
+                Cancel
+              </Button>
+            )}
+            {!orderId && (
+              <Button
+                colorScheme='green'
+                mr={3}
+                w={'full'}
+                type='submit'
+                isLoading={postAccommodationOrder.isPending}
+              >
+                Create
+              </Button>
+            )}
+            {orderId && (
+              <Button
+                colorScheme='green'
+                mr={3}
+                w={'full'}
+                type='submit'
+                isLoading={putAccommodationOrder.isPending}
+              >
+                Save
+              </Button>
+            )}
           </ModalFooter>
         </form>
       </ModalContent>

@@ -21,11 +21,18 @@ import {
 } from '@chakra-ui/react'
 import SidebarLayout from '../../components/SidebarLayout'
 import Card from '../../components/Card'
+import AddAccommodationOrderModal from '../../components/AddAccommodationOrderModal'
 import { useGetAccommodationOrders } from '../../hooks/useGetAccommodationOrders'
 import { useDeleteAccommodationOrder } from '../../hooks/useDeleteAccommodationOrder'
 
 const AccommodationOrdersPage = () => {
   const { id } = useParams<{ id: string }>()
+
+  const {
+    isOpen: isEditAccommodationOrderModalOpen,
+    onOpen: onEditAccommodationOrderModalOpen,
+    onClose: onEditAccommodationOrderModalClose,
+  } = useDisclosure()
 
   const { data, error, isLoading } = useGetAccommodationOrders(id || '')
   const deleteAccommodationOrder = useDeleteAccommodationOrder(id || '')
@@ -106,7 +113,7 @@ const AccommodationOrdersPage = () => {
                       <Th>Departure</Th>
                       <Th>Accommodation size</Th>
                       <Th>Accommodation type</Th>
-                      <Th>Booking id</Th>
+                      <Th>Edit accommodation order</Th>
                       <Th>Remove</Th>
                     </Tr>
                   </Thead>
@@ -120,7 +127,20 @@ const AccommodationOrdersPage = () => {
                         <Td>{formatDateTime(order.departureDateTime)}</Td>
                         <Td>{order.accommodationSize}</Td>
                         <Td>{order.accommodationType}</Td>
-                        <Td>{order.accommodationBookingId}</Td>
+                        <Td>
+                          <AddAccommodationOrderModal
+                            isOpen={isEditAccommodationOrderModalOpen}
+                            onClose={onEditAccommodationOrderModalClose}
+                            patientId={id}
+                            orderId={order.id}
+                          />
+                          <Button
+                            colorScheme='whatsapp'
+                            onClick={onEditAccommodationOrderModalOpen}
+                          >
+                            Edit accommodation order
+                          </Button>
+                        </Td>
                         <Td>
                           <Button
                             size={'sm'}
