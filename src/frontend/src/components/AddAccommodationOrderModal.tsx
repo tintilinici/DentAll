@@ -18,6 +18,7 @@ import {
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { usePostAccommodationOrder } from '../hooks/usePostAccommodationOrder'
 import { AccommodationOrderPostDTO } from '../lib/api.types'
+import { AccommodationType } from '../enums/accommodation-type.enum'
 
 interface Props {
   isOpen: boolean
@@ -112,12 +113,17 @@ const AddAccommodationOrderModal = ({ isOpen, onClose, patientId }: Props) => {
             <FormControl isRequired>
               <FormLabel>Accommodation type</FormLabel>
               <Select
-                placeholder='Accommodation type'
+                placeholder='type'
                 {...register('accommodationType')}
               >
-                <option value={'ROOM'}>Room</option>
-                <option value={'HOUSE'}>House</option>
-                <option value={'APARTMENT'}>Apartment</option>
+                {Object.values(AccommodationType).map((e, index) => (
+                  <option
+                    key={index}
+                    value={e}
+                  >
+                    {e.toLowerCase()}
+                  </option>
+                ))}
               </Select>
             </FormControl>
           </ModalBody>
