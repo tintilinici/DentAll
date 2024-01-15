@@ -127,6 +127,8 @@ const PatientAdminDashboard = () => {
                   <Th>Phone number</Th>
                   <Th>Email</Th>
                   <Th>PIN</Th>
+                  <Th>Add accommodation order</Th>
+                  <Th>Remove</Th>
                 </Tr>
               </Thead>
               <Tbody>
