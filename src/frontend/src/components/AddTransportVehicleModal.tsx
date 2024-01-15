@@ -2,7 +2,6 @@ import {
   Button,
   FormControl,
   FormLabel,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -10,32 +9,41 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  NumberInput,
+  NumberInputField,
+  Select,
   useToast,
 } from '@chakra-ui/react'
 
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { usePostTransportCompany } from '../hooks/usePostTransportCompany'
-import { TransportCompanyPostDTO } from '../lib/api.types'
+import { TransportVehiclePostDTO } from '../lib/api.types'
+import { usePostTransportVehicle } from '../hooks/usePostTransportVehicle'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
+  companyId: string
 }
 
-const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
-  const { register, handleSubmit, reset } = useForm<TransportCompanyPostDTO>()
+const AddTransportVehicleModal = ({ isOpen, onClose, companyId }: Props) => {
+  const { register, handleSubmit, reset } = useForm<TransportVehiclePostDTO>({
+    defaultValues: {
+      transportCompanyId: companyId,
+    },
+  })
 
-  const postTansportCompanyMutation = usePostTransportCompany()
+  const postTransportVehicle = usePostTransportVehicle(companyId)
+
   const toast = useToast()
 
-  const onSubmit: SubmitHandler<TransportCompanyPostDTO> = (data) => {
-    postTansportCompanyMutation.mutate(data, {
+  const onSubmit: SubmitHandler<TransportVehiclePostDTO> = (data) => {
+    postTransportVehicle.mutate(data, {
       onSuccess: () => {
-        reset()
         onClose()
+        reset()
         toast({
           title: 'Success',
-          description: 'Transport company was added successfully',
+          description: 'Transport vehicle was added successfully',
           status: 'success',
           duration: 5000,
           isClosable: true,
@@ -61,7 +69,7 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Add a new transport company</ModalHeader>
+        <ModalHeader>Add a new transport vehicle</ModalHeader>
         <ModalCloseButton />
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalBody
@@ -70,42 +78,33 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
           >
             <FormControl isRequired>
               <FormLabel>Name</FormLabel>
-              <Input
-                placeholder='First name'
-                type='text'
-                minLength={5}
-                maxLength={100}
-                {...register('name')}
-              />
+              <Select
+                placeholder='Vehicle type'
+                {...register('transportVehicleType')}
+              >
+                <option value={'BUS'}>Bus</option>
+                <option value={'CAR'}>Car</option>
+                <option value={'VAN'}>Van</option>
+              </Select>
             </FormControl>
 
             <FormControl isRequired>
-              <FormLabel>Email</FormLabel>
-              <Input
-                type='email'
-                placeholder='Last name'
-                minLength={5}
-                maxLength={50}
-                {...register('email')}
-              />
-            </FormControl>
-
-            <FormControl isRequired>
-              <FormLabel>Phone number</FormLabel>
-              <Input
-                placeholder='+385926822842'
-                type='tel'
-                pattern='[+]?\d+'
-                minLength={5}
-                {...register('phoneNumber')}
-              />
+              <FormLabel>Capacity</FormLabel>
+              <NumberInput>
+                <NumberInputField
+                  placeholder='8'
+                  min={1}
+                  max={100}
+                  {...register('capacity')}
+                />
+              </NumberInput>
             </FormControl>
           </ModalBody>
 
           <ModalFooter className='space-x-2'>
             <Button
               onClick={onClose}
-              isDisabled={postTansportCompanyMutation.isPending}
+              isDisabled={postTransportVehicle.isPending}
               variant={'outline'}
               colorScheme='red'
               w={'full'}
@@ -117,7 +116,7 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
               mr={3}
               w={'full'}
               type='submit'
-              isLoading={postTansportCompanyMutation.isPending}
+              isLoading={postTransportVehicle.isPending}
             >
               Add
             </Button>
@@ -128,4 +127,4 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
   )
 }
 
-export default AddTransportCompanyModal
+export default AddTransportVehicleModal

@@ -9,5 +9,4 @@ export default {
     ADMIN_MANAGMENT: '/admin-managment',
   },
   ACCOMMODATION: '/accommodation',
-  ACCOUNT: '/account',
 } as const

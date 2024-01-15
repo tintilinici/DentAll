@@ -12,8 +12,9 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import TransportCompanyDetailsPage from './pages/transportAdmin/TransportCompanyDetailsPage'
 import PatientAdminDashboard from './pages/patientAdmin/PatientAdminDashboardPage'
 import AccommodationAdminDashboardPage from './pages/accommodationAdmin/AccommodationAdminDashboard'
-import AccountPage from './pages/AccountPage'
 import AdminsManagmentPage from './pages/accommodationAdmin/AdminsManagmentPage'
+import { ROLE } from './components/auth/authTypes'
+import AccommodationDetailsPage from './pages/accommodationAdmin/AccommodationDetailsPage.tsx'
 
 const queryClient = new QueryClient()
 
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
   {
     path: routes.TRANSPORT_COMPANIES,
     element: (
-      <ProtectedRoute allowRoles={'any'}>
+      <ProtectedRoute allowRoles={[ROLE.ROLE_TRANSPORT]}>
         <AllTransportCompaniesPage />
       </ProtectedRoute>
     ),
@@ -42,7 +43,7 @@ const router = createBrowserRouter([
   {
     path: `${routes.TRANSPORT_COMPANIES}/:id`,
     element: (
-      <ProtectedRoute allowRoles={'any'}>
+      <ProtectedRoute allowRoles={[ROLE.ROLE_TRANSPORT]}>
         <TransportCompanyDetailsPage />
       </ProtectedRoute>
     ),
@@ -52,7 +53,7 @@ const router = createBrowserRouter([
   {
     path: routes.USERS.DASHBOARD,
     element: (
-      <ProtectedRoute allowRoles={'any'}>
+      <ProtectedRoute allowRoles={[ROLE.ROLE_PATIENT]}>
         <PatientAdminDashboard />
       </ProtectedRoute>
     ),
@@ -61,27 +62,25 @@ const router = createBrowserRouter([
   // accommodation admin routes
   {
     path: routes.ACCOMMODATION,
-    // TODO: add protection here for the accomodation admin
     element: (
-      <ProtectedRoute allowRoles={'any'}>
+      <ProtectedRoute allowRoles={[ROLE.ROLE_ACCOMMODATION]}>
         <AccommodationAdminDashboardPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: `${routes.ACCOMMODATION}/:id`,
+    element: (
+      <ProtectedRoute allowRoles={[ROLE.ROLE_ACCOMMODATION]}>
+        <AccommodationDetailsPage />
       </ProtectedRoute>
     ),
   },
   {
     path: routes.USERS.ADMIN_MANAGMENT,
     element: (
-      <ProtectedRoute allowRoles={'any'}>
+      <ProtectedRoute allowRoles={[ROLE.ROLE_ACCOMMODATION]}>
         <AdminsManagmentPage />
-      </ProtectedRoute>
-    ),
-  },
-
-  {
-    path: routes.ACCOUNT,
-    element: (
-      <ProtectedRoute allowRoles={'any'}>
-        <AccountPage />,
       </ProtectedRoute>
     ),
   },

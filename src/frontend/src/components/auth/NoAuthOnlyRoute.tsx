@@ -3,9 +3,9 @@ import { Navigate } from 'react-router-dom'
 import { useAuth } from './useAuth'
 
 const NoAuthOnlyRoute = ({ children }: PropsWithChildren) => {
-  const { isAuthenticated } = useAuth()
+  const { token } = useAuth()
 
-  if (isAuthenticated) {
+  if (token) {
     return (
       <Navigate
         to='/transport-companies'

@@ -1,12 +1,12 @@
 import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import routes from '../constants/routes'
 import { useAuth } from '../components/auth/useAuth'
+import routes from '../constants/routes'
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('admin@admin.com')
+  const [password, setPassword] = useState('admin')
   const [showPassword, setShowPassword] = useState(false)
 
   const togglePasswordVisibility = () => setShowPassword((state) => !state)
@@ -14,21 +14,20 @@ const LoginPage = () => {
   const { login } = useAuth()
   const navigate = useNavigate()
 
-  const handleLogin = async () => {
-    login({ email, password })
-    navigate(routes.TRANSPORT_COMPANIES)
+  const handleSubmit = () => {
+    login({ email, password }, () => navigate(routes.TRANSPORT_COMPANIES))
   }
 
   return (
-    <div className='bg-gray-100 h-full p-8'>
+    <div className='h-full bg-gray-100 p-8'>
       <Link
-        className='text-cyan-500 text-2xl font-bold italic'
+        className='text-2xl font-bold italic text-cyan-500'
         to='/'
       >
         DentAll
       </Link>
-      <div className='max-w-md mx-auto bg-white rounded-lg shadow-md mt-48'>
-        <div className='p-8 space-y-8'>
+      <div className='mx-auto mt-48 max-w-md rounded-lg bg-white shadow-md'>
+        <div className='space-y-8 p-8'>
           <p className='text-center font-bold'>Prijavi se u svoj račun</p>
           <div>
             <p className='mb-2'>Email</p>
@@ -62,7 +61,8 @@ const LoginPage = () => {
           <Button
             width={'full'}
             colorScheme='orange'
-            onClick={handleLogin}
+            type='submit'
+            onClick={handleSubmit}
           >
             Prijavi se
           </Button>
