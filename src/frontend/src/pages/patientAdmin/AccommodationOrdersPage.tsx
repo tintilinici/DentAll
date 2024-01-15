@@ -1,14 +1,40 @@
+import React from 'react'
 import { useParams } from 'react-router-dom'
-import { Skeleton, Table, TableContainer, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react'
+import {
+  Button,
+  Skeleton,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  useDisclosure,
+  useToast,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+} from '@chakra-ui/react'
 import SidebarLayout from '../../components/SidebarLayout'
 import Card from '../../components/Card'
 import { useGetAccommodationOrders } from '../../hooks/useGetAccommodationOrders'
+import { useDeleteAccommodationOrder } from '../../hooks/useDeleteAccommodationOrder'
 
 const AccommodationOrdersPage = () => {
   const { id } = useParams<{ id: string }>()
-  const { data, error, isLoading } = useGetAccommodationOrders(id || '')
 
-  console.log(data)
+  const { data, error, isLoading } = useGetAccommodationOrders(id || '')
+  const deleteAccommodationOrder = useDeleteAccommodationOrder(id || '')
+
+  const { isOpen: isAlertOpen, onOpen: onAlertOpen, onClose: onAlertClose } = useDisclosure()
+  const cancelRef = React.useRef<HTMLButtonElement | null>(null)
+  const [selectedOrderId, setSelectedOrderId] = React.useState<string | null>(null)
+
+  const toast = useToast()
 
   if (id === undefined) {
     return (
@@ -33,6 +59,37 @@ const AccommodationOrdersPage = () => {
     return `${formattedDate} ${formattedTime}`
   }
 
+  const handleDeleteOrderButtonClick = (orderId: string) => {
+    onAlertOpen()
+    setSelectedOrderId(orderId)
+  }
+
+  const confirmDeleteOrder = () => {
+    if (selectedOrderId) {
+      deleteAccommodationOrder.mutate(selectedOrderId, {
+        onSuccess: () => {
+          toast({
+            title: 'Success',
+            description: 'Accommodation order deleted successfully.',
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+          })
+        },
+        onError: (error) => {
+          toast({
+            title: 'Error',
+            description: error.message,
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          })
+        },
+      })
+      onAlertClose()
+    }
+  }
+
   return (
     <SidebarLayout className='bg-blue-50'>
       {error || !data ? (
@@ -50,6 +107,7 @@ const AccommodationOrdersPage = () => {
                       <Th>Accommodation size</Th>
                       <Th>Accommodation type</Th>
                       <Th>Booking id</Th>
+                      <Th>Remove</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
@@ -63,6 +121,19 @@ const AccommodationOrdersPage = () => {
                         <Td>{order.accommodationSize}</Td>
                         <Td>{order.accommodationType}</Td>
                         <Td>{order.accommodationBookingId}</Td>
+                        <Td>
+                          <Button
+                            size={'sm'}
+                            fontWeight={'semibold'}
+                            colorScheme='red'
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleDeleteOrderButtonClick(order.id)
+                            }}
+                          >
+                            Remove
+                          </Button>
+                        </Td>
                       </Tr>
                     ))}
                   </Tbody>
@@ -70,6 +141,42 @@ const AccommodationOrdersPage = () => {
               </TableContainer>
             </Skeleton>
           </Card>
+          <AlertDialog
+            isOpen={isAlertOpen}
+            leastDestructiveRef={cancelRef}
+            onClose={onAlertClose}
+          >
+            <AlertDialogOverlay>
+              <AlertDialogContent>
+                <AlertDialogHeader
+                  fontSize='lg'
+                  fontWeight='bold'
+                >
+                  Delete accommodation order
+                </AlertDialogHeader>
+
+                <AlertDialogBody>
+                  Are you sure? You can't undo this action afterwards.
+                </AlertDialogBody>
+
+                <AlertDialogFooter>
+                  <Button
+                    ref={cancelRef}
+                    onClick={onAlertClose}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    colorScheme='red'
+                    onClick={confirmDeleteOrder}
+                    ml={3}
+                  >
+                    Delete
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialogOverlay>
+          </AlertDialog>
         </>
       )}
     </SidebarLayout>

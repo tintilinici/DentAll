@@ -7,6 +7,6 @@ export const useGetAccommodationOrders = (patientId: string) => {
 
   return useQuery({
     queryFn: () => customFetch<AccommodationOrder[]>(`/patients/orders?patientId=${patientId}`),
-    queryKey: ['transportComapnyDetails', patientId],
+    queryKey: ['accommodationOrders', patientId],
   })
 }
