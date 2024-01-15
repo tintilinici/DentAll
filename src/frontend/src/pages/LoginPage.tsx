@@ -5,8 +5,8 @@ import { useAuth } from '../components/auth/useAuth'
 import routes from '../constants/routes'
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('admin@admin.com')
-  const [password, setPassword] = useState('admin')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
 
   const togglePasswordVisibility = () => setShowPassword((state) => !state)
@@ -36,6 +36,7 @@ const LoginPage = () => {
               type='email'
               onChange={(e) => setEmail(e.target.value)}
               placeholder='john.doe@domain.example'
+              name='email'
             />
           </div>
           <div>
@@ -46,6 +47,7 @@ const LoginPage = () => {
                 type={showPassword ? 'text' : 'password'}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder='yourpassword'
+                name='password'
               />
               <InputRightElement width='4.5rem'>
                 <Button
@@ -63,6 +65,7 @@ const LoginPage = () => {
             colorScheme='orange'
             type='submit'
             onClick={handleSubmit}
+            name='submit'
           >
             Prijavi se
           </Button>

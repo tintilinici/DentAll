@@ -109,6 +109,7 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
               variant={'outline'}
               colorScheme='red'
               w={'full'}
+              name='cancel'
             >
               Cancel
             </Button>
@@ -117,6 +118,7 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
               mr={3}
               w={'full'}
               type='submit'
+              name='submit'
               isLoading={postTansportCompanyMutation.isPending}
             >
               Add
