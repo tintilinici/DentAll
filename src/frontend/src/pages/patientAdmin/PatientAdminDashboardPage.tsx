@@ -92,21 +92,21 @@ const PatientAdminDashboard = () => {
     }
   }
 
-  const handleOnPatientNameClick = (id: string) => {
+  const handleOnRowClick = (id: string) => {
     navigate(`${routes.USERS.DASHBOARD}/${id}`)
   }
 
   if (error) return <span>{error.message}</span>
 
   return (
-    <SidebarLayout>
+    <SidebarLayout className='bg-blue-50'>
       <AddPatientModal
         isOpen={isAddPatientModalOpen}
         onClose={onAddPatientModalClose}
       />
 
-      <div className='w-full flex justify-end'>
-        <Card className='w-min mb-6'>
+      <div className='flex w-full justify-end'>
+        <Card className='mb-6 w-min'>
           <Button
             colorScheme='whatsapp'
             onClick={onAddPatientModalOpen}
@@ -131,10 +131,12 @@ const PatientAdminDashboard = () => {
               </Thead>
               <Tbody>
                 {data?.map((patient) => (
-                  <Tr key={patient.id}>
-                    <Td onClick={() => handleOnPatientNameClick(patient.id)}>
-                      {patient.firstName}
-                    </Td>
+                  <Tr
+                    key={patient.id}
+                    onClick={() => handleOnRowClick(patient.id)}
+                    className='cursor-pointer hover:bg-gray-100'
+                  >
+                    <Td>{patient.firstName}</Td>
                     <Td>{patient.lastName}</Td>
                     <Td>{patient.phoneNumber}</Td>
                     <Td>{patient.email}</Td>
@@ -147,7 +149,10 @@ const PatientAdminDashboard = () => {
                       />
                       <Button
                         colorScheme='whatsapp'
-                        onClick={() => handleAddOrderButtonClick(patient.id)}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleAddOrderButtonClick(patient.id)
+                        }}
                       >
                         Add accommodation order
                       </Button>
