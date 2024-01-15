@@ -93,7 +93,7 @@ const PatientAdminDashboard = () => {
   }
 
   const handleOnRowClick = (id: string) => {
-    navigate(`${routes.USERS.DASHBOARD}/${id}`)
+    navigate(`${routes.USERS.DASHBOARD}/orders/${id}`)
   }
 
   if (error) return <span>{error.message}</span>

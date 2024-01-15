@@ -15,6 +15,7 @@ import AccommodationAdminDashboardPage from './pages/accommodationAdmin/Accommod
 import AdminsManagmentPage from './pages/accommodationAdmin/AdminsManagmentPage'
 import { ROLE } from './components/auth/authTypes'
 import AccommodationDetailsPage from './pages/accommodationAdmin/AccommodationDetailsPage.tsx'
+import AccommodationOrdersPage from './pages/patientAdmin/AccommodationOrdersPage.tsx'
 
 const queryClient = new QueryClient()
 
@@ -55,6 +56,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute allowRoles={[ROLE.ROLE_PATIENT]}>
         <PatientAdminDashboard />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: `${routes.USERS.DASHBOARD}/orders/:id`,
+    element: (
+      <ProtectedRoute allowRoles={[ROLE.ROLE_ACCOMMODATION]}>
+        <AccommodationOrdersPage />
       </ProtectedRoute>
     ),
   },
