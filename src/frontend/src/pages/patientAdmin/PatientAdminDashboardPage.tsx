@@ -111,7 +111,7 @@ const PatientAdminDashboard = () => {
             colorScheme='whatsapp'
             onClick={onAddPatientModalOpen}
           >
-            Add new patient
+            Add patient
           </Button>
         </Card>
       </div>
@@ -167,7 +167,7 @@ const PatientAdminDashboard = () => {
                           handleDeletePatientButtonClick(patient.id)
                         }}
                       >
-                        Delete
+                        Remove
                       </Button>
                     </Td>
                   </Tr>

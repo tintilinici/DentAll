@@ -147,7 +147,7 @@ const AddPatientModal = ({ isOpen, onClose }: Props) => {
               type='submit'
               isLoading={postPatientMutation.isPending}
             >
-              Add
+              Create
             </Button>
           </ModalFooter>
         </form>

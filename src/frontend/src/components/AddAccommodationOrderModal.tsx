@@ -145,7 +145,7 @@ const AddAccommodationOrderModal = ({ isOpen, onClose, patientId }: Props) => {
               type='submit'
               isLoading={postAccommodationOrder.isPending}
             >
-              Add
+              Create
             </Button>
           </ModalFooter>
         </form>
