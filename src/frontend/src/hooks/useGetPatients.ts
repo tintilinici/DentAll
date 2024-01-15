@@ -1,14 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
-import { customFetch } from '../lib/customFetch'
 import { Patient } from '../lib/api.types'
-import { useAuth } from '../components/auth/useAuth'
+import { useCustomFetch } from './useCustomFetch'
 
 export const useGetPatients = () => {
-  const { token } = useAuth()
+  const customFetch = useCustomFetch()
 
   return useQuery({
-    queryFn: () => customFetch<Patient[]>('/patients', {}, token),
-    // eslint-disable-next-line @tanstack/query/exhaustive-deps
+    queryFn: () => customFetch<Patient[]>('/patients'),
     queryKey: ['patients'],
   })
 }
