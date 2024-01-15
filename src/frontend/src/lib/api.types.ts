@@ -62,3 +62,13 @@ export type AccommodationOrderPostDTO = {
   accommodationType: 'ROOM' | 'HOUSE' | 'APARTMENT'
   patientId: string
 }
+
+export type AccommodationOrder = {
+  id: string
+  patientId: string
+  arrivalDatetime: string
+  departureDatetime: string
+  accommodationSize: number
+  accommodationType: 'ROOM' | 'HOUSE' | 'APARTMENT'
+  accommodationBookingId: string
+}
