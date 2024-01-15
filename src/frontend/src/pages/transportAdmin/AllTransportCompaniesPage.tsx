@@ -69,6 +69,7 @@ const AllTransportCompaniesPage = () => {
           <Button
             colorScheme='whatsapp'
             onClick={onOpen}
+            name='add-transport-company-button'
           >
             Add new company
           </Button>

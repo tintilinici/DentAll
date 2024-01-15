@@ -1,12 +1,10 @@
-const BASE_URL = 'http://localhost:8080'
-
 export const customFetch = async <T>(
   endpoint: string,
   { interesedInData = true, ...options }: RequestInit & { interesedInData?: boolean },
   token?: string,
   data?: unknown
 ): Promise<T> => {
-  const url = `${BASE_URL}${endpoint}`
+  const url = `${import.meta.env.VITE_FRONTEND_URL}${endpoint}`
 
   let headers: HeadersInit = { 'Content-Type': 'application/json' }
   if (token) {
