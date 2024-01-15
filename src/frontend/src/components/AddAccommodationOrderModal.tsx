@@ -36,8 +36,6 @@ const AddAccommodationOrderModal = ({ isOpen, onClose, patientId }: Props) => {
   const postAccommodationOrder = usePostAccommodationOrder(patientId)
   const toast = useToast()
 
-  console.log(postAccommodationOrder)
-
   const onSubmit: SubmitHandler<AccommodationOrderPostDTO> = (data) => {
     postAccommodationOrder.mutate(data, {
       onSuccess: () => {
