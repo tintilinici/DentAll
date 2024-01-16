@@ -10,11 +10,12 @@ import AllTransportCompaniesPage from './pages/transportAdmin/AllTransportCompan
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import TransportCompanyDetailsPage from './pages/transportAdmin/TransportCompanyDetailsPage'
-import UserAdminDashboard from './pages/userAdmin/UserAdminDashboardPage'
+import PatientAdminDashboard from './pages/patientAdmin/PatientAdminDashboardPage'
 import AccommodationAdminDashboardPage from './pages/accommodationAdmin/AccommodationAdminDashboard'
-import AdminsManagmentPage from './pages/userAdmin/AdminsManagmentPage'
+import AdminsManagmentPage from './pages/accommodationAdmin/AdminsManagmentPage'
 import { ROLE } from './components/auth/authTypes'
 import AccommodationDetailsPage from './pages/accommodationAdmin/AccommodationDetailsPage.tsx'
+import AccommodationOrdersPage from './pages/patientAdmin/AccommodationOrdersPage.tsx'
 
 const queryClient = new QueryClient()
 
@@ -49,12 +50,20 @@ const router = createBrowserRouter([
     ),
   },
 
-  // user admin routes
+  // patient admin routes
   {
     path: routes.USERS.DASHBOARD,
     element: (
       <ProtectedRoute allowRoles={[ROLE.ROLE_PATIENT]}>
-        <UserAdminDashboard />
+        <PatientAdminDashboard />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: `${routes.USERS.DASHBOARD}/orders/:id`,
+    element: (
+      <ProtectedRoute allowRoles={[ROLE.ROLE_ACCOMMODATION]}>
+        <AccommodationOrdersPage />
       </ProtectedRoute>
     ),
   },

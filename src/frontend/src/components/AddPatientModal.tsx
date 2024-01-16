@@ -10,34 +10,36 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  NumberInput,
+  NumberInputField,
   useToast,
 } from '@chakra-ui/react'
 
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { usePostTransportCompany } from '../hooks/usePostTransportCompany'
-import { TransportCompanyPostDTO } from '../lib/api.types'
+import { usePostPatient } from '../hooks/usePostPatient'
+import { PatientPostDTO } from '../lib/api.types'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
 }
 
-const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
-  const { register, handleSubmit, reset } = useForm<TransportCompanyPostDTO>()
+const AddPatientModal = ({ isOpen, onClose }: Props) => {
+  const { register, handleSubmit, reset } = useForm<PatientPostDTO>()
 
-  const postTansportCompanyMutation = usePostTransportCompany()
+  const postPatientMutation = usePostPatient()
   const toast = useToast()
 
-  const onSubmit: SubmitHandler<TransportCompanyPostDTO> = (data) => {
-    postTansportCompanyMutation.mutate(data, {
+  const onSubmit: SubmitHandler<PatientPostDTO> = (data) => {
+    postPatientMutation.mutate(data, {
       onSuccess: () => {
-        reset()
         onClose()
+        reset()
         toast({
           title: 'Success',
-          description: 'Transport company was added successfully',
+          description: 'New patient added successfully.',
           status: 'success',
-          duration: 5000,
+          duration: 2000,
           isClosable: true,
         })
       },
@@ -61,7 +63,7 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Add a new transport company</ModalHeader>
+        <ModalHeader>Add a new patient</ModalHeader>
         <ModalCloseButton />
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalBody
@@ -69,21 +71,45 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
             className='space-y-4'
           >
             <FormControl isRequired>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>First name</FormLabel>
               <Input
                 placeholder='First name'
                 type='text'
-                minLength={5}
+                pattern='^[A-Za-z]+$'
+                minLength={3}
                 maxLength={100}
-                {...register('name')}
+                {...register('firstName')}
               />
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel>Last name</FormLabel>
+              <Input
+                type='text'
+                placeholder='Last name'
+                pattern='^[A-Za-z]+$'
+                minLength={3}
+                maxLength={100}
+                {...register('lastName')}
+              />
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel>Phone number</FormLabel>
+              <NumberInput>
+                <NumberInputField
+                  placeholder='+385926822842'
+                  minLength={5}
+                  {...register('phoneNumber')}
+                />
+              </NumberInput>
             </FormControl>
 
             <FormControl isRequired>
               <FormLabel>Email</FormLabel>
               <Input
                 type='email'
-                placeholder='Last name'
+                placeholder='example@example.com'
                 minLength={5}
                 maxLength={50}
                 {...register('email')}
@@ -91,25 +117,26 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
             </FormControl>
 
             <FormControl isRequired>
-              <FormLabel>Phone number</FormLabel>
-              <Input
-                placeholder='+385926822842'
-                type='tel'
-                pattern='[+]?\d+'
-                minLength={5}
-                {...register('phoneNumber')}
-              />
+              <FormLabel>PIN</FormLabel>
+              <NumberInput>
+                <NumberInputField
+                  type='number'
+                  placeholder='1234'
+                  minLength={4}
+                  maxLength={4}
+                  {...register('pin')}
+                />
+              </NumberInput>
             </FormControl>
           </ModalBody>
 
           <ModalFooter className='space-x-2'>
             <Button
               onClick={onClose}
-              isDisabled={postTansportCompanyMutation.isPending}
+              isDisabled={postPatientMutation.isPending}
               variant={'outline'}
               colorScheme='red'
               w={'full'}
-              name='cancel'
             >
               Cancel
             </Button>
@@ -118,10 +145,9 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
               mr={3}
               w={'full'}
               type='submit'
-              name='submit'
-              isLoading={postTansportCompanyMutation.isPending}
+              isLoading={postPatientMutation.isPending}
             >
-              Add
+              Create
             </Button>
           </ModalFooter>
         </form>
@@ -130,4 +156,4 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
   )
 }
 
-export default AddTransportCompanyModal
+export default AddPatientModal

@@ -2,6 +2,7 @@ package com.dentall.dentallservice.controller;
 
 import com.dentall.dentallservice.model.dto.TransportCompanyDto;
 import com.dentall.dentallservice.model.request.CreateTransportCompanyRequest;
+import com.dentall.dentallservice.model.request.UpdateTransportCompanyRequest;
 import com.dentall.dentallservice.service.TransportCompanyService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -41,6 +41,16 @@ public class TransportCompanyController {
     public ResponseEntity<?> deleteTransportCompany(@PathVariable("id") String id) {
         service.deleteTransportCompany(id);
         return ResponseEntity.ok("Successfully deleted!");
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> updateTransportCompany(
+            @PathVariable("id") String id,
+            @RequestBody UpdateTransportCompanyRequest request
+    ) {
+
+        return ResponseEntity.ok(service.updateTransportCompany(id, request));
     }
 
 //    @PostMapping("/{id}/assign-vehicles")

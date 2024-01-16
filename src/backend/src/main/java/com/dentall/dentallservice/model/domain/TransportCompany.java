@@ -42,4 +42,13 @@ public class TransportCompany {
         transportVehicles.add(transportVehicle);
         transportVehicle.setTransportCompany(this);
     }
+
+    public void removeTransportVehicle(TransportVehicle vehicle) {
+        if (vehicle == null) return;
+
+        if (transportVehicles != null) {
+            transportVehicles.remove(vehicle);
+            vehicle.setTransportCompany(null);
+        }
+    }
 }
