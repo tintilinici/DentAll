@@ -104,91 +104,90 @@ const AddEditAdminModal = ({ data, isOpen, onClose }: Props) => {
   };
 
   return (
-
-      <Modal
-          isOpen={isOpen}
-          onClose={handleClose}
-          isCentered
-      >
-        <ModalOverlay />
-        <ModalContent maxW="400px">
-          { data?.email &&
-              <ModalHeader>Edit { data.email }</ModalHeader>
-          }
-          { !data?.email &&
-              <ModalHeader>Add new user</ModalHeader>
-          }
-          <ModalCloseButton />
-          <form>
-            <ModalBody
-                pb={6}
-                className='space-y-4'
-            >
-              <Flex flexWrap="wrap" justifyContent="space-between">
-                { !data?.email && (
-                  <>
-                  <FormControl w="48%" marginBottom="24px" isRequired>
-                    <FormLabel>Email</FormLabel>
-                    <Input
-                        id="email"
-                        placeholder='Email'
-                        type='text'
-                        minLength={3}
-                        maxLength={100}
-                        value={user?.email ?? ''}
-                        onChange={handleFormChange}
-                    />
-                  </FormControl>
-                  <FormControl w="48%" marginBottom="24px" isRequired>
-                    <FormLabel>Password</FormLabel>
-                    <Input
-                        id="password"
-                        placeholder='Password'
-                        type='text'
-                        minLength={3}
-                        maxLength={100}
-                        value={user?.password ?? ''}
-                        onChange={handleFormChange}
-                    />
-                  </FormControl>
-                  </>
-                )}
+    <Modal
+        isOpen={isOpen}
+        onClose={handleClose}
+        isCentered
+    >
+      <ModalOverlay />
+      <ModalContent maxW="400px">
+        { data?.email &&
+            <ModalHeader>Edit { data.email }</ModalHeader>
+        }
+        { !data?.email &&
+            <ModalHeader>Add new user</ModalHeader>
+        }
+        <ModalCloseButton />
+        <form>
+          <ModalBody
+              pb={6}
+              className='space-y-4'
+          >
+            <Flex flexWrap="wrap" justifyContent="space-between">
+              { !data?.email && (
+                <>
                 <FormControl w="48%" marginBottom="24px" isRequired>
-                  <FormLabel>Select roles</FormLabel>
-                  <Flex flexFlow="column">
-                    <Checkbox value="ROLE_ACCOMMODATION" isChecked={user.roles.includes('ROLE_ACCOMMODATION')} onChange={handleRoles}>Accommodation</Checkbox>
-                    <Checkbox value="ROLE_TRANSPORT" isChecked={user.roles.includes('ROLE_TRANSPORT')} onChange={handleRoles}>Transport</Checkbox>
-                    <Checkbox value="ROLE_PATIENT" isChecked={user.roles.includes('ROLE_PATIENT')} onChange={handleRoles}>Patient</Checkbox>
-                  </Flex>
+                  <FormLabel>Email</FormLabel>
+                  <Input
+                      id="email"
+                      placeholder='Email'
+                      type='text'
+                      minLength={3}
+                      maxLength={100}
+                      value={user?.email ?? ''}
+                      onChange={handleFormChange}
+                  />
                 </FormControl>
-              </Flex>
-            </ModalBody>
+                <FormControl w="48%" marginBottom="24px" isRequired>
+                  <FormLabel>Password</FormLabel>
+                  <Input
+                      id="password"
+                      placeholder='Password'
+                      type='text'
+                      minLength={3}
+                      maxLength={100}
+                      value={user?.password ?? ''}
+                      onChange={handleFormChange}
+                  />
+                </FormControl>
+                </>
+              )}
+              <FormControl w="48%" marginBottom="24px" isRequired>
+                <FormLabel>Select roles</FormLabel>
+                <Flex flexFlow="column">
+                  <Checkbox value="ROLE_ACCOMMODATION" isChecked={user.roles.includes('ROLE_ACCOMMODATION')} onChange={handleRoles}>Accommodation</Checkbox>
+                  <Checkbox value="ROLE_TRANSPORT" isChecked={user.roles.includes('ROLE_TRANSPORT')} onChange={handleRoles}>Transport</Checkbox>
+                  <Checkbox value="ROLE_PATIENT" isChecked={user.roles.includes('ROLE_PATIENT')} onChange={handleRoles}>Patient</Checkbox>
+                </Flex>
+              </FormControl>
+            </Flex>
+          </ModalBody>
 
-            <ModalFooter className='space-x-2'>
-              <Flex flexFlow="column" gap="12px" w="100%">
-                <Button
-                    onClick={onClose}
-                    isDisabled={patchAdminMutation.isPending}
-                    variant={'outline'}
-                    colorScheme='red'
-                    w={'full'}
-                >
-                  Cancel
-                </Button>
-                <Button
-                    colorScheme='green'
-                    mr={3}
-                    w={'full'}
-                    isLoading={patchAdminMutation.isPending}
-                    onClick={handleSubmit}
-                >
-                  Save
-                </Button>
-              </Flex>
-            </ModalFooter>
-          </form>
-        </ModalContent>
-      </Modal>
+          <ModalFooter className='space-x-2'>
+            <Flex flexFlow="column" gap="12px" w="100%">
+              <Button
+                  onClick={onClose}
+                  isDisabled={patchAdminMutation.isPending}
+                  variant={'outline'}
+                  colorScheme='red'
+                  w={'full'}
+              >
+                Cancel
+              </Button>
+              <Button
+                  colorScheme='green'
+                  mr={3}
+                  w={'full'}
+                  isLoading={patchAdminMutation.isPending}
+                  onClick={handleSubmit}
+              >
+                Save
+              </Button>
+            </Flex>
+          </ModalFooter>
+        </form>
+      </ModalContent>
+    </Modal>
   )
 }
 
