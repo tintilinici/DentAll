@@ -1,7 +1,9 @@
 package com.dentall.dentallservice.service.impl;
 
+import com.dentall.dentallservice.mapper.SecurityUserMapper;
 import com.dentall.dentallservice.model.domain.SecurityRole;
 import com.dentall.dentallservice.model.domain.SecurityUser;
+import com.dentall.dentallservice.model.dto.SecurityUserDto;
 import com.dentall.dentallservice.model.request.CreateAccountRequest;
 import com.dentall.dentallservice.repository.SecurityRoleRepository;
 import com.dentall.dentallservice.repository.SecurityUserRepository;
@@ -9,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,6 +33,7 @@ public class SecurityService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final SecurityUserMapper securityUserMapper;
 
     public ResponseEntity<Void> register(CreateAccountRequest request) {
 
@@ -84,5 +89,28 @@ public class SecurityService {
             user.setRoles(securityRoles);
             securityUserRepository.save(user);
             return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<SecurityUserDto> getCurrentUser(SecurityUser securityUser) {
+        if (securityUser == null) {
+            return ResponseEntity.notFound().build();
+        }
+        SecurityUserDto dto = securityUserMapper.modelToDto(securityUser);
+        return ResponseEntity.ok(dto);
+    }
+
+    public ResponseEntity<?> getAllUsers() {
+        List<SecurityUser> users = securityUserRepository.findAll();
+        List<SecurityUserDto> dtos = securityUserMapper.modelsToDtos(users);
+        return ResponseEntity.ok(dtos);
+    }
+
+    public ResponseEntity<?> deleteUser(String id) {
+        boolean exists = securityUserRepository.existsById(id);
+        if (!exists) {
+            throw new UsernameNotFoundException("User with email: " + id + ", not found!");
+        }
+        securityUserRepository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

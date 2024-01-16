@@ -49,18 +49,21 @@ public class TransportVehicleServiceImpl implements TransportVehicleService {
                         "' does not exist!"));
 
         TransportVehicle transportVehicle = transportVehicleMapper.requestToModel(request);
+        transportVehicle.setTransportCompany(transportCompany);
         transportVehicleRepository.save(transportVehicle);
+
         transportCompany.addTransportVehicle(transportVehicle);
         transportCompanyRepository.save(transportCompany);
+
         return transportVehicleMapper.modelToDto(transportVehicle);
     }
 
     @Override
     public void deleteTransportVehicle(String id) {
-        boolean vehicleExists = transportVehicleRepository.existsById(id);
-        if (!vehicleExists)
-            throw new TransportVehicleNotFoundException(id);
+        TransportVehicle vehicle = transportVehicleRepository.findById(id)
+                .orElseThrow(() -> new TransportVehicleNotFoundException(id));
 
+        vehicle.getTransportCompany().removeTransportVehicle(vehicle);
         transportVehicleRepository.deleteById(id);
     }
 
@@ -107,6 +110,7 @@ public class TransportVehicleServiceImpl implements TransportVehicleService {
                     Patient patient = medicalTreatment.getAccommodationOrder().getPatient();
                     String patientEmail = patient.getEmail();
                     String patientPhoneNumber = patient.getPhoneNumber();
+                    String patientName = patient.getFirstName() + " " + patient.getLastName();
                     String clinicAddress = medicalTreatment.getClinicAddress();
                     String accommodationAddress = medicalTreatment
                             .getAccommodationOrder()
@@ -114,8 +118,7 @@ public class TransportVehicleServiceImpl implements TransportVehicleService {
                             .getAccommodation()
                             .getAddress();
                     emailService.sendBookingEmailToDriver(driverEmail, patientEmail, patientPhoneNumber, clinicAddress, accommodationAddress);
-                    //TODO ovdje poslati email i pacijentu
-
+                    emailService.sendBookingEmailToPatient(driverEmail, patientEmail, clinicAddress, accommodationAddress, patientName);
 
                     System.out.println("Assigned vehicle: '" + vehicle.getId() + "' to medical" +
                             " treatment: '" + medicalTreatment.getId() + "'.");

@@ -10,10 +10,12 @@ import AllTransportCompaniesPage from './pages/transportAdmin/AllTransportCompan
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import TransportCompanyDetailsPage from './pages/transportAdmin/TransportCompanyDetailsPage'
-import UserAdminDashboard from './pages/userAdmin/UserAdminDashboardPage'
+import PatientAdminDashboard from './pages/patientAdmin/PatientAdminDashboardPage'
 import AccommodationAdminDashboardPage from './pages/accommodationAdmin/AccommodationAdminDashboard'
-import AccountPage from './pages/AccountPage'
-import AdminsManagmentPage from './pages/userAdmin/AdminsManagmentPage'
+import AdminsManagmentPage from './pages/accommodationAdmin/AdminsManagmentPage'
+import { ROLE } from './components/auth/authTypes'
+import AccommodationDetailsPage from './pages/accommodationAdmin/AccommodationDetailsPage.tsx'
+import AccommodationOrdersPage from './pages/patientAdmin/AccommodationOrdersPage.tsx'
 
 const queryClient = new QueryClient()
 
@@ -34,7 +36,7 @@ const router = createBrowserRouter([
   {
     path: routes.TRANSPORT_COMPANIES,
     element: (
-      <ProtectedRoute allowRoles={'any'}>
+      <ProtectedRoute allowRoles={[ROLE.ROLE_TRANSPORT]}>
         <AllTransportCompaniesPage />
       </ProtectedRoute>
     ),
@@ -42,18 +44,26 @@ const router = createBrowserRouter([
   {
     path: `${routes.TRANSPORT_COMPANIES}/:id`,
     element: (
-      <ProtectedRoute allowRoles={'any'}>
+      <ProtectedRoute allowRoles={[ROLE.ROLE_TRANSPORT]}>
         <TransportCompanyDetailsPage />
       </ProtectedRoute>
     ),
   },
 
-  // user admin routes
+  // patient admin routes
   {
     path: routes.USERS.DASHBOARD,
     element: (
-      <ProtectedRoute allowRoles={'any'}>
-        <UserAdminDashboard />
+      <ProtectedRoute allowRoles={[ROLE.ROLE_PATIENT]}>
+        <PatientAdminDashboard />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: `${routes.USERS.DASHBOARD}/orders/:id`,
+    element: (
+      <ProtectedRoute allowRoles={[ROLE.ROLE_ACCOMMODATION]}>
+        <AccommodationOrdersPage />
       </ProtectedRoute>
     ),
   },
@@ -61,27 +71,25 @@ const router = createBrowserRouter([
   // accommodation admin routes
   {
     path: routes.ACCOMMODATION,
-    // TODO: add protection here for the accomodation admin
     element: (
-      <ProtectedRoute allowRoles={'any'}>
+      <ProtectedRoute allowRoles={[ROLE.ROLE_ACCOMMODATION]}>
         <AccommodationAdminDashboardPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: `${routes.ACCOMMODATION}/:id`,
+    element: (
+      <ProtectedRoute allowRoles={[ROLE.ROLE_ACCOMMODATION]}>
+        <AccommodationDetailsPage />
       </ProtectedRoute>
     ),
   },
   {
     path: routes.USERS.ADMIN_MANAGMENT,
     element: (
-      <ProtectedRoute allowRoles={'any'}>
+      <ProtectedRoute allowRoles={[ROLE.ROLE_ACCOMMODATION]}>
         <AdminsManagmentPage />
-      </ProtectedRoute>
-    ),
-  },
-
-  {
-    path: routes.ACCOUNT,
-    element: (
-      <ProtectedRoute allowRoles={'any'}>
-        <AccountPage />,
       </ProtectedRoute>
     ),
   },

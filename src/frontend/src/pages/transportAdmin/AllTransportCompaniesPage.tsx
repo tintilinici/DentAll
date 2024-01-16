@@ -39,6 +39,15 @@ const AllTransportCompaniesPage = () => {
           isClosable: true,
         })
       },
+      onSuccess: () => {
+        toast({
+          title: 'Success',
+          description: 'Transport company was deleted successfully',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+      },
     })
   }
 
@@ -55,11 +64,12 @@ const AllTransportCompaniesPage = () => {
         onClose={onClose}
       />
 
-      <div className='w-full flex justify-end'>
-        <Card className='w-min mb-6'>
+      <div className='flex w-full justify-end'>
+        <Card className='mb-6 w-min'>
           <Button
             colorScheme='whatsapp'
             onClick={onOpen}
+            name='add-transport-company-button'
           >
             Add new company
           </Button>
@@ -83,6 +93,7 @@ const AllTransportCompaniesPage = () => {
                   <Tr
                     key={transportCompany.id}
                     onClick={() => handleOnRowClick(transportCompany.id)}
+                    className='cursor-pointer hover:bg-gray-100'
                   >
                     <Td>{transportCompany.name}</Td>
                     <Td>{transportCompany.email}</Td>

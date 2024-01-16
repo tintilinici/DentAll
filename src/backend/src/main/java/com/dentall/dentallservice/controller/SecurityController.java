@@ -1,11 +1,16 @@
 package com.dentall.dentallservice.controller;
 
+import com.dentall.dentallservice.model.domain.SecurityUser;
 import com.dentall.dentallservice.model.request.CreateAccountRequest;
 import com.dentall.dentallservice.service.impl.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +41,21 @@ public class SecurityController {
     @PatchMapping("/update-roles")
     public ResponseEntity<Void> updateRoles(@RequestParam String email, @RequestBody String[] roles){
         return securityService.updateRoles(email, roles);
+    }
+
+    @GetMapping("/users/current")
+    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal SecurityUser securityUser) {
+        return securityService.getCurrentUser(securityUser);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<?> getAllUsers() {
+        return securityService.getAllUsers();
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable String id) {
+        return securityService.deleteUser(id);
     }
 
 }

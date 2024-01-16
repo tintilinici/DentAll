@@ -5,9 +5,8 @@ export default {
   },
   TRANSPORT_COMPANIES: '/transport-companies',
   USERS: {
-    DASHBOARD: '/users',
+    DASHBOARD: '/patients',
     ADMIN_MANAGMENT: '/admin-managment',
   },
   ACCOMMODATION: '/accommodation',
-  ACCOUNT: '/account',
 } as const

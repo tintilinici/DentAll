@@ -10,8 +10,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  NumberInput,
-  NumberInputField,
   useToast,
 } from '@chakra-ui/react'
 
@@ -33,9 +31,15 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
   const onSubmit: SubmitHandler<TransportCompanyPostDTO> = (data) => {
     postTansportCompanyMutation.mutate(data, {
       onSuccess: () => {
-        onClose()
         reset()
-        // why this not ressetin phone number
+        onClose()
+        toast({
+          title: 'Success',
+          description: 'Transport company was added successfully',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
       },
       onError: (error) => {
         toast({
@@ -88,13 +92,13 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
 
             <FormControl isRequired>
               <FormLabel>Phone number</FormLabel>
-              <NumberInput>
-                <NumberInputField
-                  placeholder='+385926822842'
-                  minLength={5}
-                  {...register('phoneNumber')}
-                />
-              </NumberInput>
+              <Input
+                placeholder='+385926822842'
+                type='tel'
+                pattern='[+]?\d+'
+                minLength={5}
+                {...register('phoneNumber')}
+              />
             </FormControl>
           </ModalBody>
 
@@ -105,6 +109,7 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
               variant={'outline'}
               colorScheme='red'
               w={'full'}
+              name='cancel'
             >
               Cancel
             </Button>
@@ -113,6 +118,7 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
               mr={3}
               w={'full'}
               type='submit'
+              name='submit'
               isLoading={postTansportCompanyMutation.isPending}
             >
               Add
