@@ -79,7 +79,7 @@ const AccommodationDetailsPage = () => {
                 height='500px'
               >
                 <MapContainer
-                  center={[data.latitude as number, data.longitude as number]}
+                  center={[data.latitude as unknown as number, data.longitude as unknown as number]}
                   zoom={13}
                   scrollWheelZoom={false}
                 >
@@ -87,7 +87,12 @@ const AccommodationDetailsPage = () => {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                   />
-                  <Marker position={[data.latitude as number, data.longitude as number]}>
+                  <Marker
+                    position={[
+                      data.latitude as unknown as number,
+                      data.longitude as unknown as number,
+                    ]}
+                  >
                     <Popup>{data.address}</Popup>
                   </Marker>
                 </MapContainer>
