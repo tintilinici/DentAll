@@ -1,5 +1,12 @@
 import {
   Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
   Skeleton,
   Table,
   TableContainer,
@@ -25,6 +32,7 @@ const AllTransportCompaniesPage = () => {
   const { data, isLoading, error } = useGetTransportCompanies()
   const deleteTransportCompanyMutation = useDeleteTransportCompanyMutation()
   const toast = useToast()
+  const { isOpen: isOpenRemoved, onOpen: onOpenRemoved, onClose: onCloseRemoved } = useDisclosure()
 
   const navigate = useNavigate()
 
@@ -104,13 +112,38 @@ const AllTransportCompaniesPage = () => {
                         size={'sm'}
                         fontWeight={'semibold'}
                         colorScheme='red'
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleDeleteCompanyButtonClick(transportCompany.id)
-                        }}
+                        onClick={onOpenRemoved}
                       >
                         Remove
                       </Button>
+                      <Modal
+                        closeOnOverlayClick={false}
+                        isOpen={isOpenRemoved}
+                        onClose={onCloseRemoved}
+                      >
+                        <ModalOverlay />
+                        <ModalContent>
+                          <ModalHeader>Remove Transport Company</ModalHeader>
+                          <ModalCloseButton />
+                          <ModalBody pb={6}>
+                            Are you sure you want to remove this transport company?
+                          </ModalBody>
+
+                          <ModalFooter>
+                            <Button
+                              colorScheme='red'
+                              mr={3}
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                handleDeleteCompanyButtonClick(transportCompany.id)
+                              }}
+                            >
+                              Remove
+                            </Button>
+                            <Button onClick={onCloseRemoved}>Cancel</Button>
+                          </ModalFooter>
+                        </ModalContent>
+                      </Modal>
                     </Td>
                   </Tr>
                 ))}
