@@ -1,19 +1,17 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { customFetch } from '../lib/customFetch'
-import { useAuth } from '../components/auth/useAuth'
+import { useCustomFetch } from './useCustomFetch'
 
 export const useDeleteAccommodationMutation = () => {
   const queryClient = useQueryClient()
-  const { token } = useAuth()
+  const customFetch = useCustomFetch()
 
   return useMutation({
     mutationKey: ['deleteAccommodation'],
     mutationFn: (accommodationId: string) =>
-      customFetch(
-        `/accommodations/${accommodationId}`,
-        { method: 'DELETE', interesedInData: false },
-        token
-      ),
+      customFetch(`/accommodations/${accommodationId}`, {
+        method: 'DELETE',
+        interesedInData: false,
+      }),
     onSuccess: () => {
       return queryClient.invalidateQueries({ queryKey: ['accommodations'] })
     },

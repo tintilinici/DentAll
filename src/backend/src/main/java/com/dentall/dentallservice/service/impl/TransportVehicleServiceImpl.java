@@ -107,6 +107,7 @@ public class TransportVehicleServiceImpl implements TransportVehicleService {
                     Patient patient = medicalTreatment.getAccommodationOrder().getPatient();
                     String patientEmail = patient.getEmail();
                     String patientPhoneNumber = patient.getPhoneNumber();
+                    String patientName = patient.getFirstName() + " " + patient.getLastName();
                     String clinicAddress = medicalTreatment.getClinicAddress();
                     String accommodationAddress = medicalTreatment
                             .getAccommodationOrder()
@@ -114,8 +115,7 @@ public class TransportVehicleServiceImpl implements TransportVehicleService {
                             .getAccommodation()
                             .getAddress();
                     emailService.sendBookingEmailToDriver(driverEmail, patientEmail, patientPhoneNumber, clinicAddress, accommodationAddress);
-                    //TODO ovdje poslati email i pacijentu
-
+                    emailService.sendBookingEmailToPatient(driverEmail, patientEmail, clinicAddress, accommodationAddress, patientName);
 
                     System.out.println("Assigned vehicle: '" + vehicle.getId() + "' to medical" +
                             " treatment: '" + medicalTreatment.getId() + "'.");
