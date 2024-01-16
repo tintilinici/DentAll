@@ -19,7 +19,7 @@ export const customFetch = async <T>(
     },
   }
 
-  if (data && ['POST', 'PUT'].includes(requestOptions.method || '')) {
+  if (data && ['POST', 'PUT', 'PATCH'].includes(requestOptions.method || '')) {
     requestOptions.body = JSON.stringify(data)
   }
 
