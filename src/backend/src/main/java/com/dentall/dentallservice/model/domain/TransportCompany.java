@@ -2,6 +2,7 @@ package com.dentall.dentallservice.model.domain;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,7 @@ public class TransportCompany {
 
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "transportCompany", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "transportCompany", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<TransportVehicle> transportVehicles;
 
     public void addTransportVehicle(TransportVehicle transportVehicle) {
@@ -40,5 +41,14 @@ public class TransportCompany {
 
         transportVehicles.add(transportVehicle);
         transportVehicle.setTransportCompany(this);
+    }
+
+    public void removeTransportVehicle(TransportVehicle vehicle) {
+        if (vehicle == null) return;
+
+        if (transportVehicles != null) {
+            transportVehicles.remove(vehicle);
+            vehicle.setTransportCompany(null);
+        }
     }
 }

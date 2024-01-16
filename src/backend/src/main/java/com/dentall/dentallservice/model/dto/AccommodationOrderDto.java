@@ -17,6 +17,8 @@ public class AccommodationOrderDto {
 
     private String id;
 
+    private PatientDto patient;
+
     private LocalDateTime arrivalDateTime;
 
     private LocalDateTime departureDateTime;
@@ -25,7 +27,7 @@ public class AccommodationOrderDto {
 
     private AccommodationType accommodationType;
 
-    private String patientId;
+    private String accommodationBookingId;
 
 
 

@@ -2,23 +2,28 @@ package com.dentall.dentallservice.controller;
 
 import com.dentall.dentallservice.model.dto.TransportVehicleDto;
 import com.dentall.dentallservice.model.request.CreateTransportVehicleRequest;
+import com.dentall.dentallservice.service.EmailService;
 import com.dentall.dentallservice.service.TransportVehicleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/transportVehicles")
 @Tag(name = "Transport Vehicle", description = "Transport Vehicle API")
 public class TransportVehicleController {
 
     @Autowired
     private TransportVehicleService service;
+
+    @Autowired
+    private EmailService emailService;
 
     @Operation(
             summary = "Creates a TransportVehicle",
@@ -49,5 +54,13 @@ public class TransportVehicleController {
     @GetMapping("/{id}")
     ResponseEntity<TransportVehicleDto> retrieveTransportVehicle(@PathVariable("id") String id) {
         return ResponseEntity.ok(service.retrieveTransportVehicleById(id));
+    }
+
+
+    @GetMapping("/testMail")
+    public ResponseEntity<?> testMail() {
+        emailService.sendBookingEmailToPatient("your@driver.com","rokorokic@gmail.com",
+                "Clinic address1", "accommodation address 1", "Filip Buljan");
+        return ResponseEntity.ok("Sent!");
     }
 }

@@ -6,6 +6,7 @@ import com.dentall.dentallservice.model.domain.TransportCompany;
 import com.dentall.dentallservice.model.domain.TransportVehicle;
 import com.dentall.dentallservice.model.dto.TransportCompanyDto;
 import com.dentall.dentallservice.model.request.CreateTransportCompanyRequest;
+import com.dentall.dentallservice.model.request.UpdateTransportCompanyRequest;
 import com.dentall.dentallservice.repository.TransportCompanyRepository;
 import com.dentall.dentallservice.repository.TransportVehicleRepository;
 import com.dentall.dentallservice.service.TransportCompanyService;
@@ -60,7 +61,7 @@ public class TransportCompanyServiceImpl implements TransportCompanyService {
         TransportCompany transportCompany = transportCompanyRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Transport company with id: '" + id + "' not found!"));
 
-        if (transportCompany.getTransportVehicles() == null || transportCompany.getTransportVehicles().isEmpty()) {
+        if (transportCompany.getTransportVehicles() != null && !transportCompany.getTransportVehicles().isEmpty()) {
             throw new IllegalArgumentException("You first need to delete companies' transport vehicles to delete the " +
                     "company!");
         }
@@ -85,6 +86,25 @@ public class TransportCompanyServiceImpl implements TransportCompanyService {
 
             transportCompany.addTransportVehicle(vehicle);
         });
+
+        transportCompanyRepository.save(transportCompany);
+        return transportCompanyMapper.modelToDto(transportCompany);
+    }
+
+    @Override
+    public TransportCompanyDto updateTransportCompany(String id, UpdateTransportCompanyRequest request) {
+        TransportCompany transportCompany = transportCompanyRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Transport company with id: '" + id + "' not found!"));
+
+        if (request.getEmail() != null) {
+            transportCompany.setEmail(request.getEmail());
+        }
+        if (request.getPhoneNumber() != null) {
+            transportCompany.setPhoneNumber(request.getPhoneNumber());
+        }
+        if (request.getName() != null) {
+            transportCompany.setName(request.getName());
+        }
 
         transportCompanyRepository.save(transportCompany);
         return transportCompanyMapper.modelToDto(transportCompany);

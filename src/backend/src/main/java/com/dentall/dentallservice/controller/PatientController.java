@@ -4,24 +4,31 @@ import com.dentall.dentallservice.model.dto.AccommodationOrderDto;
 import com.dentall.dentallservice.model.dto.PatientDto;
 import com.dentall.dentallservice.model.request.CreateAccommodationOrderRequest;
 import com.dentall.dentallservice.model.request.CreatePatientRequest;
+import com.dentall.dentallservice.model.request.UpdateAccommodationOrderRequest;
 import com.dentall.dentallservice.model.request.UpdatePatientRequest;
+import com.dentall.dentallservice.repository.AccommodationBookingRepository;
 import com.dentall.dentallservice.service.PatientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/patients")
 @Tag(name = "Patient", description = "Patient API")
 public class PatientController {
 
     @Autowired
     private PatientService service;
+
+    @Autowired
+    private AccommodationBookingRepository accommodationBookingRepository;
 
     @Operation(
             summary = "Retrieve a Patient",
@@ -62,6 +69,22 @@ public class PatientController {
     }
 
     @Operation(
+            summary = "Update a Patient",
+            description = "Updates a Patient by it's Id. All params are optional."
+    )
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<PatientDto> updatePatient(
+            @PathVariable("id") String id,
+            @RequestBody UpdatePatientRequest request){
+        return ResponseEntity.ok(service.updatePatient(id, request));
+    }
+
+    /*Now starts the Accommodation Order part of the controller.
+    Based on the correlation with the patient
+    these functionalities are not part of a separate controller.*/
+
+    @Operation(
             summary = "Creates an AccommodationOrder",
             description = "Creates an AccommodationOrder. AccommodationType must be one of the following: " +
                     "'ROOM, 'HOUSE', 'APARTMENT'"
@@ -92,15 +115,20 @@ public class PatientController {
     }
 
     @Operation(
-            summary = "Update a Patient",
-            description = "Updates a Patient by it's Id. All params are optional."
+            summary = "Update a AccommodationOrder",
+            description = "Updates a AccommodationOrder by it's Id."
     )
-    @PutMapping("/{id}")
+    @PutMapping("orders/{id}")
     @Transactional
-    public ResponseEntity<PatientDto> updatePatient(
+    public ResponseEntity<AccommodationOrderDto> updateAccommodationOrder(
             @PathVariable("id") String id,
-            @RequestBody UpdatePatientRequest request){
-        return ResponseEntity.ok(service.updatePatient(id, request));
+            @RequestBody UpdateAccommodationOrderRequest request){
+        if(accommodationBookingRepository.existsByOrderId(id)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }else {
+            return ResponseEntity.ok(service.updateAccommodationOrder(id, request));
+        }
+
     }
 
 }

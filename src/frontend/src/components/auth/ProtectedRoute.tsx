@@ -1,30 +1,30 @@
-import { PropsWithChildren, useContext } from 'react'
-import { AuthContext, roleDefaultRoutes } from './AuthProvider'
+import { PropsWithChildren } from 'react'
 import { Navigate } from 'react-router-dom'
-import { ROLE } from './AuthProvider'
+import { ROLE, roleDefaultRoutes } from './authTypes'
+import { useAuth } from './useAuth'
 
 interface Props {
-  allowRoles: ROLE[] | 'any'
+  allowRoles: ROLE[]
 }
 
 const ProtectedRoute = ({ children, allowRoles }: PropsWithChildren<Props>) => {
-  const { isAuthenticated, userData } = useContext(AuthContext)
+  const { token, getRoles } = useAuth()
 
-  if (!isAuthenticated) {
+  if (!token) {
     return (
       <Navigate
         to='/login'
         replace
       />
     )
-  } else if (allowRoles !== 'any' && !allowRoles.includes(userData.role)) {
-    // TODO: redirect the role to it's matching dashboard if they try to acces a page they don't have access to
-
-    // FIXME: fix the flasing before redirecting, the page tries to load before redirecting
-    // mby use somekind of loader to check the role and then redirect before render
+  } else if (
+    getRoles().some((role) => {
+      allowRoles.includes(role)
+    })
+  ) {
     return (
       <Navigate
-        to={roleDefaultRoutes[userData.role]}
+        to={roleDefaultRoutes[getRoles()[0]]}
         replace
       />
     )

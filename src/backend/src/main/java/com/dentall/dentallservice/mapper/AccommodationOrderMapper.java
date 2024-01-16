@@ -9,10 +9,10 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {PatientMapper.class})
 public interface AccommodationOrderMapper {
 
-    @Mapping(target = "patientId", source = "patient.id")
+    @Mapping(target = "accommodationBookingId", source = "accommodationBooking.id")
     AccommodationOrderDto modelToDto(AccommodationOrder model);
 
     List<AccommodationOrderDto> modelsToDtos(List<AccommodationOrder> models);

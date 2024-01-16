@@ -10,7 +10,7 @@ const SidebarLayout = (props: PropsWithChildren<Props>) => {
   return (
     <div className={cn('flex h-full bg-blue-50', props.className)}>
       <Sidebar />
-      <div className='p-8 flex-1'>{props.children}</div>
+      <div className='flex-1 bg-inherit p-8'>{props.children}</div>
     </div>
   )
 }
