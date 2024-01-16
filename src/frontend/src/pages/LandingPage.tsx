@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../components/auth/useAuth'
 
 const LandingPage = () => {
-  const { isAuthenticated } = useAuth()
+  const { token } = useAuth()
 
   return (
     <div className='h-full bg-white'>
@@ -12,7 +12,7 @@ const LandingPage = () => {
           <Link to='/'>About</Link>
           <Link to='/'>Contact</Link>
         </ul>
-        {isAuthenticated ? (
+        {token ? (
           <Link
             className='bg-orange-500 px-8 py-2 text-white hover:bg-orange-600 hover:shadow-md'
             to={'/transport-companies'}
