@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CreateAccommodationOrderRequest {
 
-    private LocalDateTime arrivalDatetime;
+    private LocalDateTime arrivalDateTime;
 
-    private LocalDateTime departureDatetime;
+    private LocalDateTime departureDateTime;
 
     private int accommodationSize;
 

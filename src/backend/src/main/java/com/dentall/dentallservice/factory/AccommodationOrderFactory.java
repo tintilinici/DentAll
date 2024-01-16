@@ -15,8 +15,8 @@ public class AccommodationOrderFactory {
                 .id(UUID.randomUUID().toString())
                 .patient(patient)
                 .accommodationSize(request.getAccommodationSize())
-                .arrivalDateTime(LocalDateTime.from(request.getArrivalDatetime()))
-                .departureDateTime(LocalDateTime.from(request.getDepartureDatetime()))
+                .arrivalDateTime(LocalDateTime.from(request.getArrivalDateTime()))
+                .departureDateTime(LocalDateTime.from(request.getDepartureDateTime()))
                 .accommodationType(AccommodationType.valueOf(request.getAccommodationType()))
                 .build();
     }
