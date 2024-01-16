@@ -1,6 +1,15 @@
 import SidebarLayout from '../../components/SidebarLayout'
 import {
-    Button, Flex,
+    Button, Checkbox,
+    Flex,
+    FormControl,
+    FormLabel,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent, ModalFooter,
+    ModalHeader,
+    ModalOverlay,
     Skeleton,
     Table,
     TableContainer,
@@ -14,14 +23,29 @@ import {
 } from "@chakra-ui/react";
 import Card from "../../components/Card.tsx";
 import { useGetUsers } from "../../hooks/useGetAdmins.ts";
-import {useDeleteAdminMutation} from "../../hooks/useDeleteAdmin.ts";
+import { useDeleteAdminMutation } from "../../hooks/useDeleteAdmin.ts";
+import * as React from "react";
+import { usePatchAdmin } from "../../hooks/usePatchAdmin.ts";
+import {useEffect, useState} from "react";
+import {User} from "../../lib/api.types.ts";
+import AddEditAdminModal from "../../components/AddEditAdminModal.tsx";
 
 const AdminsManagmentPage = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const { data, isLoading, error } = useGetUsers()
+    const [ allUsers, setAllUsers ] = useState<User[]>([])
+    const [user, setUser] = useState<{email: string, roles: string[]}>({
+        email: '',
+        roles: []
+    });
+
     const deleteAdminMutation = useDeleteAdminMutation()
     const toast = useToast()
+
+    useEffect(() => {
+        setAllUsers(data)
+    }, [data]);
 
     const handleDeleteAdmin = (id: string) => {
         deleteAdminMutation.mutate(id, {
@@ -37,11 +61,33 @@ const AdminsManagmentPage = () => {
         })
     }
 
+    const handleOnRowClick = (email: string, roles: string[]) => {
+        setUser({email, roles: roles.map(e => e.replace('ROLE_', ''))})
+        onOpen();
+    }
+
+    const handleClose = () => {
+        setUser({
+            email: '',
+            roles: [],
+            password: ''
+        });
+        onClose();
+    };
+
     if (error) return <span>{error.message}</span>
 
     return (
         <SidebarLayout className='bg-blue-50'>
 
+            <div className='w-full flex justify-end'>
+                <Card className='w-min mb-6'>
+                    <Button
+                        colorScheme='whatsapp'
+                        onClick={onOpen}
+                    >Add admin</Button>
+                </Card>
+            </div>
             <Card>
                 <Skeleton isLoaded={!isLoading}>
                     <TableContainer>
@@ -55,18 +101,19 @@ const AdminsManagmentPage = () => {
                                 </Tr>
                             </Thead>
                             <Tbody className="row-hover">
-                                {data?.map((user) => (
+                                {allUsers?.map((singleUser) => (
                                     <Tr
-                                        key={user.email}
+                                        key={singleUser.email}
                                         className="hover:bg-gray-100"
+                                        onClick={() => handleOnRowClick(singleUser.email, singleUser.roles)}
                                     >
-                                        <Td>{user.email}</Td>
+                                        <Td>{singleUser.email}</Td>
                                         <Td>
-                                            {new Date(user.createdAt).toLocaleDateString('hr-HR')}
+                                            {new Date(singleUser.createdAt).toLocaleDateString('hr-HR')}
                                         </Td>
                                         <Td>
                                             <Flex flexWrap="wrap" gap="10px">
-                                            {user.roles.map((e, index) => (
+                                            {singleUser.roles.map((e, index) => (
                                                 <div className={e.replace("ROLE_", "").toLowerCase()} key={index}>
                                                     {e.replace("ROLE_", "").toLowerCase()}
                                                 </div>
@@ -80,7 +127,7 @@ const AdminsManagmentPage = () => {
                                                 colorScheme='red'
                                                 onClick={(e) => {
                                                     e.stopPropagation()
-                                                    handleDeleteAdmin(user.email)
+                                                    handleDeleteAdmin(singleUser.email)
                                                 }}
                                             >
                                                 Remove
@@ -93,6 +140,11 @@ const AdminsManagmentPage = () => {
                     </TableContainer>
                 </Skeleton>
             </Card>
+            <AddEditAdminModal
+                data={user}
+                isOpen={isOpen}
+                onClose={handleClose}
+            />
         </SidebarLayout>
     )
 }

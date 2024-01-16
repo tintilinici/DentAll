@@ -8,9 +8,9 @@ export const useDeleteAdminMutation = () => {
 
   return useMutation({
     mutationKey: ['deleteAdmin'],
-    mutationFn: (accommodationId: string) =>
+    mutationFn: (email: string) =>
       customFetch(
-        `/security/${accommodationId}`,
+        `/security/users/${email}`,
         { method: 'DELETE', interesedInData: false },
         token
       ),
