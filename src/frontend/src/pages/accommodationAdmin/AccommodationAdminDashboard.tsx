@@ -18,6 +18,7 @@ import Card from '../../components/Card.tsx'
 import { useGetAccommodations } from '../../hooks/useGetAccommodations.ts'
 import { useDeleteAccommodationMutation } from '../../hooks/useDeleteAccommodation.ts'
 import AddEditAccommodationModal from '../../components/AddEditAccommodationModal.tsx'
+import AccommodationTypeTag from '../../components/AccomodationTypeTag'
 
 const AccommodationAdminDashboardPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -78,17 +79,16 @@ const AccommodationAdminDashboardPage = () => {
                   <Th>Remove</Th>
                 </Tr>
               </Thead>
-              <Tbody className='row-hover'>
+              <Tbody>
                 {data?.map((accommodation) => (
                   <Tr
                     key={accommodation.id}
                     onClick={() => handleOnRowClick(accommodation.id)}
+                    className='cursor-pointer hover:bg-gray-100'
                   >
                     <Td>{accommodation.address}</Td>
-                    <Td className='accommodation-type lowercase'>
-                      <span className={accommodation.accommodationType.toLowerCase()}>
-                        {accommodation.accommodationType}
-                      </span>
+                    <Td>
+                      <AccommodationTypeTag accommodationType={accommodation.accommodationType} />
                     </Td>
                     <Td>{new Date(accommodation.availabilityStart).toLocaleDateString()}</Td>
                     <Td>{new Date(accommodation.availabilityEnd).toLocaleDateString()}</Td>
