@@ -4,6 +4,13 @@ import SidebarLayout from '../../components/SidebarLayout'
 import {
   Button,
   Heading,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
   Skeleton,
   Table,
   TableContainer,
@@ -29,6 +36,7 @@ const TransportCompanyDetailsPage = () => {
   const deleteTransportVehicleMuation = useDeleteTransportVehicle(id || '')
 
   const { isOpen, onClose, onOpen } = useDisclosure()
+  const { isOpen: isOpenRemove, onClose: onCloseRemove, onOpen: onOpenRemove } = useDisclosure()
   const toast = useToast()
 
   const handleDeleteVehicleButtonClick = (vehicleId: string) => {
@@ -152,13 +160,38 @@ const TransportCompanyDetailsPage = () => {
                                 size={'sm'}
                                 fontWeight={'semibold'}
                                 colorScheme='red'
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  handleDeleteVehicleButtonClick(vehicleData.id)
-                                }}
+                                onClick={onOpenRemove}
                               >
                                 Remove
                               </Button>
+                              <Modal
+                                closeOnOverlayClick={false}
+                                isOpen={isOpenRemove}
+                                onClose={onCloseRemove}
+                              >
+                                <ModalOverlay />
+                                <ModalContent>
+                                  <ModalHeader>Remove Vehicle</ModalHeader>
+                                  <ModalCloseButton />
+                                  <ModalBody pb={6}>
+                                    Are you sure you want to remove this vehicle?
+                                  </ModalBody>
+
+                                  <ModalFooter>
+                                    <Button
+                                      colorScheme='red'
+                                      mr={3}
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        handleDeleteVehicleButtonClick(vehicleData.id)
+                                      }}
+                                    >
+                                      Remove
+                                    </Button>
+                                    <Button onClick={onCloseRemove}>Cancel</Button>
+                                  </ModalFooter>
+                                </ModalContent>
+                              </Modal>
                             </Td>
                           </Tr>
                         ))}
