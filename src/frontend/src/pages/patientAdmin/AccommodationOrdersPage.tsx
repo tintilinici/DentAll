@@ -24,6 +24,7 @@ import Card from '../../components/Card'
 import AddAccommodationOrderModal from '../../components/AddAccommodationOrderModal'
 import { useGetAccommodationOrders } from '../../hooks/useGetAccommodationOrders'
 import { useDeleteAccommodationOrder } from '../../hooks/useDeleteAccommodationOrder'
+import AccommodationTypeTag from '../../components/AccomodationTypeTag'
 
 const AccommodationOrdersPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -126,7 +127,9 @@ const AccommodationOrdersPage = () => {
                         <Td>{formatDateTime(order.arrivalDateTime)}</Td>
                         <Td>{formatDateTime(order.departureDateTime)}</Td>
                         <Td>{order.accommodationSize}</Td>
-                        <Td>{order.accommodationType}</Td>
+                        <Td>
+                          <AccommodationTypeTag accommodationType={order.accommodationType} />
+                        </Td>
                         <Td>
                           <AddAccommodationOrderModal
                             isOpen={isEditAccommodationOrderModalOpen}

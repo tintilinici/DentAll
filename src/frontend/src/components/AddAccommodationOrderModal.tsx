@@ -118,6 +118,7 @@ const AddAccommodationOrderModal = ({ isOpen, onClose, patientId, orderId }: Pro
                     onChange={(date) => onChange(date?.toISOString() || '')}
                     selected={value ? new Date(value) : null}
                     timeFormat='HH:mm'
+                    minDate={new Date()}
                     dateFormat={'dd/MM/yyyy - HH:mm'}
                     customInput={React.createElement(React.forwardRef(CustomDateTimeInput))}
                     showTimeSelect
