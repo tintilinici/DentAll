@@ -104,4 +104,13 @@ public class SecurityService {
         List<SecurityUserDto> dtos = securityUserMapper.modelsToDtos(users);
         return ResponseEntity.ok(dtos);
     }
+
+    public ResponseEntity<?> deleteUser(String id) {
+        boolean exists = securityUserRepository.existsById(id);
+        if (!exists) {
+            throw new UsernameNotFoundException("User with email: " + id + ", not found!");
+        }
+        securityUserRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }
