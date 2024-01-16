@@ -4,13 +4,6 @@ import SidebarLayout from '../../components/SidebarLayout'
 import {
   Button,
   Heading,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   Skeleton,
   Table,
   TableContainer,
@@ -28,6 +21,7 @@ import { useGetTransportCompanyDetails } from '../../hooks/useGetTransportCompan
 import AddTransportVehicleModal from '../../components/AddTransportVehicleModal'
 import { getVehicleTagColor } from '../../constants/vehicleTagColor'
 import { useDeleteTransportVehicle } from '../../hooks/useDeleteTransportVehicle'
+import useConfirmModal from '../../hooks/useConfirmModal'
 
 const TransportCompanyDetailsPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -36,10 +30,11 @@ const TransportCompanyDetailsPage = () => {
   const deleteTransportVehicleMuation = useDeleteTransportVehicle(id || '')
 
   const { isOpen, onClose, onOpen } = useDisclosure()
-  const { isOpen: isOpenRemove, onClose: onCloseRemove, onOpen: onOpenRemove } = useDisclosure()
   const toast = useToast()
 
-  const handleDeleteVehicleButtonClick = (vehicleId: string) => {
+  const { openConfirmModal, ConfirmModal } = useConfirmModal()
+
+  const deleteVehicle = (vehicleId: string) => {
     deleteTransportVehicleMuation.mutate(vehicleId, {
       onError: (error) => {
         toast({
@@ -81,6 +76,7 @@ const TransportCompanyDetailsPage = () => {
             isOpen={isOpen}
             onClose={onClose}
           />
+
           <div className='flex w-full justify-end'>
             <Card className='mb-6 w-min'>
               <Button
@@ -141,7 +137,6 @@ const TransportCompanyDetailsPage = () => {
                         {companyData.transportVehicles.map((vehicleData) => (
                           <Tr
                             key={vehicleData.id}
-                            // onClick={() => handleOnRowClick(vehicleData.id)}
                             className='hover:bg-gray-100'
                           >
                             <Td>
@@ -160,39 +155,16 @@ const TransportCompanyDetailsPage = () => {
                                 size={'sm'}
                                 fontWeight={'semibold'}
                                 colorScheme='red'
-                                onClick={onOpenRemove}
+                                onClick={openConfirmModal}
                               >
                                 Remove
                               </Button>
-                              <Modal
-                                closeOnOverlayClick={false}
-                                isOpen={isOpenRemove}
-                                onClose={onCloseRemove}
-                              >
-                                <ModalOverlay />
-                                <ModalContent>
-                                  <ModalHeader>Remove Vehicle</ModalHeader>
-                                  <ModalCloseButton />
-                                  <ModalBody pb={6}>
-                                    Are you sure you want to remove this vehicle?
-                                  </ModalBody>
-
-                                  <ModalFooter>
-                                    <Button
-                                      colorScheme='red'
-                                      mr={3}
-                                      onClick={(e) => {
-                                        e.stopPropagation()
-                                        handleDeleteVehicleButtonClick(vehicleData.id)
-                                      }}
-                                    >
-                                      Remove
-                                    </Button>
-                                    <Button onClick={onCloseRemove}>Cancel</Button>
-                                  </ModalFooter>
-                                </ModalContent>
-                              </Modal>
                             </Td>
+                            <ConfirmModal
+                              title={'Brisanje vozila'}
+                              description={'Jeste li sigurni da želite obrisati ovo vozilo?'}
+                              onConfirm={() => deleteVehicle(vehicleData.id)}
+                            />
                           </Tr>
                         ))}
                       </Tbody>

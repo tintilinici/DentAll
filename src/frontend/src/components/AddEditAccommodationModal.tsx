@@ -24,7 +24,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from 'react-leaflet'
 import { usePostAccommodation } from '../hooks/usePostAccommodation.ts'
-import CustomDateTimeInput from './CustomDateTimeInput.tsx'
+import CustomDateTimeInput from './_CustomDateTimeInput.tsx'
 
 interface Props {
   isOpen: boolean

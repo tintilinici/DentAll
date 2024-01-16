@@ -1,12 +1,5 @@
 import {
   Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   Skeleton,
   Table,
   TableContainer,
@@ -14,6 +7,7 @@ import {
   Td,
   Th,
   Thead,
+  Tooltip,
   Tr,
   useDisclosure,
   useToast,
@@ -25,6 +19,8 @@ import SidebarLayout from '../../components/SidebarLayout'
 import routes from '../../constants/routes'
 import { useGetTransportCompanies } from '../../hooks/useGetTransportCompanies'
 import { useDeleteTransportCompanyMutation } from '../../hooks/useDeleteTransportCompany'
+import useConfirmModal from '../../hooks/useConfirmModal'
+import { useState } from 'react'
 
 const AllTransportCompaniesPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -32,12 +28,15 @@ const AllTransportCompaniesPage = () => {
   const { data, isLoading, error } = useGetTransportCompanies()
   const deleteTransportCompanyMutation = useDeleteTransportCompanyMutation()
   const toast = useToast()
-  const { isOpen: isOpenRemoved, onOpen: onOpenRemoved, onClose: onCloseRemoved } = useDisclosure()
+
+  const { openConfirmModal, ConfirmModal } = useConfirmModal()
 
   const navigate = useNavigate()
 
-  const handleDeleteCompanyButtonClick = (id: string) => {
-    deleteTransportCompanyMutation.mutate(id, {
+  const [targetCompanyId, setTargetCompanyId] = useState<string>('')
+
+  const deleteCompany = () => {
+    deleteTransportCompanyMutation.mutate(targetCompanyId, {
       onError: (error) => {
         toast({
           title: 'Error',
@@ -67,6 +66,12 @@ const AllTransportCompaniesPage = () => {
 
   return (
     <SidebarLayout className='bg-blue-50'>
+      <ConfirmModal
+        title='Delete transport company'
+        description='Are you sure you want to delete this transport company?'
+        onConfirm={deleteCompany}
+      />
+
       <AddTransportCompanyModal
         isOpen={isOpen}
         onClose={onClose}
@@ -108,42 +113,24 @@ const AllTransportCompaniesPage = () => {
                     <Td>{transportCompany.phoneNumber}</Td>
                     <Td>{transportCompany.transportVehicles.length}</Td>
                     <Td>
-                      <Button
-                        size={'sm'}
-                        fontWeight={'semibold'}
-                        colorScheme='red'
-                        onClick={onOpenRemoved}
+                      <Tooltip
+                        label='Kompanija se ne može obrisati zato što ima vozila u floti.'
+                        isDisabled={transportCompany.transportVehicles.length === 0}
                       >
-                        Remove
-                      </Button>
-                      <Modal
-                        closeOnOverlayClick={false}
-                        isOpen={isOpenRemoved}
-                        onClose={onCloseRemoved}
-                      >
-                        <ModalOverlay />
-                        <ModalContent>
-                          <ModalHeader>Remove Transport Company</ModalHeader>
-                          <ModalCloseButton />
-                          <ModalBody pb={6}>
-                            Are you sure you want to remove this transport company?
-                          </ModalBody>
-
-                          <ModalFooter>
-                            <Button
-                              colorScheme='red'
-                              mr={3}
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleDeleteCompanyButtonClick(transportCompany.id)
-                              }}
-                            >
-                              Remove
-                            </Button>
-                            <Button onClick={onCloseRemoved}>Cancel</Button>
-                          </ModalFooter>
-                        </ModalContent>
-                      </Modal>
+                        <Button
+                          size={'sm'}
+                          fontWeight={'semibold'}
+                          colorScheme='red'
+                          isDisabled={transportCompany.transportVehicles.length > 0}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setTargetCompanyId(transportCompany.id)
+                            openConfirmModal()
+                          }}
+                        >
+                          Remove
+                        </Button>
+                      </Tooltip>
                     </Td>
                   </Tr>
                 ))}
