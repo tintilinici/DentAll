@@ -29,11 +29,46 @@ export type JwtPayload = {
 }
 
 export type Accommodation = {
-  id: string,
-  accommodationType: string,
-  address: string,
-  availabilityStart: string,
-  availabilityEnd: string,
-  latitude: string,
-  longitude: string,
+  id: string
+  accommodationType: string
+  address: string
+  availabilityStart: string
+  availabilityEnd: string
+  latitude: string
+  longitude: string
+}
+
+export type Patient = {
+  id: string
+  firstName: string
+  lastName: string
+  phoneNumber: string
+  email: string
+  pin: string
+}
+
+export type PatientPostDTO = {
+  firstName: string
+  lastName: string
+  phoneNumber: string
+  email: string
+  pin: string
+}
+
+export type AccommodationOrderPostDTO = {
+  arrivalDateTime: string
+  departureDateTime: string
+  accommodationSize: number
+  accommodationType: 'ROOM' | 'HOUSE' | 'APARTMENT'
+  patientId: string
+}
+
+export type AccommodationOrder = {
+  id: string
+  patientId: string
+  arrivalDateTime: string
+  departureDateTime: string
+  accommodationSize: number
+  accommodationType: 'ROOM' | 'HOUSE' | 'APARTMENT'
+  accommodationBookingId: string
 }
