@@ -2,7 +2,6 @@ import {
   Button,
   FormControl,
   FormLabel,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -15,11 +14,14 @@ import {
   useToast,
   Select,
 } from '@chakra-ui/react'
-import { useForm, SubmitHandler } from 'react-hook-form'
+import DatePicker from 'react-datepicker'
+import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { usePostAccommodationOrder } from '../hooks/usePostAccommodationOrder'
 import { usePutAccommodationOrder } from '../hooks/usePutAccommodationOrder'
 import { AccommodationOrderPostDTO } from '../lib/api.types'
 import { AccommodationType } from '../enums/accommodation-type.enum'
+import CustomDateTimeInput from './CustomDateTimeInput'
+import React from 'react'
 
 interface Props {
   isOpen: boolean
@@ -29,9 +31,10 @@ interface Props {
 }
 
 const AddAccommodationOrderModal = ({ isOpen, onClose, patientId, orderId }: Props) => {
-  const { register, handleSubmit, reset } = useForm<AccommodationOrderPostDTO>({
+  const { register, handleSubmit, reset, control } = useForm<AccommodationOrderPostDTO>({
     defaultValues: {
       patientId: patientId,
+      arrivalDateTime: '',
     },
   })
 
@@ -84,21 +87,42 @@ const AddAccommodationOrderModal = ({ isOpen, onClose, patientId, orderId }: Pro
           >
             <FormControl isRequired>
               <FormLabel>Arrival</FormLabel>
-              <Input
-                placeholder='Select Date and Time'
-                size='md'
-                type='datetime-local'
-                {...register('arrivalDateTime')}
+
+              <Controller
+                control={control}
+                name='arrivalDateTime'
+                render={({ field: { onChange, value } }) => (
+                  <DatePicker
+                    placeholderText='Select arrival date and time'
+                    onChange={(date) => onChange(date?.toISOString() || '')}
+                    selected={value ? new Date(value) : null}
+                    timeFormat='HH:mm'
+                    minDate={new Date()}
+                    dateFormat={'dd/MM/yyyy - HH:mm'}
+                    customInput={React.createElement(React.forwardRef(CustomDateTimeInput))}
+                    showTimeSelect
+                  />
+                )}
               />
             </FormControl>
 
             <FormControl isRequired>
               <FormLabel>Departure</FormLabel>
-              <Input
-                placeholder='Select Date and Time'
-                size='md'
-                type='datetime-local'
-                {...register('departureDateTime')}
+
+              <Controller
+                control={control}
+                name='departureDateTime'
+                render={({ field: { onChange, value } }) => (
+                  <DatePicker
+                    placeholderText='Select departue date and time'
+                    onChange={(date) => onChange(date?.toISOString() || '')}
+                    selected={value ? new Date(value) : null}
+                    timeFormat='HH:mm'
+                    dateFormat={'dd/MM/yyyy - HH:mm'}
+                    customInput={React.createElement(React.forwardRef(CustomDateTimeInput))}
+                    showTimeSelect
+                  />
+                )}
               />
             </FormControl>
 

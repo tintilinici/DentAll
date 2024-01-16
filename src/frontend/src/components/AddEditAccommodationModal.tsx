@@ -17,17 +17,19 @@ import {
 
 import { Accommodation } from '../lib/api.types'
 import { usePutAccommodation } from '../hooks/usePutAccommodation.ts'
-import { forwardRef, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import * as React from 'react'
 import { AccommodationType } from '../enums/accommodation-type.enum.ts'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from 'react-leaflet'
 import { usePostAccommodation } from '../hooks/usePostAccommodation.ts'
+import CustomDateTimeInput from './CustomDateTimeInput.tsx'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
+  accommodation?: Accommodation
 }
 
 const AddTransportCompanyModal = ({ accommodation, isOpen, onClose }: Props) => {
@@ -62,7 +64,7 @@ const AddTransportCompanyModal = ({ accommodation, isOpen, onClose }: Props) => 
     handleSubmit.mutate(formData, {
       onSuccess: () => {
         onClose()
-        setFormData(null)
+        setFormData(null!)
       },
       onError: (error) => {
         toast({
@@ -75,20 +77,6 @@ const AddTransportCompanyModal = ({ accommodation, isOpen, onClose }: Props) => 
       },
     })
   }
-
-  const customDateInput = ({ value, onClick, onChange }, ref) => (
-    <Input
-      w='100%'
-      placeholder='Description'
-      onClick={onClick}
-      value={value}
-      ref={ref}
-      onChange={onChange}
-    />
-  )
-  customDateInput.displayName = 'DateInput'
-
-  const CustomInput = forwardRef(customDateInput)
 
   function LocationMarker() {
     useMapEvents({
@@ -106,8 +94,8 @@ const AddTransportCompanyModal = ({ accommodation, isOpen, onClose }: Props) => 
     return (
       <Marker
         position={[
-          (formData?.latitude as number) ?? 45.815,
-          (formData?.longitude as number) ?? 15.982,
+          (formData?.latitude as unknown as number) ?? 45.815,
+          (formData?.longitude as unknown as number) ?? 15.982,
         ]}
       >
         <Popup>{formData?.address}</Popup>
@@ -161,9 +149,6 @@ const AddTransportCompanyModal = ({ accommodation, isOpen, onClose }: Props) => 
                 <Select
                   id='accommodationType'
                   placeholder='Type'
-                  type='text'
-                  minLength={3}
-                  maxLength={100}
                   value={formData?.accommodationType}
                   onChange={handleFormChange}
                 >
@@ -185,14 +170,14 @@ const AddTransportCompanyModal = ({ accommodation, isOpen, onClose }: Props) => 
               >
                 <FormLabel>Available from</FormLabel>
                 <DatePicker
-                  w='100%'
                   selected={new Date(formData?.availabilityStart ?? new Date())}
                   onChange={(date) => {
                     const formattedDate = date ? date.toLocaleDateString('en-CA') : ''
                     setFormData({ ...formData, availabilityStart: formattedDate })
                   }}
                   dateFormat='dd/MM/yyyy'
-                  customInput={<CustomInput />}
+                  // wierd fix per: https://github.com/Hacker0x01/react-datepicker/issues/2165#issuecomment-711032947
+                  customInput={React.createElement(React.forwardRef(CustomDateTimeInput))}
                 />
               </FormControl>
 
@@ -203,14 +188,13 @@ const AddTransportCompanyModal = ({ accommodation, isOpen, onClose }: Props) => 
               >
                 <FormLabel>Available to</FormLabel>
                 <DatePicker
-                  w='100%'
                   selected={new Date(formData?.availabilityEnd ?? new Date())}
                   onChange={(date) => {
                     const formattedDate = date ? date.toLocaleDateString('en-CA') : ''
                     setFormData({ ...formData, availabilityEnd: formattedDate })
                   }}
                   dateFormat='dd/MM/yyyy'
-                  customInput={<CustomInput />}
+                  customInput={React.createElement(React.forwardRef(CustomDateTimeInput))}
                 />
               </FormControl>
 
@@ -223,8 +207,8 @@ const AddTransportCompanyModal = ({ accommodation, isOpen, onClose }: Props) => 
               >
                 <MapContainer
                   center={[
-                    (formData?.latitude as number) ?? 45.815,
-                    (formData?.longitude as number) ?? 15.982,
+                    (formData?.latitude as unknown as number) ?? 45.815,
+                    (formData?.longitude as unknown as number) ?? 15.982,
                   ]}
                   zoom={13}
                   scrollWheelZoom={false}
