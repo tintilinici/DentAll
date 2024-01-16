@@ -72,3 +72,9 @@ export type AccommodationOrder = {
   accommodationType: 'ROOM' | 'HOUSE' | 'APARTMENT'
   accommodationBookingId: string
 }
+
+export type User = {
+  email: string,
+  roles: string[],
+  createdAt: string
+}
