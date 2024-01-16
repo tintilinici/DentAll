@@ -1,94 +1,69 @@
 package com.dentall.dentallservice.controller;
 
-import com.dentall.dentallservice.model.dto.AccommodationBookingDto;
 import com.dentall.dentallservice.model.dto.AccommodationDto;
-import com.dentall.dentallservice.model.request.BookAccommodationRequest;
 import com.dentall.dentallservice.model.request.CreateAccommodationRequest;
-import com.dentall.dentallservice.model.request.DeleteAccommodationBookingRequest;
-import com.dentall.dentallservice.model.request.SearchAccommodationBookingRequest;
 import com.dentall.dentallservice.model.request.SearchAccommodationsRequest;
 import com.dentall.dentallservice.model.request.UpdateAccommodationRequest;
 import com.dentall.dentallservice.service.AccommodationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-//TODO add validation on request bodies
-
 @RestController
+@CrossOrigin
 @RequestMapping("/accommodations")
+@Tag(name = "Accommodation", description = "Accommodation API")
 public class AccommodationController {
 
     @Autowired
     private AccommodationService service;
 
+    @Operation(
+            summary = "Create an Accommodation",
+            description = "Creates an Accommodation. All params are required."
+    )
     @PostMapping
     public ResponseEntity<AccommodationDto> createAccommodation(@RequestBody CreateAccommodationRequest request) {
-        return ResponseEntity.status(201).body(service.createAccommodation(request));
+        return ResponseEntity.ok(service.createAccommodation(request));
     }
 
+    @Operation(
+            summary = "Retrieve Accommodations",
+            description = "Retrieve all Accommodations around a given point. (10km radius) or just All accommodations " +
+                    "if a point is not provided"
+    )
     @GetMapping
-    public ResponseEntity<List<AccommodationDto>> searchAccommodations(@RequestBody SearchAccommodationsRequest request) {
-        var result = service.searchAccommodations(request);
-        int status = result.isEmpty() ? 204 : 200;
-        return ResponseEntity.status(status).body(result);
+    public ResponseEntity<List<AccommodationDto>> searchAccommodations(
+            @RequestParam(required = false) String latitude,
+            @RequestParam(required = false) String longitude
+    ) {
+        if (latitude == null || longitude == null) {
+            return ResponseEntity.ok(service.retrieveAccommodations());
+        }
+
+        return ResponseEntity.ok(service.searchAccommodations(latitude, longitude));
     }
 
+    @Operation(
+            summary = "Retrieve an Accommodation",
+            description = "Retrieves an Accommodation by it's id."
+    )
     @GetMapping("/{id}")
     public ResponseEntity<AccommodationDto> retrieveAccommodation(@PathVariable("id") String id) {
         return ResponseEntity.ok(service.retrieveAccommodation(id));
     }
 
-    @PostMapping("/bookings")
-    public ResponseEntity<AccommodationBookingDto> bookAccommodation(@RequestBody BookAccommodationRequest request) {
-        return ResponseEntity.ok(service.bookAccommodation(request));
-    }
-
-    @GetMapping("/bookings")
-    public ResponseEntity<List<AccommodationBookingDto>> searchAccommodationBookings(@RequestBody SearchAccommodationBookingRequest request) {
-        //TODO add validation on request bodies
-        var result = service.searchAccommodationBookings(request);
-        int status = result.isEmpty() ? 204 : 200;
-        return ResponseEntity.status(status).body(result);
-    }
-
-    @GetMapping("/bookings/{id}")
-    public ResponseEntity<AccommodationBookingDto> retrieveAccommodationBooking(@PathVariable("id") String id) {
-        return ResponseEntity.ok(service.retrieveAccommodationBooking(id));
-    }
-
-    @DeleteMapping("/bookings/{id}")
-    @Transactional
-    public ResponseEntity<?> deleteAccommodationBooking(@PathVariable("id") String id) {
-        service.deleteAccommodationBooking(id);
-        return ResponseEntity.ok("Booking successfully deleted!");
-    }
-
-    @DeleteMapping("/{id}/bookings")
-    @Transactional
-    public ResponseEntity<?> deleteAccommodationBookingByAccommodationId(@PathVariable("id") String id) {
-        service.deleteAccommodationBookingByAccommodationId(id);
-        return ResponseEntity.ok("Bookings successfully deleted!");
-    }
-
-    @DeleteMapping("/bookings")
-    @Transactional
-    public ResponseEntity<?> deleteAccommodationBooking(@RequestBody DeleteAccommodationBookingRequest request) {
-        service.deleteAccommodationBooking(request);
-        return ResponseEntity.ok("Bookings successfully deleted!");
-    }
-
-
+    @Operation(
+            summary = "Delete an Accommodation",
+            description = "Deletes and Accommodation by it's id."
+    )
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<?> deleteAccommodation(@PathVariable("id") String id) {
@@ -96,6 +71,10 @@ public class AccommodationController {
         return ResponseEntity.ok("Successfully deleted");
     }
 
+    @Operation(
+            summary = "Update an Accommodation",
+            description = "Updates an Accommodation by it's id. All params are optional."
+    )
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<AccommodationDto> updateAccommodation(

@@ -15,17 +15,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class AccommodationOrderDto {
 
-    private String accommodationOrderId;
+    private String id;
 
-    private LocalDateTime arrivalDatetime;
+    private PatientDto patient;
 
-    private LocalDateTime departureDatetime;
+    private LocalDateTime arrivalDateTime;
+
+    private LocalDateTime departureDateTime;
 
     private int accommodationSize;
 
     private AccommodationType accommodationType;
 
-    private String patientId;
+    private String accommodationBookingId;
 
 
 

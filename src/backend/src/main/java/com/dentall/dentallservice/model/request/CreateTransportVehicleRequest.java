@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateTransportVehicleRequest {
 
-    private String id;
-
     private int capacity;
 
     private TransportVehicleType transportVehicleType;
