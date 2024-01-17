@@ -2,7 +2,7 @@ import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../components/auth/useAuth'
-import routes from '../constants/routes'
+import { roleDefaultRoutes } from '../components/auth/authTypes'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('')
@@ -11,11 +11,11 @@ const LoginPage = () => {
 
   const togglePasswordVisibility = () => setShowPassword((state) => !state)
 
-  const { login } = useAuth()
+  const { login, getRoles } = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = () => {
-    login({ email, password }, () => navigate(routes.TRANSPORT_COMPANIES))
+    login({ email, password }, () => navigate(roleDefaultRoutes[getRoles()[0]]))
   }
 
   return (

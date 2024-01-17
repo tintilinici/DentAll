@@ -1,14 +1,15 @@
 import { PropsWithChildren } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from './useAuth'
+import { roleDefaultRoutes } from './authTypes'
 
 const NoAuthOnlyRoute = ({ children }: PropsWithChildren) => {
-  const { token } = useAuth()
+  const { token, getRoles } = useAuth()
 
   if (token) {
     return (
       <Navigate
-        to='/transport-companies'
+        to={roleDefaultRoutes[getRoles()[0]]}
         replace
       />
     )

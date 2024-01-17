@@ -32,7 +32,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
 
   const getRoles = () => {
     const userRoles = jwtDecode<JwtPayload>(token).roles
-    return userRoles
+    return userRoles.sort()
   }
 
   const login = (loginData: TLoginData, onSuccess: () => void) => {
