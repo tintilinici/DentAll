@@ -56,11 +56,4 @@ public class TransportVehicleController {
         return ResponseEntity.ok(service.retrieveTransportVehicleById(id));
     }
 
-
-    @GetMapping("/testMail")
-    public ResponseEntity<?> testMail() {
-        emailService.sendBookingEmailToPatient("your@driver.com","rokorokic@gmail.com",
-                "Clinic address1", "accommodation address 1", "Filip Buljan");
-        return ResponseEntity.ok("Sent!");
-    }
 }
