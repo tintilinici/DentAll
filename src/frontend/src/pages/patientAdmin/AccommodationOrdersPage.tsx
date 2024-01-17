@@ -127,6 +127,7 @@ const AccommodationOrdersPage = () => {
                             order={order}
                           />
                           <Button
+                            isDisabled={order.accommodationBookingId !== null}
                             colorScheme='whatsapp'
                             onClick={onEditAccommodationOrderModalOpen}
                             size='sm'
