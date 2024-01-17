@@ -13,14 +13,14 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
-import routes from '../../constants/routes.ts'
-import Card from '../../components/Card.tsx'
-import { useGetAccommodations } from '../../hooks/useGetAccommodations.ts'
-import { useDeleteAccommodationMutation } from '../../hooks/useDeleteAccommodation.ts'
-import AddEditAccommodationModal from '../../components/AddEditAccommodationModal.tsx'
+import routes from '../../constants/routes'
+import Card from '../../components/Card'
+import { useGetAccommodations } from '../../hooks/useGetAccommodations'
+import { useDeleteAccommodationMutation } from '../../hooks/useDeleteAccommodation'
+import AddEditAccommodationModal from '../../components/AddEditAccommodationModal'
 import AccommodationTypeTag from '../../components/AccomodationTypeTag'
 import { useState } from 'react'
-import useConfirmModal from '../../hooks/useConfirmModal.tsx'
+import useConfirmModal from '../../hooks/useConfirmModal'
 
 const AccommodationAdminDashboardPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()

@@ -5,13 +5,13 @@ import ProtectedRoute from './components/auth/ProtectedRoute'
 import routes from './constants/routes'
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
-import AllTransportCompaniesPage from './pages/transportAdmin/AllTransportCompaniesPage'
+import TransportAdminDashboardPage from './pages/transportAdmin/TransportAdminDashboardPage.tsx'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import TransportCompanyDetailsPage from './pages/transportAdmin/TransportCompanyDetailsPage'
 import PatientAdminDashboard from './pages/patientAdmin/PatientAdminDashboardPage'
-import AccommodationAdminDashboardPage from './pages/accommodationAdmin/AccommodationAdminDashboard'
+import AccommodationAdminDashboardPage from './pages/accommodationAdmin/AccommodationAdminDashboardPage.tsx'
 import AdminsManagmentPage from './pages/accommodationAdmin/AdminsManagmentPage'
 import { ROLE } from './components/auth/authTypes'
 import AccommodationDetailsPage from './pages/accommodationAdmin/AccommodationDetailsPage.tsx'
@@ -37,7 +37,7 @@ const router = createBrowserRouter([
     path: routes.TRANSPORT_COMPANIES,
     element: (
       <ProtectedRoute allowRoles={[ROLE.ROLE_TRANSPORT]}>
-        <AllTransportCompaniesPage />
+        <TransportAdminDashboardPage />
       </ProtectedRoute>
     ),
   },

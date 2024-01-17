@@ -22,7 +22,7 @@ import { useDeleteTransportCompanyMutation } from '../../hooks/useDeleteTranspor
 import useConfirmModal from '../../hooks/useConfirmModal'
 import { useState } from 'react'
 
-const AllTransportCompaniesPage = () => {
+const TransportAdminDashboardPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const { data, isLoading, error } = useGetTransportCompanies()
@@ -143,4 +143,4 @@ const AllTransportCompaniesPage = () => {
   )
 }
 
-export default AllTransportCompaniesPage
+export default TransportAdminDashboardPage
