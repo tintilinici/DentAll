@@ -11,12 +11,6 @@ import {
   Tr,
   useDisclosure,
   useToast,
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogContent,
-  AlertDialogOverlay,
 } from '@chakra-ui/react'
 import SidebarLayout from '../../components/SidebarLayout'
 import AddPatientModal from '../../components/AddPatientModal'
@@ -26,6 +20,7 @@ import { useDeletePatientMutation } from '../../hooks/useDeletePatient'
 import Card from '../../components/Card'
 import { useNavigate } from 'react-router-dom'
 import routes from '../../constants/routes'
+import useConfirmModal from '../../hooks/useConfirmModal'
 
 const PatientAdminDashboard = () => {
   const {
@@ -34,62 +29,55 @@ const PatientAdminDashboard = () => {
     onClose: onAddPatientModalClose,
   } = useDisclosure()
 
-  const { isOpen: isAlertOpen, onOpen: onAlertOpen, onClose: onAlertClose } = useDisclosure()
+  const {
+    isOpen: isAddAccommodationOrderModalOpen,
+    onOpen: onAddAccommodationOrderModalOpen,
+    onClose: onAddAccommodationOrderModalClose,
+  } = useDisclosure()
 
-  //track modal state for each patient
-  const [isAccommodationOrderModalOpen, setIsAccommodationOrderModalOpen] = React.useState<{
-    [key: string]: boolean
-  }>({})
-
-  const cancelRef = React.useRef<HTMLButtonElement | null>(null)
-  const [selectedPatientId, setSelectedPatientId] = React.useState<string | null>(null)
+  // const [isAccommodationOrderModalOpen, setIsAccommodationOrderModalOpen] = React.useState<{
+  //   [key: string]: boolean
+  // }>({})
 
   const { data, isLoading, error } = useGetPatients()
   const deletePatientMutation = useDeletePatientMutation()
 
   const toast = useToast()
-
   const navigate = useNavigate()
 
-  const handleDeletePatientButtonClick = (id: string) => {
-    onAlertOpen()
-    setSelectedPatientId(id)
-  }
+  // const handleAddOrderButtonClick = (id: string) => {
+  //   // Set the modal state for the specific patient to true
+  //   setIsAccommodationOrderModalOpen((prevState) => ({ ...prevState, [id]: true }))
+  // }
 
-  const handleAddOrderButtonClick = (id: string) => {
-    // Set the modal state for the specific patient to true
-    setIsAccommodationOrderModalOpen((prevState) => ({ ...prevState, [id]: true }))
-  }
+  // const onCloseAccommodationOrderModal = (id: string) => {
+  //   // Set the modal state for the specific patient to false
+  //   setIsAccommodationOrderModalOpen((prevState) => ({ ...prevState, [id]: false }))
+  // }
 
-  const onCloseAccommodationOrderModal = (id: string) => {
-    // Set the modal state for the specific patient to false
-    setIsAccommodationOrderModalOpen((prevState) => ({ ...prevState, [id]: false }))
-  }
+  const { openConfirmModal, ConfirmModal } = useConfirmModal()
 
-  const confirmDeletePatient = () => {
-    if (selectedPatientId) {
-      deletePatientMutation.mutate(selectedPatientId, {
-        onSuccess: () => {
-          toast({
-            title: 'Success',
-            description: 'Patient deleted successfully.',
-            status: 'success',
-            duration: 5000,
-            isClosable: true,
-          })
-        },
-        onError: (error) => {
-          toast({
-            title: 'Error',
-            description: error.message,
-            status: 'error',
-            duration: 5000,
-            isClosable: true,
-          })
-        },
-      })
-      onAlertClose()
-    }
+  const deletePatient = (patientId: string) => {
+    deletePatientMutation.mutate(patientId, {
+      onSuccess: () => {
+        toast({
+          title: 'Success',
+          description: 'Patient deleted successfully.',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+      },
+      onError: (error) => {
+        toast({
+          title: 'Error',
+          description: error.message,
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      },
+    })
   }
 
   const handleOnRowClick = (id: string) => {
@@ -145,16 +133,17 @@ const PatientAdminDashboard = () => {
                     <Td>{patient.pin}</Td>
                     <Td>
                       <AddAccommodationOrderModal
-                        isOpen={isAccommodationOrderModalOpen[patient.id] || false}
-                        onClose={() => onCloseAccommodationOrderModal(patient.id)}
+                        isOpen={isAddAccommodationOrderModalOpen}
+                        onClose={onAddAccommodationOrderModalClose}
                         patientId={patient.id}
                         orderId={''}
                       />
                       <Button
                         colorScheme='whatsapp'
+                        size='sm'
                         onClick={(e) => {
                           e.stopPropagation()
-                          handleAddOrderButtonClick(patient.id)
+                          onAddAccommodationOrderModalOpen()
                         }}
                       >
                         Add accommodation order
@@ -167,12 +156,17 @@ const PatientAdminDashboard = () => {
                         colorScheme='red'
                         onClick={(e) => {
                           e.stopPropagation()
-                          handleDeletePatientButtonClick(patient.id)
+                          openConfirmModal()
                         }}
                       >
                         Remove
                       </Button>
                     </Td>
+                    <ConfirmModal
+                      title='Brisanje pacijenta'
+                      description='Jeste li sigurni da želite obrisati pacijenta?'
+                      onConfirm={() => deletePatient(patient.id)}
+                    />
                   </Tr>
                 ))}
               </Tbody>
@@ -180,41 +174,6 @@ const PatientAdminDashboard = () => {
           </TableContainer>
         </Skeleton>
       </Card>
-
-      <AlertDialog
-        isOpen={isAlertOpen}
-        leastDestructiveRef={cancelRef}
-        onClose={onAlertClose}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader
-              fontSize='lg'
-              fontWeight='bold'
-            >
-              Delete Patient
-            </AlertDialogHeader>
-
-            <AlertDialogBody>Are you sure? You can't undo this action afterwards.</AlertDialogBody>
-
-            <AlertDialogFooter>
-              <Button
-                ref={cancelRef}
-                onClick={onAlertClose}
-              >
-                Cancel
-              </Button>
-              <Button
-                colorScheme='red'
-                onClick={confirmDeletePatient}
-                ml={3}
-              >
-                Delete
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
     </SidebarLayout>
   )
 }
