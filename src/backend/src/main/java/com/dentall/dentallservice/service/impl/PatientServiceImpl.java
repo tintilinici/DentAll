@@ -58,6 +58,13 @@ public class PatientServiceImpl implements PatientService {
         if(!patientExists){
             throw new PatientNotFoundException("Patient with id: " + id + "doesn't exits.");
         }
+
+        Patient patient = patientRepository.getReferenceById(id);
+        List<AccommodationOrder> orders = patient.getAccommodationOrders();
+        if(orders == null || !orders.isEmpty()){
+            throw new RuntimeException("You can't delete this patient since it has accommodation orders");
+        }
+
         patientRepository.deleteById(id);
     }
 
