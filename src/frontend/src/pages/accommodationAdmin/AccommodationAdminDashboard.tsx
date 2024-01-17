@@ -19,6 +19,8 @@ import { useGetAccommodations } from '../../hooks/useGetAccommodations.ts'
 import { useDeleteAccommodationMutation } from '../../hooks/useDeleteAccommodation.ts'
 import AddEditAccommodationModal from '../../components/AddEditAccommodationModal.tsx'
 import AccommodationTypeTag from '../../components/AccomodationTypeTag'
+import { useState } from 'react'
+import useConfirmModal from '../../hooks/useConfirmModal.tsx'
 
 const AccommodationAdminDashboardPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -29,8 +31,11 @@ const AccommodationAdminDashboardPage = () => {
 
   const navigate = useNavigate()
 
-  const handleDeleteAccommodation = (id: string) => {
-    deleteAccommodationMutation.mutate(id, {
+  const [targetAccommodationId, setTargetAccommodationId] = useState<string>('')
+  const { openConfirmModal, ConfirmModal } = useConfirmModal()
+
+  const deleteAccommodation = () => {
+    deleteAccommodationMutation.mutate(targetAccommodationId, {
       onError: (error) => {
         toast({
           title: 'Error',
@@ -99,7 +104,8 @@ const AccommodationAdminDashboardPage = () => {
                         colorScheme='red'
                         onClick={(e) => {
                           e.stopPropagation()
-                          handleDeleteAccommodation(accommodation.id)
+                          setTargetAccommodationId(accommodation.id)
+                          openConfirmModal()
                         }}
                       >
                         Remove
@@ -112,6 +118,11 @@ const AccommodationAdminDashboardPage = () => {
           </TableContainer>
         </Skeleton>
       </Card>
+      <ConfirmModal
+        title='Brisanje smještaja'
+        description='Jeste li sigurni da želite obrisati smještaj?'
+        onConfirm={deleteAccommodation}
+      />
     </SidebarLayout>
   )
 }

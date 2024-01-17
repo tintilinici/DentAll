@@ -37,7 +37,7 @@ const ConfirmModal = (props: ConfirmModalProps) => {
         </ModalBody>
         <ModalFooter>
           <Button
-            colorScheme='red'
+            colorScheme='green'
             variant={'outline'}
             mr={3}
             onClick={() => {
@@ -48,7 +48,7 @@ const ConfirmModal = (props: ConfirmModalProps) => {
             Cancel
           </Button>
           <Button
-            colorScheme='green'
+            colorScheme='red'
             onClick={() => {
               props.onClose()
               props.onConfirm()

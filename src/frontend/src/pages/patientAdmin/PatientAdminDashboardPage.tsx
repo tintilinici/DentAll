@@ -136,7 +136,6 @@ const PatientAdminDashboard = () => {
                     </Td>
                     <Td>
                       <Button
-                        variant={'outline'}
                         size={'sm'}
                         colorScheme='red'
                         onClick={(e) => {

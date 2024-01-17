@@ -18,6 +18,7 @@ import { useGetAccommodationDetails } from '../../hooks/useGetAccommodationDetai
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import AddEditAccommodationModal from '../../components/AddEditAccommodationModal.tsx'
+import AccommodationTypeTag from '../../components/AccomodationTypeTag.tsx'
 
 const AccommodationDetailsPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -62,10 +63,8 @@ const AccommodationDetailsPage = () => {
                   <Tbody>
                     <Tr>
                       <Td>{data.address}</Td>
-                      <Td className='accommodation-type lowercase'>
-                        <span className={data.accommodationType.toLowerCase()}>
-                          {data.accommodationType}
-                        </span>
+                      <Td>
+                        <AccommodationTypeTag accommodationType={data.accommodationType} />
                       </Td>
                       <Td>{new Date(data.availabilityStart).toLocaleDateString()}</Td>
                       <Td>{new Date(data.availabilityEnd).toLocaleDateString()}</Td>
