@@ -3,7 +3,7 @@ import { ROLE } from '../components/auth/authTypes'
 export type TransportCompanyPostDTO = {
   name: string
   email: string
-  phoneNumber: number
+  phoneNumber: string
 }
 
 export type TransportCompany = {

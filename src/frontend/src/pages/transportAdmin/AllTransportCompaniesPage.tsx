@@ -13,7 +13,7 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
-import AddTransportCompanyModal from '../../components/AddTransportCompanyModal'
+import AddEditTransportCompanyModal from '../../components/AddEditTransportCompanyModal'
 import Card from '../../components/Card'
 import SidebarLayout from '../../components/SidebarLayout'
 import routes from '../../constants/routes'
@@ -72,7 +72,7 @@ const AllTransportCompaniesPage = () => {
         onConfirm={deleteCompany}
       />
 
-      <AddTransportCompanyModal
+      <AddEditTransportCompanyModal
         isOpen={isOpen}
         onClose={onClose}
       />

@@ -15,21 +15,33 @@ import {
 
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { usePostTransportCompany } from '../hooks/usePostTransportCompany'
-import { TransportCompanyPostDTO } from '../lib/api.types'
+import { TransportCompany, TransportCompanyPostDTO } from '../lib/api.types'
+import { usePutTransportCompany } from '../hooks/usePutTransportCompany'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
+  data?: TransportCompany
 }
 
-const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
-  const { register, handleSubmit, reset } = useForm<TransportCompanyPostDTO>()
+const AddEditTransportCompanyModal = ({ isOpen, onClose, data }: Props) => {
+  const { register, handleSubmit, reset } = useForm<TransportCompanyPostDTO>({
+    defaultValues: {
+      name: data?.name || '',
+      email: data?.email || '',
+      phoneNumber: data?.phoneNumber || '',
+    },
+  })
 
   const postTansportCompanyMutation = usePostTransportCompany()
+  const putTransprotCompanyMutation = usePutTransportCompany(data?.email || '') // if there is no data, this mutation will not be used
+
+  const mutation = data ? putTransprotCompanyMutation : postTansportCompanyMutation
+
   const toast = useToast()
 
   const onSubmit: SubmitHandler<TransportCompanyPostDTO> = (data) => {
-    postTansportCompanyMutation.mutate(data, {
+    mutation.mutate(data, {
       onSuccess: () => {
         reset()
         onClose()
@@ -130,4 +142,4 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
   )
 }
 
-export default AddTransportCompanyModal
+export default AddEditTransportCompanyModal
