@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Button,
   Skeleton,
@@ -35,25 +34,11 @@ const PatientAdminDashboard = () => {
     onClose: onAddAccommodationOrderModalClose,
   } = useDisclosure()
 
-  // const [isAccommodationOrderModalOpen, setIsAccommodationOrderModalOpen] = React.useState<{
-  //   [key: string]: boolean
-  // }>({})
-
   const { data, isLoading, error } = useGetPatients()
   const deletePatientMutation = useDeletePatientMutation()
 
   const toast = useToast()
   const navigate = useNavigate()
-
-  // const handleAddOrderButtonClick = (id: string) => {
-  //   // Set the modal state for the specific patient to true
-  //   setIsAccommodationOrderModalOpen((prevState) => ({ ...prevState, [id]: true }))
-  // }
-
-  // const onCloseAccommodationOrderModal = (id: string) => {
-  //   // Set the modal state for the specific patient to false
-  //   setIsAccommodationOrderModalOpen((prevState) => ({ ...prevState, [id]: false }))
-  // }
 
   const { openConfirmModal, ConfirmModal } = useConfirmModal()
 
@@ -151,8 +136,8 @@ const PatientAdminDashboard = () => {
                     </Td>
                     <Td>
                       <Button
+                        variant={'outline'}
                         size={'sm'}
-                        fontWeight={'semibold'}
                         colorScheme='red'
                         onClick={(e) => {
                           e.stopPropagation()
