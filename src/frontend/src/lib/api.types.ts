@@ -74,7 +74,13 @@ export type AccommodationOrder = {
 }
 
 export type User = {
-  email: string,
-  roles: string[],
+  email: string
+  roles: string[]
   createdAt: string
+}
+
+export type UserPostDTO = {
+  email: string
+  password: string
+  roles: string[]
 }

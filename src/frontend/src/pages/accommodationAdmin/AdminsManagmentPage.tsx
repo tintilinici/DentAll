@@ -1,45 +1,57 @@
 import SidebarLayout from '../../components/SidebarLayout'
 import {
   Button,
-  Flex,
+  HStack,
   Skeleton,
   Table,
   TableContainer,
+  Tag,
   Tbody,
   Td,
   Th,
   Thead,
   Tr,
   useDisclosure,
-  useToast
-} from "@chakra-ui/react";
-import Card from "../../components/Card.tsx";
-import { useGetUsers } from "../../hooks/useGetAdmins.ts";
-import { useDeleteAdminMutation } from "../../hooks/useDeleteAdmin.ts";
-import * as React from "react";
-import { useEffect, useState } from "react";
-import { User } from "../../lib/api.types.ts";
-import AddEditAdminModal from "../../components/AddEditAdminModal.tsx";
+  useToast,
+} from '@chakra-ui/react'
+import Card from '../../components/Card.tsx'
+import { useGetUsers } from '../../hooks/useGetAdmins.ts'
+import { useDeleteAdminMutation } from '../../hooks/useDeleteAdmin.ts'
+import AddAdminModal from '../../components/AddAdminModal.tsx'
+import { User } from '../../lib/api.types.ts'
+import { useState } from 'react'
+import EditAdminModal from '../../components/EditAdminModal.tsx'
+import useConfirmModal from '../../hooks/useConfirmModal.tsx'
 
 const AdminsManagmentPage = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen: isOpenAdd, onOpen: onOpenAdd, onClose: onCloseAdd } = useDisclosure()
+  const { isOpen: isOpenEdit, onOpen: onOpenEdit, onClose: onCloseEdit } = useDisclosure()
 
-  const { data, isLoading, error } = useGetUsers()
-  const [ allUsers, setAllUsers ] = useState<User[]>([])
-  const [user, setUser] = useState<{email: string, roles: string[]}>({
+  const { data: allUsers, isLoading, error } = useGetUsers()
+  const [user, setUser] = useState<User>({
     email: '',
-    roles: []
-  });
+    roles: [],
+    createdAt: '',
+  })
 
   const deleteAdminMutation = useDeleteAdminMutation()
   const toast = useToast()
 
-  useEffect(() => {
-    setAllUsers(data)
-  }, [data]);
+  const { openConfirmModal, ConfirmModal } = useConfirmModal()
+  const [targetEmail, setTargetEmail] = useState<string>('')
 
-  const handleDeleteAdmin = (id: string) => {
-    deleteAdminMutation.mutate(id, {
+  const deleteAdmin = () => {
+    if (targetEmail === 'admin@admin.com') return
+    deleteAdminMutation.mutate(targetEmail, {
+      onSuccess: () => {
+        toast({
+          title: 'Success',
+          description: 'Admin deleted successfully',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+      },
       onError: (error) => {
         toast({
           title: 'Error',
@@ -52,30 +64,18 @@ const AdminsManagmentPage = () => {
     })
   }
 
-  const handleOnRowClick = (email: string, roles: string[]) => {
-    setUser({email, roles: roles.map(e => e.replace('ROLE_', ''))})
-    onOpen();
-  }
-
-  const handleClose = () => {
-    setUser({
-      email: '',
-      roles: [],
-      password: ''
-    });
-    onClose();
-  };
-
   if (error) return <span>{error.message}</span>
 
   return (
-    <SidebarLayout className='bg-blue-50'>
-      <div className='w-full flex justify-end'>
-        <Card className='w-min mb-6'>
+    <SidebarLayout>
+      <div className='flex w-full justify-end'>
+        <Card className='mb-6 w-min'>
           <Button
             colorScheme='whatsapp'
-            onClick={onOpen}
-          >Add admin</Button>
+            onClick={onOpenAdd}
+          >
+            Add admin
+          </Button>
         </Card>
       </div>
       <Card>
@@ -87,28 +87,41 @@ const AdminsManagmentPage = () => {
                   <Th>Email</Th>
                   <Th>Created at</Th>
                   <Th>Roles</Th>
+                  <Th>Edit</Th>
                   <Th>Remove</Th>
                 </Tr>
               </Thead>
-              <Tbody className="row-hover">
+              <Tbody>
                 {allUsers?.map((singleUser) => (
                   <Tr
                     key={singleUser.email}
-                    className="hover:bg-gray-100"
-                    onClick={() => handleOnRowClick(singleUser.email, singleUser.roles)}
+                    className='hover:bg-gray-100'
                   >
                     <Td>{singleUser.email}</Td>
+                    <Td>{new Date(singleUser.createdAt).toLocaleDateString('hr-HR')}</Td>
                     <Td>
-                      {new Date(singleUser.createdAt).toLocaleDateString('hr-HR')}
+                      <HStack spacing={4}>
+                        {singleUser.roles.sort().map((e, index) => (
+                          <Tag
+                            colorScheme='cyan'
+                            key={index}
+                          >
+                            {e.replace('ROLE_', '').toLowerCase()}
+                          </Tag>
+                        ))}
+                      </HStack>
                     </Td>
                     <Td>
-                      <Flex flexWrap="wrap" gap="10px">
-                      {singleUser.roles.map((e, index) => (
-                        <div className={e.replace("ROLE_", "").toLowerCase()} key={index}>
-                          {e.replace("ROLE_", "").toLowerCase()}
-                        </div>
-                      ))}
-                      </Flex>
+                      <Button
+                        size='sm'
+                        colorScheme='whatsapp'
+                        onClick={() => {
+                          setUser(singleUser)
+                          onOpenEdit()
+                        }}
+                      >
+                        Edit
+                      </Button>
                     </Td>
                     <Td>
                       <Button
@@ -117,7 +130,8 @@ const AdminsManagmentPage = () => {
                         colorScheme='red'
                         onClick={(e) => {
                           e.stopPropagation()
-                          handleDeleteAdmin(singleUser.email)
+                          setTargetEmail(singleUser.email)
+                          openConfirmModal()
                         }}
                       >
                         Remove
@@ -130,10 +144,20 @@ const AdminsManagmentPage = () => {
           </TableContainer>
         </Skeleton>
       </Card>
-      <AddEditAdminModal
-        data={user}
-        isOpen={isOpen}
-        onClose={handleClose}
+
+      <AddAdminModal
+        isOpen={isOpenAdd}
+        onClose={onCloseAdd}
+      />
+      <EditAdminModal
+        currentUser={user}
+        isOpen={isOpenEdit}
+        onClose={onCloseEdit}
+      />
+      <ConfirmModal
+        title='Brisanje administratora'
+        description='Jeste li sigurni da želite obrisati ovog administratora?'
+        onConfirm={deleteAdmin}
       />
     </SidebarLayout>
   )
