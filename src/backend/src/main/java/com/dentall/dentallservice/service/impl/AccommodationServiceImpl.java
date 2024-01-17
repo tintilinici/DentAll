@@ -195,4 +195,5 @@ public class AccommodationServiceImpl implements AccommodationService {
                 .notExists());
 
         return whereClause;
+    }
 }

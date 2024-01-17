@@ -14,6 +14,7 @@ import java.util.UUID;
 public class AccommodationOrderFactory {
 
     public static AccommodationOrder create(CreateAccommodationOrderRequest request, Patient patient){
+        System.out.println(request.getArrivalDateTime());
         return AccommodationOrder.builder()
                 .id(UUID.randomUUID().toString())
                 .patient(patient)
