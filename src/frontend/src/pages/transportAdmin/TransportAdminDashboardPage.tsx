@@ -7,29 +7,36 @@ import {
   Td,
   Th,
   Thead,
+  Tooltip,
   Tr,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
-import AddTransportCompanyModal from '../../components/AddTransportCompanyModal'
+import AddEditTransportCompanyModal from '../../components/AddEditTransportCompanyModal'
 import Card from '../../components/Card'
 import SidebarLayout from '../../components/SidebarLayout'
 import routes from '../../constants/routes'
 import { useGetTransportCompanies } from '../../hooks/useGetTransportCompanies'
 import { useDeleteTransportCompanyMutation } from '../../hooks/useDeleteTransportCompany'
+import useConfirmModal from '../../hooks/useConfirmModal'
+import { useState } from 'react'
 
-const AllTransportCompaniesPage = () => {
+const TransportAdminDashboardPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const { data, isLoading, error } = useGetTransportCompanies()
   const deleteTransportCompanyMutation = useDeleteTransportCompanyMutation()
   const toast = useToast()
 
+  const { openConfirmModal, ConfirmModal } = useConfirmModal()
+
   const navigate = useNavigate()
 
-  const handleDeleteCompanyButtonClick = (id: string) => {
-    deleteTransportCompanyMutation.mutate(id, {
+  const [targetCompanyId, setTargetCompanyId] = useState<string>('')
+
+  const deleteCompany = () => {
+    deleteTransportCompanyMutation.mutate(targetCompanyId, {
       onError: (error) => {
         toast({
           title: 'Error',
@@ -59,7 +66,13 @@ const AllTransportCompaniesPage = () => {
 
   return (
     <SidebarLayout className='bg-blue-50'>
-      <AddTransportCompanyModal
+      <ConfirmModal
+        title='Delete transport company'
+        description='Are you sure you want to delete this transport company?'
+        onConfirm={deleteCompany}
+      />
+
+      <AddEditTransportCompanyModal
         isOpen={isOpen}
         onClose={onClose}
       />
@@ -100,17 +113,24 @@ const AllTransportCompaniesPage = () => {
                     <Td>{transportCompany.phoneNumber}</Td>
                     <Td>{transportCompany.transportVehicles.length}</Td>
                     <Td>
-                      <Button
-                        size={'sm'}
-                        fontWeight={'semibold'}
-                        colorScheme='red'
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleDeleteCompanyButtonClick(transportCompany.id)
-                        }}
+                      <Tooltip
+                        label='Kompanija se ne može obrisati zato što ima vozila u floti.'
+                        isDisabled={transportCompany.transportVehicles.length === 0}
                       >
-                        Remove
-                      </Button>
+                        <Button
+                          size={'sm'}
+                          fontWeight={'semibold'}
+                          colorScheme='red'
+                          isDisabled={transportCompany.transportVehicles.length > 0}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setTargetCompanyId(transportCompany.id)
+                            openConfirmModal()
+                          }}
+                        >
+                          Remove
+                        </Button>
+                      </Tooltip>
                     </Td>
                   </Tr>
                 ))}
@@ -123,4 +143,4 @@ const AllTransportCompaniesPage = () => {
   )
 }
 
-export default AllTransportCompaniesPage
+export default TransportAdminDashboardPage

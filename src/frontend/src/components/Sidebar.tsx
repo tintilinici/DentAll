@@ -4,6 +4,7 @@ import routes from '../constants/routes'
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from './auth/useAuth'
 import { ROLE } from './auth/authTypes'
+import { Button } from '@chakra-ui/react'
 
 interface SidebarLinkProps {
   to: string
@@ -83,13 +84,15 @@ const Sidebar = () => {
             }
           })}
         </ul>
-        <SidebarLink
-          to='/'
+        <Button
           className=''
           onClick={logout}
+          colorScheme='orange'
+          mx='5'
+          variant={'outline'}
         >
           Logout
-        </SidebarLink>
+        </Button>
       </div>
     </div>
   )

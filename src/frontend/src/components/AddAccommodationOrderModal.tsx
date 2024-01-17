@@ -20,7 +20,7 @@ import { usePostAccommodationOrder } from '../hooks/usePostAccommodationOrder'
 import { usePutAccommodationOrder } from '../hooks/usePutAccommodationOrder'
 import { AccommodationOrderPostDTO } from '../lib/api.types'
 import { AccommodationType } from '../enums/accommodation-type.enum'
-import CustomDateTimeInput from './CustomDateTimeInput'
+import CustomDateTimeInput from './_CustomDateTimeInput'
 import React from 'react'
 
 interface Props {

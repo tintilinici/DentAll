@@ -13,11 +13,14 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
-import routes from '../../constants/routes.ts'
-import Card from '../../components/Card.tsx'
-import { useGetAccommodations } from '../../hooks/useGetAccommodations.ts'
-import { useDeleteAccommodationMutation } from '../../hooks/useDeleteAccommodation.ts'
-import AddEditAccommodationModal from '../../components/AddEditAccommodationModal.tsx'
+import routes from '../../constants/routes'
+import Card from '../../components/Card'
+import { useGetAccommodations } from '../../hooks/useGetAccommodations'
+import { useDeleteAccommodationMutation } from '../../hooks/useDeleteAccommodation'
+import AddEditAccommodationModal from '../../components/AddEditAccommodationModal'
+import AccommodationTypeTag from '../../components/AccomodationTypeTag'
+import { useState } from 'react'
+import useConfirmModal from '../../hooks/useConfirmModal'
 
 const AccommodationAdminDashboardPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -28,8 +31,11 @@ const AccommodationAdminDashboardPage = () => {
 
   const navigate = useNavigate()
 
-  const handleDeleteAccommodation = (id: string) => {
-    deleteAccommodationMutation.mutate(id, {
+  const [targetAccommodationId, setTargetAccommodationId] = useState<string>('')
+  const { openConfirmModal, ConfirmModal } = useConfirmModal()
+
+  const deleteAccommodation = () => {
+    deleteAccommodationMutation.mutate(targetAccommodationId, {
       onError: (error) => {
         toast({
           title: 'Error',
@@ -78,17 +84,16 @@ const AccommodationAdminDashboardPage = () => {
                   <Th>Remove</Th>
                 </Tr>
               </Thead>
-              <Tbody className='row-hover'>
+              <Tbody>
                 {data?.map((accommodation) => (
                   <Tr
                     key={accommodation.id}
                     onClick={() => handleOnRowClick(accommodation.id)}
+                    className='cursor-pointer hover:bg-gray-100'
                   >
                     <Td>{accommodation.address}</Td>
-                    <Td className='accommodation-type lowercase'>
-                      <span className={accommodation.accommodationType.toLowerCase()}>
-                        {accommodation.accommodationType}
-                      </span>
+                    <Td>
+                      <AccommodationTypeTag accommodationType={accommodation.accommodationType} />
                     </Td>
                     <Td>{new Date(accommodation.availabilityStart).toLocaleDateString()}</Td>
                     <Td>{new Date(accommodation.availabilityEnd).toLocaleDateString()}</Td>
@@ -99,7 +104,8 @@ const AccommodationAdminDashboardPage = () => {
                         colorScheme='red'
                         onClick={(e) => {
                           e.stopPropagation()
-                          handleDeleteAccommodation(accommodation.id)
+                          setTargetAccommodationId(accommodation.id)
+                          openConfirmModal()
                         }}
                       >
                         Remove
@@ -112,6 +118,11 @@ const AccommodationAdminDashboardPage = () => {
           </TableContainer>
         </Skeleton>
       </Card>
+      <ConfirmModal
+        title='Brisanje smještaja'
+        description='Jeste li sigurni da želite obrisati smještaj?'
+        onConfirm={deleteAccommodation}
+      />
     </SidebarLayout>
   )
 }

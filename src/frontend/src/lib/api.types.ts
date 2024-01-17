@@ -3,7 +3,7 @@ import { ROLE } from '../components/auth/authTypes'
 export type TransportCompanyPostDTO = {
   name: string
   email: string
-  phoneNumber: number
+  phoneNumber: string
 }
 
 export type TransportCompany = {
@@ -71,4 +71,16 @@ export type AccommodationOrder = {
   accommodationSize: number
   accommodationType: 'ROOM' | 'HOUSE' | 'APARTMENT'
   accommodationBookingId: string
+}
+
+export type User = {
+  email: string
+  roles: string[]
+  createdAt: string
+}
+
+export type UserPostDTO = {
+  email: string
+  password: string
+  roles: string[]
 }

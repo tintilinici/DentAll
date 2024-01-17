@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  db:
+    image: postgis/postgis:latest
+    environment:
+      POSTGRES_DB: dentall
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./psql/data:/var/lib/postgresql/data

@@ -101,6 +101,7 @@ public class AccommodationServiceImpl implements AccommodationService {
             if (!isUpdatable) {
                 throw new BadRequestException("Conflict in updating accommodation's availability!");
             }
+            accommodation.setAvailabilityStart(startDate);
         }
 
         if (endDate != null) {
@@ -109,6 +110,7 @@ public class AccommodationServiceImpl implements AccommodationService {
             if (!isUpdatable) {
                 throw new BadRequestException("Conflict in updating accommodation's availability!");
             }
+            accommodation.setAvailabilityEnd(endDate);
         }
 
         accommodationRepository.save(accommodation);
