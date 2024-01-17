@@ -51,6 +51,11 @@ const AdminsManagmentPage = () => {
           duration: 5000,
           isClosable: true,
         })
+        setUser({
+          email: '',
+          roles: [],
+          createdAt: '',
+        })
       },
       onError: (error) => {
         toast({
