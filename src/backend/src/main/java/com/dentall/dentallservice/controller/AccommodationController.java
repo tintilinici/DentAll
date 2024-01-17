@@ -60,6 +60,14 @@ public class AccommodationController {
         return ResponseEntity.ok(service.retrieveAccommodation(id));
     }
 
+    @GetMapping("/get-by-order")
+    public ResponseEntity<List<AccommodationDto>> retrieveAccommodations(
+            @RequestParam("orderId") String orderId,
+            @RequestParam("radius") int radius
+    ) {
+        return ResponseEntity.ok(service.retrieveAccommodations(orderId, radius));
+    }
+
     @Operation(
             summary = "Delete an Accommodation",
             description = "Deletes and Accommodation by it's id."

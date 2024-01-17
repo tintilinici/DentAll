@@ -13,7 +13,9 @@ import java.util.List;
 public interface AccommodationOrderMapper {
 
     @Mapping(target = "accommodationBookingId", source = "accommodationBooking.id")
-    AccommodationOrderDto modelToDto(AccommodationOrder model);
+    @Mapping(target = "longitude", expression = "java(String.valueOf(accommodationOrder.getLocation().getX()))")
+    @Mapping(target = "latitude", expression = "java(String.valueOf(accommodationOrder.getLocation().getY()))")
+    AccommodationOrderDto modelToDto(AccommodationOrder accommodationOrder);
 
     List<AccommodationOrderDto> modelsToDtos(List<AccommodationOrder> models);
 }

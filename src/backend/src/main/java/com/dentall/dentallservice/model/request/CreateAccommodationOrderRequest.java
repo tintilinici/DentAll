@@ -23,4 +23,6 @@ public class CreateAccommodationOrderRequest {
     private String accommodationType;
 
     private String patientId;
+    private String latitude;
+    private String longitude;
 }
