@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import SidebarLayout from '../../components/SidebarLayout'
 import Card from '../../components/Card'
-import AddAccommodationOrderModal from '../../components/AddAccommodationOrderModal'
+import AddEditAccommodationOrderModal from '../../components/AddEditAccommodationOrderModal'
 import { useGetAccommodationOrders } from '../../hooks/useGetAccommodationOrders'
 import { useDeleteAccommodationOrder } from '../../hooks/useDeleteAccommodationOrder'
 import AccommodationTypeTag from '../../components/AccomodationTypeTag'
@@ -120,11 +120,11 @@ const AccommodationOrdersPage = () => {
                           <AccommodationTypeTag accommodationType={order.accommodationType} />
                         </Td>
                         <Td>
-                          <AddAccommodationOrderModal
+                          <AddEditAccommodationOrderModal
                             isOpen={isEditAccommodationOrderModalOpen}
                             onClose={onEditAccommodationOrderModalClose}
                             patientId={id}
-                            orderId={order.id}
+                            order={order}
                           />
                           <Button
                             colorScheme='whatsapp'

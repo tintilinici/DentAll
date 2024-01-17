@@ -13,13 +13,14 @@ import {
 } from '@chakra-ui/react'
 import SidebarLayout from '../../components/SidebarLayout'
 import AddPatientModal from '../../components/AddPatientModal'
-import AddAccommodationOrderModal from '../../components/AddAccommodationOrderModal'
+import AddEditAccommodationOrderModal from '../../components/AddEditAccommodationOrderModal'
 import { useGetPatients } from '../../hooks/useGetPatients'
 import { useDeletePatientMutation } from '../../hooks/useDeletePatient'
 import Card from '../../components/Card'
 import { useNavigate } from 'react-router-dom'
 import routes from '../../constants/routes'
 import useConfirmModal from '../../hooks/useConfirmModal'
+import { useState } from 'react'
 
 const PatientAdminDashboard = () => {
   const {
@@ -41,6 +42,8 @@ const PatientAdminDashboard = () => {
   const navigate = useNavigate()
 
   const { openConfirmModal, ConfirmModal } = useConfirmModal()
+
+  const [targetPatientId, setTargetPatientId] = useState<string>('')
 
   const deletePatient = (patientId: string) => {
     deletePatientMutation.mutate(patientId, {
@@ -117,17 +120,12 @@ const PatientAdminDashboard = () => {
                     <Td>{patient.email}</Td>
                     <Td>{patient.pin}</Td>
                     <Td>
-                      <AddAccommodationOrderModal
-                        isOpen={isAddAccommodationOrderModalOpen}
-                        onClose={onAddAccommodationOrderModalClose}
-                        patientId={patient.id}
-                        orderId={''}
-                      />
                       <Button
                         colorScheme='whatsapp'
                         size='sm'
                         onClick={(e) => {
                           e.stopPropagation()
+                          setTargetPatientId(patient.id)
                           onAddAccommodationOrderModalOpen()
                         }}
                       >
@@ -158,6 +156,11 @@ const PatientAdminDashboard = () => {
           </TableContainer>
         </Skeleton>
       </Card>
+      <AddEditAccommodationOrderModal
+        isOpen={isAddAccommodationOrderModalOpen}
+        onClose={onAddAccommodationOrderModalClose}
+        patientId={targetPatientId}
+      />
     </SidebarLayout>
   )
 }

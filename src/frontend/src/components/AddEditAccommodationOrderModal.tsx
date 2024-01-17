@@ -18,40 +18,47 @@ import DatePicker from 'react-datepicker'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { usePostAccommodationOrder } from '../hooks/usePostAccommodationOrder'
 import { usePutAccommodationOrder } from '../hooks/usePutAccommodationOrder'
-import { AccommodationOrderPostDTO } from '../lib/api.types'
+import { AccommodationOrder, AccommodationOrderPostDTO } from '../lib/api.types'
 import { AccommodationType } from '../enums/accommodation-type.enum'
 import CustomDateTimeInput from './_CustomDateTimeInput'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
   patientId: string
-  orderId: string
+  order?: AccommodationOrder
 }
 
-const AddAccommodationOrderModal = ({ isOpen, onClose, patientId, orderId }: Props) => {
-  const { register, handleSubmit, reset, control } = useForm<AccommodationOrderPostDTO>({
-    defaultValues: {
-      patientId: patientId,
-      arrivalDateTime: '',
-    },
-  })
+const AddEditAccommodationOrderModal = ({ isOpen, onClose, patientId, order }: Props) => {
+  const { register, handleSubmit, reset, control, setValue } = useForm<AccommodationOrderPostDTO>()
+
+  useEffect(() => {
+    reset()
+    setValue('patientId', patientId)
+    if (order) {
+      setValue('arrivalDateTime', order.arrivalDateTime)
+      setValue('departureDateTime', order.departureDateTime)
+      setValue('accommodationSize', order.accommodationSize)
+      setValue('accommodationType', order.accommodationType)
+    }
+  }, [order, patientId, setValue, reset])
 
   const postAccommodationOrder = usePostAccommodationOrder(patientId)
-  const putAccommodationOrder = usePutAccommodationOrder(patientId, orderId)
+  const putAccommodationOrder = usePutAccommodationOrder(patientId, order?.id || '') // if the order is undefined, this mutation will not be used
+  const mutation = order ? putAccommodationOrder : postAccommodationOrder
   const toast = useToast()
 
   const onSubmit: SubmitHandler<AccommodationOrderPostDTO> = (data) => {
-    console.log(data)
-    const handleSubmit = orderId ? putAccommodationOrder : postAccommodationOrder
-    handleSubmit.mutate(data, {
+    mutation.mutate(data, {
       onSuccess: () => {
         onClose()
         reset()
         toast({
           title: 'Success',
-          description: 'Accommodation order made',
+          description: order
+            ? 'Accommodation order updated successfully.'
+            : 'Accommodation order created successfully.',
           status: 'success',
           duration: 5000,
           isClosable: true,
@@ -77,8 +84,7 @@ const AddAccommodationOrderModal = ({ isOpen, onClose, patientId, orderId }: Pro
     >
       <ModalOverlay />
       <ModalContent>
-        {!orderId && <ModalHeader>Add a new accommodation order</ModalHeader>}
-        {orderId && <ModalHeader>Edit accommodation order</ModalHeader>}
+        <ModalHeader>{order ? 'Edit accommodation order' : 'Add accommodation order'}</ModalHeader>
         <ModalCloseButton />
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalBody
@@ -87,7 +93,6 @@ const AddAccommodationOrderModal = ({ isOpen, onClose, patientId, orderId }: Pro
           >
             <FormControl isRequired>
               <FormLabel>Arrival</FormLabel>
-
               <Controller
                 control={control}
                 name='arrivalDateTime'
@@ -108,7 +113,6 @@ const AddAccommodationOrderModal = ({ isOpen, onClose, patientId, orderId }: Pro
 
             <FormControl isRequired>
               <FormLabel>Departure</FormLabel>
-
               <Controller
                 control={control}
                 name='departureDateTime'
@@ -158,50 +162,24 @@ const AddAccommodationOrderModal = ({ isOpen, onClose, patientId, orderId }: Pro
           </ModalBody>
 
           <ModalFooter className='space-x-2'>
-            {!orderId && (
-              <Button
-                onClick={onClose}
-                isDisabled={postAccommodationOrder.isPending}
-                variant={'outline'}
-                colorScheme='red'
-                w={'full'}
-              >
-                Cancel
-              </Button>
-            )}
-            {orderId && (
-              <Button
-                onClick={onClose}
-                isDisabled={putAccommodationOrder.isPending}
-                variant={'outline'}
-                colorScheme='red'
-                w={'full'}
-              >
-                Cancel
-              </Button>
-            )}
-            {!orderId && (
-              <Button
-                colorScheme='green'
-                mr={3}
-                w={'full'}
-                type='submit'
-                isLoading={postAccommodationOrder.isPending}
-              >
-                Create
-              </Button>
-            )}
-            {orderId && (
-              <Button
-                colorScheme='green'
-                mr={3}
-                w={'full'}
-                type='submit'
-                isLoading={putAccommodationOrder.isPending}
-              >
-                Save
-              </Button>
-            )}
+            <Button
+              onClick={onClose}
+              isDisabled={putAccommodationOrder.isPending}
+              variant={'outline'}
+              colorScheme='red'
+              w={'full'}
+            >
+              Cancel
+            </Button>
+            <Button
+              colorScheme='green'
+              mr={3}
+              w={'full'}
+              type='submit'
+              isLoading={postAccommodationOrder.isPending}
+            >
+              {order ? 'Edit' : 'Add'}
+            </Button>
           </ModalFooter>
         </form>
       </ModalContent>
@@ -209,4 +187,4 @@ const AddAccommodationOrderModal = ({ isOpen, onClose, patientId, orderId }: Pro
   )
 }
 
-export default AddAccommodationOrderModal
+export default AddEditAccommodationOrderModal

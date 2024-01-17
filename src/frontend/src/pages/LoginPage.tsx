@@ -41,7 +41,11 @@ const LoginPage = () => {
           </div>
           <div>
             <p className='mb-2'>Password</p>
-            <InputGroup>
+            <InputGroup
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleSubmit()
+              }}
+            >
               <Input
                 value={password}
                 type={showPassword ? 'text' : 'password'}
