@@ -26,9 +26,9 @@ const LoginPage = () => {
       >
         DentAll
       </Link>
-      <div className='mx-auto mt-48 max-w-md rounded-lg bg-white shadow-md'>
+      <div className='mx-auto mt-16 max-w-md rounded-lg bg-white shadow-md'>
         <div className='space-y-8 p-8'>
-          <p className='text-center font-bold'>Prijavi se u svoj račun</p>
+          <p className='text-center font-bold'>Sign in to your account</p>
           <div>
             <p className='mb-2'>Email</p>
             <Input
@@ -71,7 +71,7 @@ const LoginPage = () => {
             onClick={handleSubmit}
             name='submit'
           >
-            Prijavi se
+            Sign in
           </Button>
         </div>
       </div>
