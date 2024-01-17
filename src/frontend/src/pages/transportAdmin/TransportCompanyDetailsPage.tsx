@@ -16,12 +16,14 @@ import {
   Tag,
   TagLabel,
   useToast,
+  HStack,
 } from '@chakra-ui/react'
 import { useGetTransportCompanyDetails } from '../../hooks/useGetTransportCompanyDetails'
 import AddTransportVehicleModal from '../../components/AddTransportVehicleModal'
 import { getVehicleTagColor } from '../../constants/vehicleTagColor'
 import { useDeleteTransportVehicle } from '../../hooks/useDeleteTransportVehicle'
 import useConfirmModal from '../../hooks/useConfirmModal'
+import AddEditTransportCompanyModal from '../../components/AddEditTransportCompanyModal'
 
 const TransportCompanyDetailsPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -29,7 +31,16 @@ const TransportCompanyDetailsPage = () => {
   const { data: companyData, error, isLoading } = useGetTransportCompanyDetails(id || '')
   const deleteTransportVehicleMuation = useDeleteTransportVehicle(id || '')
 
-  const { isOpen, onClose, onOpen } = useDisclosure()
+  const {
+    isOpen: isOpenAddVehicle,
+    onClose: onCloseAddVehicle,
+    onOpen: onOpenAddVehicle,
+  } = useDisclosure()
+  const {
+    isOpen: isOpenEditData,
+    onClose: onCloseEditData,
+    onOpen: onOpenEditData,
+  } = useDisclosure()
   const toast = useToast()
 
   const { openConfirmModal, ConfirmModal } = useConfirmModal()
@@ -73,18 +84,27 @@ const TransportCompanyDetailsPage = () => {
         <>
           <AddTransportVehicleModal
             companyId={id}
-            isOpen={isOpen}
-            onClose={onClose}
+            isOpen={isOpenAddVehicle}
+            onClose={onCloseAddVehicle}
           />
 
           <div className='flex w-full justify-end'>
             <Card className='mb-6 w-min'>
-              <Button
-                colorScheme='whatsapp'
-                onClick={onOpen}
-              >
-                Add vehicle
-              </Button>
+              <HStack gap='4'>
+                <Button
+                  colorScheme='whatsapp'
+                  variant={'outline'}
+                  onClick={onOpenEditData}
+                >
+                  Edit data
+                </Button>
+                <Button
+                  colorScheme='whatsapp'
+                  onClick={onOpenAddVehicle}
+                >
+                  Add vehicle
+                </Button>
+              </HStack>
             </Card>
           </div>
 
@@ -112,14 +132,25 @@ const TransportCompanyDetailsPage = () => {
               </TableContainer>
 
               <Heading
-                size={'lg'}
+                size={'md'}
                 color='gray.600'
                 mt='10'
+                mb='5'
                 ml={5}
               >
-                {companyData.transportVehicles.length > 0
-                  ? 'Vehicles'
-                  : 'This company has no vehicles'}
+                {companyData.transportVehicles.length > 0 ? (
+                  'Vehicles'
+                ) : (
+                  <>
+                    {'This company has no vehicles. '}
+                    <span
+                      className='cursor-pointer text-green-500 hover:text-green-600'
+                      onClick={onOpenAddVehicle}
+                    >
+                      Add one.
+                    </span>
+                  </>
+                )}
               </Heading>
 
               {companyData.transportVehicles.length > 0 ? (
@@ -176,6 +207,11 @@ const TransportCompanyDetailsPage = () => {
           </Card>
         </>
       )}
+      <AddEditTransportCompanyModal
+        isOpen={isOpenEditData}
+        onClose={onCloseEditData}
+        data={companyData}
+      />
     </SidebarLayout>
   )
 }
