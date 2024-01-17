@@ -2,13 +2,13 @@ package com.dentall.dentallservice.repository;
 
 import com.dentall.dentallservice.model.domain.AccommodationOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AccommodationOrderRepository extends JpaRepository<AccommodationOrder, String> {
-    List<AccommodationOrder> findByArrivalDateTimeBetweenOrDepartureDateTimeBetween(LocalDateTime arrivalDatetime, LocalDateTime departureDatetime, LocalDateTime arrivalDatetime1, LocalDateTime departureDatetime1);
-
+    List<AccommodationOrder> findByPatientIdAndArrivalDateTimeIsBetweenOrDepartureDateTimeIsBetween(String patient_id, LocalDateTime arrivalDateTime, LocalDateTime arrivalDateTime2, LocalDateTime departureDateTime, LocalDateTime departureDateTime2);
 
     List<AccommodationOrder> findByArrivalDateTimeAfterAndMedicalTreatmentsIsNull(LocalDateTime date);
 /*

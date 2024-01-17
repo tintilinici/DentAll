@@ -103,13 +103,14 @@ public class PatientServiceImpl implements PatientService {
         Patient patient = patientRepository.findById(request.getPatientId())
                 .orElseThrow(() -> new PatientNotFoundException("Patient with id: '" + request.getPatientId() + "' not found!"));
 
-        accommodationOrderRepository.findByArrivalDateTimeBetweenOrDepartureDateTimeBetween(
+        accommodationOrderRepository.findByPatientIdAndArrivalDateTimeIsBetweenOrDepartureDateTimeIsBetween(
+                request.getPatientId(),
                 request.getArrivalDateTime(),
                 request.getDepartureDateTime(),
                 request.getArrivalDateTime(),
                 request.getDepartureDateTime()
         ).stream().findAny().ifPresent((order) -> {
-            throw new IllegalArgumentException("Patient with id: '" + order.getPatient().getId() + "' already has an order for that time! Order id: '" + order.getId() + "'");
+            throw new IllegalArgumentException("Patient: " + order.getPatient().getFirstName() + " already has an order for that time!");
         });
 
         AccommodationOrder accommodationOrder = AccommodationOrderFactory.create(request, patient);
