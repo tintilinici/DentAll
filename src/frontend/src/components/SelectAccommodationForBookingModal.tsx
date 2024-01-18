@@ -58,7 +58,7 @@ interface Props {
 }
 
 const SelectAccommodationForBookingModal = ({ order, isOpen, onClose }: Props) => {
-  const { data, isLoading, error } = useGetAccommodationsByOrder(order.id || 'EMPTY', 1000)
+  const { data, isLoading, error } = useGetAccommodationsByOrder(order.id || 'EMPTY', 100000)
   const postAccommodationBookingBooking = usePostAccommodationBooking(order.patientId, order.id)
 
   const [targetAccommodationId, setTargetAccommodationId] = useState<string>('')

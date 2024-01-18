@@ -10,7 +10,7 @@ export const usePostAccommodationBooking = (patientId: string, accommodationOrde
     mutationFn: (accommodationId: string) =>
       customFetch('/bookings', { method: 'POST' }, { accommodationOrderId, accommodationId }),
     onSuccess: () => {
-      return queryClient.invalidateQueries({ queryKey: ['accomodationOrders', patientId] })
+      return queryClient.invalidateQueries({ queryKey: ['accommodationOrders', patientId] })
     },
   })
 }
