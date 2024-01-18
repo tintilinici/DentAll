@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../components/auth/useAuth'
+import bus from '/Bus.svg'
+import dentist from '/Dentist.svg'
+import house from '/House.svg'
 
 const LandingPage = () => {
   const { token } = useAuth()
@@ -53,18 +56,18 @@ const LandingPage = () => {
 
       <img
         className='bus'
-        src='/src/assets/Bus.svg'
+        src={bus}
         alt='bus'
       />
       <img
         className='dentist'
-        src='/src/assets/Dentist.svg'
+        src={dentist}
         alt='dentist'
       />
       <img
         className='house'
         src='/src/assets/House.svg'
-        alt='house'
+        alt={house}
       />
     </div>
   )
