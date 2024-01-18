@@ -25,6 +25,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from 'react-leaflet'
 import { usePostAccommodation } from '../hooks/usePostAccommodation.ts'
 import CustomDateTimeInput from './_CustomDateTimeInput.tsx'
+import { normalLocationIcon } from '../constants/mapIcons.ts'
 
 interface Props {
   isOpen: boolean
@@ -93,6 +94,7 @@ const AddTransportCompanyModal = ({ accommodation, isOpen, onClose }: Props) => 
 
     return (
       <Marker
+        icon={normalLocationIcon}
         position={[
           (formData?.latitude as unknown as number) ?? 45.815,
           (formData?.longitude as unknown as number) ?? 15.982,
