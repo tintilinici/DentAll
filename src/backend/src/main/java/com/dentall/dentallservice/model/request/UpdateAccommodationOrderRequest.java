@@ -23,4 +23,9 @@ public class UpdateAccommodationOrderRequest {
 
     private AccommodationType accommodationType;
 
+    private String latitude;
+
+    private String longitude;
+
+    private String id;
 }

@@ -16,6 +16,9 @@ import com.dentall.dentallservice.model.request.UpdatePatientRequest;
 import com.dentall.dentallservice.repository.AccommodationOrderRepository;
 import com.dentall.dentallservice.repository.PatientRepository;
 import com.dentall.dentallservice.service.PatientService;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -139,9 +142,29 @@ public class PatientServiceImpl implements PatientService {
         AccommodationOrder accommodationOrder = accommodationOrderRepository.findById(id).orElseThrow(() -> new AccommodationOrderNotFoundException(id));
 
         if(request.getArrivalDateTime() != null){
+            accommodationOrderRepository.findByPatientIdAndArrivalDateTimeIsBetweenOrDepartureDateTimeIsBetween(
+                    accommodationOrder.getPatient().getId(),
+                    request.getArrivalDateTime(),
+                    request.getDepartureDateTime(),
+                    request.getArrivalDateTime(),
+                    request.getDepartureDateTime()
+            ).stream().findAny().ifPresent((order) -> {
+                if (!order.getId().equals(request.getId()))
+                    throw new IllegalArgumentException("Patient: " + order.getPatient().getFirstName() + " already has an order for that time!");
+            });
             accommodationOrder.setArrivalDateTime(request.getArrivalDateTime());
         }
         if(request.getDepartureDateTime() != null){
+            accommodationOrderRepository.findByPatientIdAndArrivalDateTimeIsBetweenOrDepartureDateTimeIsBetween(
+                    accommodationOrder.getPatient().getId(),
+                    request.getArrivalDateTime(),
+                    request.getDepartureDateTime(),
+                    request.getArrivalDateTime(),
+                    request.getDepartureDateTime()
+            ).stream().findAny().ifPresent((order) -> {
+                if (!order.getId().equals(request.getId()))
+                    throw new IllegalArgumentException("Patient: " + order.getPatient().getFirstName() + " already has an order for that time!");
+            });
             accommodationOrder.setDepartureDateTime(request.getDepartureDateTime());
         }
         if(request.getAccommodationSize() > 0){
@@ -149,6 +172,15 @@ public class PatientServiceImpl implements PatientService {
         }
         if (request.getAccommodationType() != null) {
             accommodationOrder.setAccommodationType(request.getAccommodationType());
+        }
+
+        if (!request.getLatitude().isBlank() && !request.getLongitude().isBlank()) {
+
+            GeometryFactory geometryFactory = new GeometryFactory();
+            Point newLocation = geometryFactory.createPoint(new Coordinate(
+                    Double.parseDouble(request.getLatitude()), Double.parseDouble(request.getLongitude()))
+            );
+            accommodationOrder.setLocation(newLocation);
         }
 
         accommodationOrderRepository.save(accommodationOrder);

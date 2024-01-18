@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom'
 import {
   Button,
+  HStack,
   Skeleton,
   Table,
   TableContainer,
@@ -19,6 +20,9 @@ import { useGetAccommodationOrders } from '../../hooks/useGetAccommodationOrders
 import { useDeleteAccommodationOrder } from '../../hooks/useDeleteAccommodationOrder'
 import AccommodationTypeTag from '../../components/AccomodationTypeTag'
 import useConfirmModal from '../../hooks/useConfirmModal'
+import { useState } from 'react'
+import { AccommodationOrder } from '../../lib/api.types'
+import SelectAccommodationForBookingModal from '../../components/SelectAccommodationForBookingModal'
 
 const AccommodationOrdersPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -28,6 +32,14 @@ const AccommodationOrdersPage = () => {
     onOpen: onEditAccommodationOrderModalOpen,
     onClose: onEditAccommodationOrderModalClose,
   } = useDisclosure()
+
+  const {
+    isOpen: isSelectAccommodationForBookingModalOpen,
+    onOpen: onSelectAccommodationForBookingModalOpen,
+    onClose: onSelectAccommodationForBookingModalClose,
+  } = useDisclosure()
+
+  const [targetOrder, setTargetOrder] = useState<AccommodationOrder>({} as AccommodationOrder)
 
   const { data, error, isLoading } = useGetAccommodationOrders(id || '')
   const deleteAccommodationOrder = useDeleteAccommodationOrder(id || '')
@@ -98,7 +110,7 @@ const AccommodationOrdersPage = () => {
                       <Th>Departure</Th>
                       <Th>Accommodation size</Th>
                       <Th>Accommodation type</Th>
-                      <Th>Edit</Th>
+                      <Th>Manage</Th>
                       <Th>Remove</Th>
                     </Tr>
                   </Thead>
@@ -120,20 +132,32 @@ const AccommodationOrdersPage = () => {
                           <AccommodationTypeTag accommodationType={order.accommodationType} />
                         </Td>
                         <Td>
-                          <AddEditAccommodationOrderModal
-                            isOpen={isEditAccommodationOrderModalOpen}
-                            onClose={onEditAccommodationOrderModalClose}
-                            patientId={id}
-                            order={order}
-                          />
-                          <Button
-                            isDisabled={order.accommodationBookingId !== null}
-                            colorScheme='whatsapp'
-                            onClick={onEditAccommodationOrderModalOpen}
-                            size='sm'
-                          >
-                            Edit
-                          </Button>
+                          <HStack gap={6}>
+                            <Button
+                              isDisabled={order.accommodationBookingId !== null}
+                              size={'sm'}
+                              colorScheme='whatsapp'
+                              onClick={() => {
+                                setTargetOrder(order)
+                                onSelectAccommodationForBookingModalOpen()
+                              }}
+                            >
+                              + Create booking
+                            </Button>
+                            <Button
+                              isDisabled={order.accommodationBookingId !== null}
+                              colorScheme='whatsapp'
+                              variant={'outline'}
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                setTargetOrder(order)
+                                onEditAccommodationOrderModalOpen()
+                              }}
+                              size='sm'
+                            >
+                              Edit
+                            </Button>
+                          </HStack>
                         </Td>
                         <Td>
                           <Button
@@ -157,6 +181,17 @@ const AccommodationOrdersPage = () => {
           </Card>
         </>
       )}
+      <SelectAccommodationForBookingModal
+        order={targetOrder}
+        isOpen={isSelectAccommodationForBookingModalOpen}
+        onClose={onSelectAccommodationForBookingModalClose}
+      />
+      <AddEditAccommodationOrderModal
+        isOpen={isEditAccommodationOrderModalOpen}
+        onClose={onEditAccommodationOrderModalClose}
+        patientId={id}
+        order={targetOrder}
+      />
     </SidebarLayout>
   )
 }
