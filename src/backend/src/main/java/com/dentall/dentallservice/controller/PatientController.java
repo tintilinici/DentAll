@@ -124,7 +124,7 @@ public class PatientController {
             @PathVariable("id") String id,
             @RequestBody UpdateAccommodationOrderRequest request){
         if(accommodationBookingRepository.existsByOrderId(id)){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }else {
             return ResponseEntity.ok(service.updateAccommodationOrder(id, request));
         }

@@ -8,29 +8,28 @@ interface Props {
 }
 
 const ProtectedRoute = ({ children, allowRoles }: PropsWithChildren<Props>) => {
-  const { token, getRoles } = useAuth()
+  const { token, getRoles, isFetchingToken } = useAuth()
 
-  if (!token) {
+  if (!token && !isFetchingToken) {
     return (
       <Navigate
         to='/login'
         replace
       />
     )
-  } else if (
-    getRoles().some((role) => {
-      allowRoles.includes(role)
-    })
-  ) {
-    return (
-      <Navigate
-        to={roleDefaultRoutes[getRoles()[0]]}
-        replace
-      />
-    )
-  } else {
+  }
+
+  // test to see if curent user has any of the roles that are allowed to access this route
+  if (getRoles().some((role) => allowRoles.includes(role))) {
     return children
   }
+
+  return (
+    <Navigate
+      to={roleDefaultRoutes[getRoles()[0]]}
+      replace
+    />
+  )
 }
 
 export default ProtectedRoute

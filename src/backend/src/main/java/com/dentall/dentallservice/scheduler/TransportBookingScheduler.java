@@ -18,7 +18,7 @@ public class TransportBookingScheduler {
     @Autowired
     private MedicalTreatmentRepository medicalTreatmentRepository;
 
-    @Scheduled(fixedRate = 2000)
+    @Scheduled(fixedRate = 10000)
     public void assignTransportVehicles() {
         List<MedicalTreatment> mtWithMissingBookings = medicalTreatmentRepository.findByTransportBookingIsNull();
 

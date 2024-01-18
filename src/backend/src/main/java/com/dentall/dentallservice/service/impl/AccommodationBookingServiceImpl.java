@@ -57,22 +57,20 @@ public class AccommodationBookingServiceImpl implements AccommodationBookingServ
         AccommodationOrder order = accommodationOrderRepository.findById(request.getAccommodationOrderId())
                 .orElseThrow(() -> new IllegalArgumentException("Accommodation Order with id: '" + request.getAccommodationOrderId() + "' not found!"));
 
+        if (order.getAccommodationBooking() != null) {
+            throw new IllegalArgumentException("This Order already has an accommodation booking!");
+        }
+
         Patient patient = patientRepository.findById(order.getPatient().getId())
                 .orElseThrow(() -> new PatientNotFoundException("Patient with id: '" + order.getPatient().getId() + "' not found!"));
 
 
-
-        BooleanBuilder builder = constructBookingRequestWhereClause(request, order);
-
-        Iterable<Accommodation> accommodationIterable = accommodationRepository.findAll(builder);
-        Accommodation accommodation = StreamSupport.stream(accommodationIterable.spliterator(), false)
-                .findFirst()
-                .orElseThrow(NoBookingAvailableException::new);
+        Accommodation accommodation = accommodationRepository.findById(request.getAccommodationId())
+                .orElseThrow(() -> new IllegalArgumentException("Accommodation with id: '" + request.getAccommodationId() +"' not found!"));
 
         AccommodationBooking booking = AccommodationBookingFactory.create(order, accommodation);
-        accommodationBookingRepository.save(booking);
-
         order.setAccommodationBooking(booking);
+        accommodationBookingRepository.save(booking);
         accommodationOrderRepository.save(order);
 
         return accommodationBookingMapper.modelToDto(booking);
@@ -138,38 +136,5 @@ public class AccommodationBookingServiceImpl implements AccommodationBookingServ
         if (!exists) {
             throw new AccommodationBookingNotFoundException(id);
         }
-    }
-
-    private BooleanBuilder constructBookingRequestWhereClause(CreateAccommodationBookingRequest request, AccommodationOrder order) {
-        QAccommodation qAccommodation = QAccommodation.accommodation;
-
-        BooleanBuilder whereClause = new BooleanBuilder();
-
-        if (request.getLongitude() != null && request.getLatitude() != null) {
-            String template = "ST_DistanceSphere({0}, ST_MakePoint({1}, {2}))";
-            NumberExpression<Double> distanceExpression = Expressions.numberTemplate(Double.class, template,
-                    qAccommodation.location, Expressions.constant(Double.parseDouble(request.getLongitude())), Expressions.constant(Double.parseDouble(request.getLatitude())));
-            whereClause.and(distanceExpression.loe(RADIUS));
-        }
-
-        if (order.getAccommodationType() != null) {
-            whereClause.and(qAccommodation.accommodationType.eq(AccommodationType.valueOf(String.valueOf(order.getAccommodationType()))));
-        }
-
-        whereClause.and(qAccommodation.availabilityStart.loe(LocalDate.from(order.getArrivalDateTime())));
-        whereClause.and(qAccommodation.availabilityEnd.goe(LocalDate.from(order.getDepartureDateTime())));
-
-        QAccommodationBooking qBooking = QAccommodationBooking.accommodationBooking;
-
-        BooleanBuilder bookingOverlapClause = new BooleanBuilder();
-        bookingOverlapClause.and(qBooking.order.arrivalDateTime.loe(LocalDateTime.from(order.getArrivalDateTime())));
-        bookingOverlapClause.and(qBooking.order.departureDateTime.goe(LocalDateTime.from(order.getDepartureDateTime())));
-
-        whereClause.and(JPAExpressions.selectFrom(qBooking)
-                .where(qBooking.accommodation.id.eq(qAccommodation.id)
-                        .and(bookingOverlapClause))
-                .notExists());
-
-        return whereClause;
     }
 }

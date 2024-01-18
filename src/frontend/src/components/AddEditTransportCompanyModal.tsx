@@ -15,21 +15,34 @@ import {
 
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { usePostTransportCompany } from '../hooks/usePostTransportCompany'
-import { TransportCompanyPostDTO } from '../lib/api.types'
+import { TransportCompany, TransportCompanyPostDTO } from '../lib/api.types'
+import { usePutTransportCompany } from '../hooks/usePutTransportCompany'
+import { useEffect } from 'react'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
+  data?: TransportCompany
 }
 
-const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
+const AddEditTransportCompanyModal = ({ isOpen, onClose, data }: Props) => {
   const { register, handleSubmit, reset } = useForm<TransportCompanyPostDTO>()
 
+  useEffect(() => {
+    if (data) {
+      reset(data)
+    }
+  }, [data, reset])
+
   const postTansportCompanyMutation = usePostTransportCompany()
+  const putTransprotCompanyMutation = usePutTransportCompany(data?.id || '') // if there is no data, this mutation will not be used
+
+  const mutation = data ? putTransprotCompanyMutation : postTansportCompanyMutation
+
   const toast = useToast()
 
   const onSubmit: SubmitHandler<TransportCompanyPostDTO> = (data) => {
-    postTansportCompanyMutation.mutate(data, {
+    mutation.mutate(data, {
       onSuccess: () => {
         reset()
         onClose()
@@ -61,7 +74,9 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Add a new transport company</ModalHeader>
+        <ModalHeader>
+          {data === undefined ? 'Add a new transport company' : 'Edit transport company data'}
+        </ModalHeader>
         <ModalCloseButton />
         <form onSubmit={handleSubmit(onSubmit)}>
           <ModalBody
@@ -95,7 +110,6 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
               <Input
                 placeholder='+385926822842'
                 type='tel'
-                pattern='[+]?\d+'
                 minLength={5}
                 {...register('phoneNumber')}
               />
@@ -121,7 +135,7 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
               name='submit'
               isLoading={postTansportCompanyMutation.isPending}
             >
-              Add
+              {data === undefined ? 'Add' : 'Save'}
             </Button>
           </ModalFooter>
         </form>
@@ -130,4 +144,4 @@ const AddTransportCompanyModal = ({ isOpen, onClose }: Props) => {
   )
 }
 
-export default AddTransportCompanyModal
+export default AddEditTransportCompanyModal

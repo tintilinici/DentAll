@@ -28,7 +28,6 @@ public class AccommodationOrderDto {
     private AccommodationType accommodationType;
 
     private String accommodationBookingId;
-
-
-
+    private String longitude;
+    private String latitude;
 }

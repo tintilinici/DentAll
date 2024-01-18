@@ -2,7 +2,7 @@ import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../components/auth/useAuth'
-import routes from '../constants/routes'
+import { roleDefaultRoutes } from '../components/auth/authTypes'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('')
@@ -11,11 +11,11 @@ const LoginPage = () => {
 
   const togglePasswordVisibility = () => setShowPassword((state) => !state)
 
-  const { login } = useAuth()
+  const { login, getRoles } = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = () => {
-    login({ email, password }, () => navigate(routes.TRANSPORT_COMPANIES))
+    login({ email, password }, () => navigate(roleDefaultRoutes[getRoles()[0]]))
   }
 
   return (
@@ -26,9 +26,9 @@ const LoginPage = () => {
       >
         DentAll
       </Link>
-      <div className='mx-auto mt-48 max-w-md rounded-lg bg-white shadow-md'>
+      <div className='mx-auto mt-16 max-w-md rounded-lg bg-white shadow-md'>
         <div className='space-y-8 p-8'>
-          <p className='text-center font-bold'>Prijavi se u svoj račun</p>
+          <p className='text-center font-bold'>Sign in to your account</p>
           <div>
             <p className='mb-2'>Email</p>
             <Input
@@ -41,7 +41,11 @@ const LoginPage = () => {
           </div>
           <div>
             <p className='mb-2'>Password</p>
-            <InputGroup>
+            <InputGroup
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleSubmit()
+              }}
+            >
               <Input
                 value={password}
                 type={showPassword ? 'text' : 'password'}
@@ -67,7 +71,7 @@ const LoginPage = () => {
             onClick={handleSubmit}
             name='submit'
           >
-            Prijavi se
+            Sign in
           </Button>
         </div>
       </div>

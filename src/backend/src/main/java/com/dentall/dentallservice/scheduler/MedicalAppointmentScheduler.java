@@ -35,7 +35,7 @@ public class MedicalAppointmentScheduler {
     @Autowired
     private WebClient webClient;
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 10000)
     public void fetchMedicalAppointments() {
         var accommodationOrderList = accommodationOrderRepository.
                 findByArrivalDateTimeAfterAndMedicalTreatmentsIsNull(LocalDateTime.now());
