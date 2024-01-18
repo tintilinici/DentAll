@@ -337,7 +337,7 @@
 		
 			Na slikama \ref{fig:arhitektura_controller_class_diagram}  do \ref{fig:arhitektura_model_class_diagram}  prikazani su ključni elementi backend dijela arhitekture DentAll aplikacije. 
 			
-			Prva slika \ref{fig:arhitektura_controller_class_diagram}  prikazuje dijagram razreda Controllera, prikazujući sve Controller razrede u aplikaciji.  Slika \ref{fig:arhitektura_dto_class_diagram} fokusira se na dijagram razreda s DTO razredima koje služe za prijenos podataka između Controllera i Modela. Svaka DTO klasa odgovara određenom razredu iz Modela, osiguravajući učinkovit prijenos podataka unutar aplikacije. Na slici \ref{fig:arhitektura_requests_class_diagram} nalaze se Requests razredi koje predstavljaju zahtjeve od klijenta prema Controller razredima. Ovi razredi sadrže sve potrebne informacije za izvođenje funkcionalnosti poput CREATE i UPDATE. Obuhvaćajući sve domain razrede iz modela DentAll aplikacije, dijagram razreda sa slike  \ref{fig:arhitektura_model_class_diagram} prikazuje relacije i međusobnu povezanost između razreda unutar modela. 
+			Prva slika \ref{fig:arhitektura_controller_class_diagram}  prikazuje dijagram razreda Controllera, prikazujući sve Controller razrede u aplikaciji.  Sljedeći veliki element arhitekture backenda su Service sučelja i pripadajući ServiceImpl razredi prikazani na \ref{fig:arhitektura_service_class_diagram}. Slika \ref{fig:arhitektura_dto_class_diagram} fokusira se na dijagram razreda s DTO razredima koje služe za prijenos podataka između Controllera i Modela. Svaka DTO klasa odgovara određenom razredu iz Modela, osiguravajući učinkovit prijenos podataka unutar aplikacije. Na slici \ref{fig:arhitektura_requests_class_diagram} nalaze se Requests razredi koje predstavljaju zahtjeve od klijenta prema Controller razredima. Ovi razredi sadrže sve potrebne informacije za izvođenje funkcionalnosti poput CREATE i UPDATE. Obuhvaćajući sve domain razrede iz modela DentAll aplikacije, dijagram razreda sa slike  \ref{fig:arhitektura_model_class_diagram} prikazuje relacije i međusobnu povezanost između razreda unutar modela. Svaki segment dokumentacije dijagrama razreda osmišljen je da naglasi važnost svakog dijela arhitekture u dizajnu i implementaciji sustava.
 			
 						
 			\begin{figure}[H]
@@ -347,12 +347,25 @@
 				\label{fig:arhitektura_controller_class_diagram}
 			\end{figure}
 			
+			Kontroleri su poveznica između korisnika i aplikacije, odgovorni za upravljanje okom HTTP zahtjeva i odgovora. Svaki Controller razred u DentAll aplikaciji povezan je s određenim Service sučeljem koji omogućuje obradu poslovne logike. PatientController upravlja pacijentima i sadrži metode poput createPatient i deletePatient, koje prate RESTful princip za CRUD operacije. TransportVehicleController i TransportCompanyController omogućavaju upravljanje vozilima i tvrtkama za transport, s metodama kao što su createTransportVehicle i updateTransportCompany. AccommodationController i AccommodationBookingController služe za upravljanje smještajem te njegovu rezervaciju kroz booking. SecurityController upravlja autentifikacijom i autorizacijom, s metodama poput register i login.
+			
+			\begin{figure}[H]
+				\includegraphics[scale=0.07]{slike/arhitektura_controller_class_diagram_v2.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram razreda - dio Service}
+				\label{fig:arhitektura_service_class_diagram}
+			\end{figure}
+			
+			*Insert opis za Service i ServiceImpl*
+			
 			\begin{figure}[H]
 				\includegraphics[scale=0.12]{slike/arhitektura_dto_class_diagram_v2.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 				\centering
 				\caption{Dijagram razreda - dio DTO}
 				\label{fig:arhitektura_dto_class_diagram}
 			\end{figure}
+			
+			DTO razredi su ključni za učinkovit i siguran prijenos podataka između slojeva aplikacije. DTO omogućuje da se modeli ne izlažu direktno klijentima, što smanjuje rizik od manipulacije podataka. Svaki DTO sadrži atribute koji se mapiraju na entitet modela, uz potrebne gettere i settere za pristup i modifikaciju podataka.
 			
 			\begin{figure}[H]
 				\includegraphics[scale=0.08]{slike/arhitektura_requests_class_diagram_v2.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
@@ -361,6 +374,8 @@
 				\label{fig:arhitektura_requests_class_diagram}
 			\end{figure}
 			
+			Request razredi su specijalizirani razredi koji sadrže sve potrebne informacije za obradu zahtjeva. Oni olakšavaju validaciju ulaznih podataka i smanjuju složenost Controller razreda.
+			
 			\begin{figure}[H]
 				\includegraphics[scale=0.08]{slike/arhitektura_model_class_diagram_v2.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 				\centering
@@ -368,6 +383,7 @@
 				\label{fig:arhitektura_model_class_diagram}
 			\end{figure}
 			
+			 Domain modeli su osnovni razred nad kojim se obrađuje sve u aplikaciji.  Patient, TransportVehicle, Accommodation, i AccommodationOrder su osnovni entiteti koji se međusobno povezuju. Odnosi između entiteta su jasno definirani s odgovarajućim vezama (npr. jedan pacijent može imati više medicinskih tretmana). SecurityUser i SecurityRole modeliraju sigurnosni aspekt aplikacije, omogućavajući upravljanje pristupom i autorizacijom. 
 			
 			
 			\eject
