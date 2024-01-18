@@ -12,11 +12,18 @@ import {
   Spinner,
   Text,
   Tooltip,
+  useToast,
 } from '@chakra-ui/react'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { AccommodationOrder } from '../lib/api.types'
 import { useGetAccommodationsByOrder } from '../hooks/useGetAccommodationsByOrder'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { usePostAccommodationBooking } from '../hooks/usePostAccommodationBooking'
+import {
+  accomodationIcon,
+  normalLocationIcon,
+  selectedAccomodationIcon,
+} from '../constants/mapIcons'
 
 interface Props {
   order: AccommodationOrder
@@ -25,51 +32,64 @@ interface Props {
 }
 
 const SelectAccommodationForBookingModal = ({ order, isOpen, onClose }: Props) => {
-  const { data, isLoading } = useGetAccommodationsByOrder(order.id, 5000)
-  // const postAccommodationBookingBooking = usePostAccommodationBooking(order.patientId, order.id)
+  const { data, isLoading, error } = useGetAccommodationsByOrder(order.id || 'EMPTY', 100000)
+  const postAccommodationBookingBooking = usePostAccommodationBooking(order.patientId, order.id)
 
-  const [targetAccommodationId] = useState<string>('')
+  const [targetAccommodationId, setTargetAccommodationId] = useState<string>('')
 
-  // const onSubmit = () => {
-  // mutation.mutate(data, {
-  //   onSuccess: () => {
-  //     onClose()
-  //     reset()
-  //     toast({
-  //       title: 'Success',
-  //       description: order
-  //         ? 'Accommodation order updated successfully.'
-  //         : 'Accommodation order created successfully.',
-  //       status: 'success',
-  //       duration: 5000,
-  //       isClosable: true,
-  //     })
-  //   },
-  //   onError: (error: Error) => {
-  //     toast({
-  //       title: 'Error',
-  //       description: error.message,
-  //       status: 'error',
-  //       duration: 5000,
-  //       isClosable: true,
-  //     })
-  //   },
-  // })
-  // }
+  const toast = useToast()
 
-  // const LocationMarker = () => {
-  //   const map = useMapEvent('click', (e) => {
-  //     map.setView(e.latlng, map.getZoom(), {
-  //       animate: true,
-  //     })
-  //   })
+  const onConfirm = () => {
+    postAccommodationBookingBooking.mutate(targetAccommodationId, {
+      onSuccess: () => {
+        onClose()
+        setTargetAccommodationId('')
+        toast({
+          title: 'Success',
+          description: 'The accommodation booking has been created.',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+      },
+      onError: (error: Error) => {
+        toast({
+          title: 'Error',
+          description: error.message,
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      },
+    })
+  }
 
-  //   return (
-  //     <Marker position={[parseFloat(watch('latitude')), parseFloat(watch('longitude'))]}>
-  //       <Popup autoPan={true}>Arrival location</Popup>
-  //     </Marker>
-  //   )
-  // }
+  useEffect(() => {
+    setTargetAccommodationId('')
+  }, [order])
+
+  const AccomodationMarkers = () => {
+    return (
+      data &&
+      data.map((accommodation) => (
+        <Marker
+          key={accommodation.id}
+          position={[parseFloat(accommodation.latitude), parseFloat(accommodation.longitude)]}
+          eventHandlers={{
+            click: () => setTargetAccommodationId(accommodation.id),
+          }}
+          icon={
+            targetAccommodationId === accommodation.id ? selectedAccomodationIcon : accomodationIcon
+          }
+        >
+          <Popup autoPan={true}>{accommodation.address}</Popup>
+        </Marker>
+      ))
+    )
+  }
+
+  if (error) console.error(error)
+
   return (
     <Modal
       isOpen={isOpen}
@@ -119,16 +139,23 @@ const SelectAccommodationForBookingModal = ({ order, isOpen, onClose }: Props) =
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
               />
-              <Marker position={[order.latitude, order.longitude]}>
+              <Marker
+                icon={normalLocationIcon}
+                position={[order.latitude, order.longitude]}
+              >
                 <Popup autoPan={true}>Arrival location</Popup>
               </Marker>
+              <AccomodationMarkers />
             </MapContainer>
           </Flex>
         </ModalBody>
 
         <ModalFooter className='space-x-2'>
           <Button
-            onClick={onClose}
+            onClick={() => {
+              onClose()
+              setTargetAccommodationId('')
+            }}
             variant={'outline'}
             colorScheme='red'
             w={'full'}
@@ -145,6 +172,7 @@ const SelectAccommodationForBookingModal = ({ order, isOpen, onClose }: Props) =
               mr={3}
               w={'full'}
               type='submit'
+              onClick={onConfirm}
             >
               Create
             </Button>

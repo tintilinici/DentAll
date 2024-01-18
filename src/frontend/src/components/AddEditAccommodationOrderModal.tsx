@@ -27,6 +27,7 @@ import React, { useEffect } from 'react'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { useMapEvent } from 'react-leaflet/hooks'
 import { Map } from 'leaflet'
+import { normalLocationIcon } from '../constants/mapIcons'
 
 interface Props {
   isOpen: boolean
@@ -37,7 +38,12 @@ interface Props {
 
 const AddEditAccommodationOrderModal = ({ isOpen, onClose, patientId, order }: Props) => {
   const { register, handleSubmit, reset, control, setValue, watch } =
-    useForm<AccommodationOrderPostDTO>()
+    useForm<AccommodationOrderPostDTO>({
+      defaultValues: {
+        latitude: 45.81,
+        longitude: 15.97,
+      },
+    })
 
   const mapRef = React.useRef<Map | null>(null)
 
@@ -45,6 +51,7 @@ const AddEditAccommodationOrderModal = ({ isOpen, onClose, patientId, order }: P
     reset()
     setValue('patientId', patientId)
     if (order) {
+      console.log(order)
       setValue('arrivalDateTime', order.arrivalDateTime)
       setValue('departureDateTime', order.departureDateTime)
       setValue('accommodationSize', order.accommodationSize)
@@ -102,7 +109,10 @@ const AddEditAccommodationOrderModal = ({ isOpen, onClose, patientId, order }: P
     })
 
     return (
-      <Marker position={[watch('latitude') || 45.81, watch('longitude') || 15.97]}>
+      <Marker
+        position={[watch('latitude') || 45.81, watch('longitude') || 15.97]}
+        icon={normalLocationIcon}
+      >
         <Popup>Arrival location</Popup>
       </Marker>
     )

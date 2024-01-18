@@ -6,10 +6,12 @@ export const useGetAccommodationsByOrder = (orderId: string, radius: number) => 
   const customFetch = useCustomFetch()
 
   return useQuery({
-    queryFn: (radius) =>
+    queryFn: () =>
       customFetch<Accommodation[]>(
-        `accommodations/get-by-order?orderId=${orderId}&radius=${radius}`
+        `/accommodations/get-by-order?orderId=${orderId}&radius=${radius}`,
+        { method: 'GET' }
       ),
     queryKey: ['accomodationsByOrder', orderId, radius],
+    retry: false,
   })
 }
