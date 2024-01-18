@@ -11,7 +11,5 @@ public class CreateAccommodationBookingRequest {
 
     private String accommodationOrderId;
 
-    private String latitude;
-
-    private String longitude;
+    private String accommodationId;
 }

@@ -2,15 +2,15 @@ package com.dentall.dentallservice.repository;
 
 import com.dentall.dentallservice.model.domain.AccommodationOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AccommodationOrderRepository extends JpaRepository<AccommodationOrder, String> {
-    List<AccommodationOrder> findByArrivalDateTimeBetweenOrDepartureDateTimeBetween(LocalDateTime arrivalDatetime, LocalDateTime departureDatetime, LocalDateTime arrivalDatetime1, LocalDateTime departureDatetime1);
-
-
     List<AccommodationOrder> findByArrivalDateTimeAfterAndMedicalTreatmentsIsNull(LocalDateTime date);
+
+    List<AccommodationOrder> findByPatientIdAndArrivalDateTimeIsBetweenAndDepartureDateTimeIsBetween(String patientId, LocalDateTime arrivalDateTime, LocalDateTime departureDateTime, LocalDateTime arrivalDateTime1, LocalDateTime departureDateTime1);
 /*
     List<AccommodationOrder> findByAccommodationId(String id);
 
@@ -21,4 +21,7 @@ public interface AccommodationOrderRepository extends JpaRepository<Accommodatio
     void deleteOrderByAccommodationId(String id);
 
     void deleteOrderByPatientIdAndStartDateBetween(String patientId, LocalDateTime dateTimeStart, LocalDateTime dateTimeEnd);*/
+
+    @Query("SELECT ao FROM AccommodationOrder ao WHERE ao.patient.id = :patientId AND (ao.arrivalDateTime BETWEEN :startDateTime AND :endDateTime OR ao.departureDateTime BETWEEN :startDateTime AND :endDateTime)")
+    List<AccommodationOrder> findByPatientIdAndDateTimeRanges(String patientId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 }

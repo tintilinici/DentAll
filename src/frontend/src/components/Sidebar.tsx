@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react'
 import { cn } from '../lib/utils'
 import routes from '../constants/routes'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from './auth/useAuth'
 import { ROLE } from './auth/authTypes'
 import { Button } from '@chakra-ui/react'
@@ -64,6 +64,7 @@ const links: SidebarLinkMetadata[] = [
 
 const Sidebar = () => {
   const { getRoles, logout } = useAuth()
+  const navigate = useNavigate()
 
   return (
     <div className='flex w-72 flex-shrink-0 flex-col bg-white'>
@@ -85,8 +86,8 @@ const Sidebar = () => {
           })}
         </ul>
         <Button
-          className=''
-          onClick={logout}
+          name='logout'
+          onClick={() => logout(() => navigate('/'))}
           colorScheme='orange'
           mx='5'
           variant={'outline'}

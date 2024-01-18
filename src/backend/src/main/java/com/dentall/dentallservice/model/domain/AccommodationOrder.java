@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,6 +25,9 @@ public class AccommodationOrder {
     private LocalDateTime departureDateTime;
 
     private int accommodationSize;
+
+    @Column(columnDefinition = "geometry(Point,4326)")
+    private Point location;
 
     @Enumerated(EnumType.STRING)
     private AccommodationType accommodationType;

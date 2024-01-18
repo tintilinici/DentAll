@@ -16,6 +16,9 @@ import com.dentall.dentallservice.model.request.UpdatePatientRequest;
 import com.dentall.dentallservice.repository.AccommodationOrderRepository;
 import com.dentall.dentallservice.repository.PatientRepository;
 import com.dentall.dentallservice.service.PatientService;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +61,13 @@ public class PatientServiceImpl implements PatientService {
         if(!patientExists){
             throw new PatientNotFoundException("Patient with id: " + id + "doesn't exits.");
         }
+
+        Patient patient = patientRepository.getReferenceById(id);
+        List<AccommodationOrder> orders = patient.getAccommodationOrders();
+        if(orders == null || !orders.isEmpty()){
+            throw new RuntimeException("You can't delete this patient since it has accommodation orders");
+        }
+
         patientRepository.deleteById(id);
     }
 
@@ -103,13 +113,12 @@ public class PatientServiceImpl implements PatientService {
         Patient patient = patientRepository.findById(request.getPatientId())
                 .orElseThrow(() -> new PatientNotFoundException("Patient with id: '" + request.getPatientId() + "' not found!"));
 
-        accommodationOrderRepository.findByArrivalDateTimeBetweenOrDepartureDateTimeBetween(
-                request.getArrivalDateTime(),
-                request.getDepartureDateTime(),
+        accommodationOrderRepository.findByPatientIdAndDateTimeRanges(
+                request.getPatientId(),
                 request.getArrivalDateTime(),
                 request.getDepartureDateTime()
         ).stream().findAny().ifPresent((order) -> {
-            throw new IllegalArgumentException("Patient with id: '" + order.getPatient().getId() + "' already has an order for that time! Order id: '" + order.getId() + "'");
+            throw new IllegalArgumentException("Patient: " + order.getPatient().getFirstName() + " already has an order for that time!");
         });
 
         AccommodationOrder accommodationOrder = AccommodationOrderFactory.create(request, patient);
@@ -131,16 +140,37 @@ public class PatientServiceImpl implements PatientService {
         AccommodationOrder accommodationOrder = accommodationOrderRepository.findById(id).orElseThrow(() -> new AccommodationOrderNotFoundException(id));
 
         if(request.getArrivalDateTime() != null){
-            accommodationOrder.setArrivalDateTime(request.getArrivalDateTime());
+            accommodationOrderRepository.findByPatientIdAndDateTimeRanges(
+                    accommodationOrder.getPatient().getId(),
+                    request.getArrivalDateTime(),
+                    request.getDepartureDateTime()
+            ).stream()
+                    .findAny()
+                    .ifPresent((order) -> {
+                        if (!order.getId().equals(request.getId())) {
+                            throw new IllegalArgumentException("Patient: " + order.getPatient()
+                                    .getFirstName() + " already has an order for that time!");
+                        }
+            });
+
         }
-        if(request.getDepartureDateTime() != null){
-            accommodationOrder.setDepartureDateTime(request.getDepartureDateTime());
-        }
+        accommodationOrder.setArrivalDateTime(request.getArrivalDateTime());
+        accommodationOrder.setDepartureDateTime(request.getDepartureDateTime());
+
         if(request.getAccommodationSize() > 0){
             accommodationOrder.setAccommodationSize(request.getAccommodationSize());
         }
         if (request.getAccommodationType() != null) {
             accommodationOrder.setAccommodationType(request.getAccommodationType());
+        }
+
+        if (request.getLatitude() != null && request.getLongitude() != null) {
+
+            GeometryFactory geometryFactory = new GeometryFactory();
+            Point newLocation = geometryFactory.createPoint(new Coordinate(
+                    Double.parseDouble(request.getLatitude()), Double.parseDouble(request.getLongitude()))
+            );
+            accommodationOrder.setLocation(newLocation);
         }
 
         accommodationOrderRepository.save(accommodationOrder);

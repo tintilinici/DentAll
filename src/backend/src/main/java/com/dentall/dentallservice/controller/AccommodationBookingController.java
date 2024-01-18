@@ -69,13 +69,6 @@ public class AccommodationBookingController {
         return ResponseEntity.ok("Booking successfully deleted!");
     }
 
-    @GetMapping("/testMail")
-    public ResponseEntity<?> testMail() {
-        emailService.sendBookingEmailToDriver("asd", "rokorokic@gmail.com",
-                "0915601017", "Clinic address1", "accommodation address 1");
-        return ResponseEntity.ok("Sent!");
-    }
-
     @Operation(
             summary = "Delete AccommodationBooking either by the Accommodation's id",
             description = "Delete AccommodationBookings either by Accommodation's id or by Patient's id and " +

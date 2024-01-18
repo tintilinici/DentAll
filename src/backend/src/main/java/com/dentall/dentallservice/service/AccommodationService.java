@@ -21,4 +21,6 @@ public interface AccommodationService {
     AccommodationDto updateAccommodation(String id, UpdateAccommodationRequest request);
 
     List<AccommodationDto> retrieveAccommodations();
+
+    List<AccommodationDto> retrieveAccommodations(String orderId, int radius);
 }

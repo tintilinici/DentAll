@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../components/auth/useAuth'
+import bus from '/Bus.svg'
+import dentist from '/Dentist.svg'
+import house from '/House.svg'
 
 const LandingPage = () => {
   const { token } = useAuth()
@@ -7,7 +10,7 @@ const LandingPage = () => {
   return (
     <div className='h-full bg-white'>
       <div className='flex items-center justify-between px-12 py-8'>
-        <ul className='flex space-x-12 text-cyan-500'>
+        <ul className='flex space-x-24 text-cyan-500'>
           <Link to='/'>Home</Link>
           <Link to='/'>About</Link>
           <Link to='/'>Contact</Link>
@@ -24,11 +27,48 @@ const LandingPage = () => {
             to='/login'
             className='bg-orange-500 px-8 py-2 text-white hover:bg-orange-600 hover:shadow-md'
           >
-            Prijavi se
+            Sign in
           </Link>
         )}
       </div>
-      <h1 className='pt-28 text-center text-9xl italic text-cyan-500'>DentAll</h1>
+
+      <div className='dental-welcome-wrapper w-2/5'>
+        <h1 className='text-black-500 mb-8 text-4xl font-bold'>
+          Your ultimate companion in dental tourism! <span className='text-cyan-500'>DentAll</span>
+        </h1>
+        <p className='mb-12 text-sm'>
+          Our cutting-edge app is meticulously crafted to empower dentists and elevate the dental
+          tourism experience.
+          <br />
+          <br />
+          DentAll goes beyond traditional dental practice management by seamlessly integrating
+          travel logistics. Dentists can now effortlessly organize accommodation, transportation,
+          and other essential services for their international patients, ensuring a hassle-free and
+          enjoyable journey.
+        </p>
+        <Link
+          to='/login'
+          className='bg-orange-500 px-8 py-2 text-white hover:bg-orange-600 hover:shadow-md'
+        >
+          Sign in
+        </Link>
+      </div>
+
+      <img
+        className='bus'
+        src={bus}
+        alt='bus'
+      />
+      <img
+        className='dentist'
+        src={dentist}
+        alt='dentist'
+      />
+      <img
+        className='house'
+        src={house}
+        alt='house'
+      />
     </div>
   )
 }

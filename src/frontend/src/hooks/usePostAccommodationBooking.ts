@@ -1,15 +1,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { AccommodationOrderPostDTO } from '../lib/api.types'
 import { useCustomFetch } from './useCustomFetch'
 
-export const usePutAccommodationOrder = (patientId: string, orderId: string) => {
+export const usePostAccommodationBooking = (patientId: string, accommodationOrderId: string) => {
   const queryClient = useQueryClient()
   const customFetch = useCustomFetch()
 
   return useMutation({
-    mutationKey: ['deleteAccommodationOrder'],
-    mutationFn: (accommodationData: AccommodationOrderPostDTO) =>
-      customFetch(`/patients/orders/${orderId}`, { method: 'PUT' }, accommodationData),
+    mutationKey: ['postAccommodationBooking'],
+    mutationFn: (accommodationId: string) =>
+      customFetch('/bookings', { method: 'POST' }, { accommodationOrderId, accommodationId }),
     onSuccess: () => {
       return queryClient.invalidateQueries({ queryKey: ['accommodationOrders', patientId] })
     },

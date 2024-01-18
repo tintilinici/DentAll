@@ -8,10 +8,11 @@ import { JwtPayload } from '../../lib/api.types'
 type IAuthContext = {
   token: string
   userData: TUserData
+  isFetchingToken: boolean
 
   getRoles: () => ROLE[]
   login: (loginData: TLoginData, onSuccess: () => void) => void
-  logout: () => void
+  logout: (onSuccess?: () => void) => void
 }
 
 export const AuthContext = createContext<IAuthContext>(null!)
@@ -19,6 +20,7 @@ export const AuthContext = createContext<IAuthContext>(null!)
 const AuthProvider = ({ children }: PropsWithChildren) => {
   const [token, setToken] = useState<IAuthContext['token']>('')
   const [userData, setUserData] = useState<TUserData>(null!)
+  const [isFetchingToken, setIsFetchingToken] = useState(true)
 
   const loginMutation = usePostLoginAdmin()
   const toast = useToast()
@@ -28,11 +30,17 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     if (lsToken) {
       setToken(lsToken)
     }
+    setIsFetchingToken(false)
   }, [])
 
   const getRoles = () => {
-    const userRoles = jwtDecode<JwtPayload>(token).roles
-    return userRoles
+    let userRoles
+    try {
+      userRoles = jwtDecode<JwtPayload>(token).roles
+    } catch (e) {
+      return []
+    }
+    return userRoles.sort()
   }
 
   const login = (loginData: TLoginData, onSuccess: () => void) => {
@@ -54,16 +62,18 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     })
   }
 
-  const logout = () => {
+  const logout = (onSuccess?: () => void) => {
     setToken('')
     setUserData(null!)
     localStorage.removeItem('token')
+    onSuccess && onSuccess()
   }
 
   const value = {
     userData,
     logout,
     token,
+    isFetchingToken,
     login,
     setToken,
     getRoles,
