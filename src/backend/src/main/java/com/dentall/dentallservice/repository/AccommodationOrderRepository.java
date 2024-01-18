@@ -21,4 +21,7 @@ public interface AccommodationOrderRepository extends JpaRepository<Accommodatio
     void deleteOrderByAccommodationId(String id);
 
     void deleteOrderByPatientIdAndStartDateBetween(String patientId, LocalDateTime dateTimeStart, LocalDateTime dateTimeEnd);*/
+
+    @Query("SELECT ao FROM AccommodationOrder ao WHERE ao.patient.id = :patientId AND (ao.arrivalDateTime BETWEEN :startDateTime AND :endDateTime OR ao.departureDateTime BETWEEN :startDateTime AND :endDateTime)")
+    List<AccommodationOrder> findByPatientIdAndDateTimeRanges(String patientId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 }

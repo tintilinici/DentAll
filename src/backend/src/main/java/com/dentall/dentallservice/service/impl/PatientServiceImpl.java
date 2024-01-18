@@ -113,10 +113,8 @@ public class PatientServiceImpl implements PatientService {
         Patient patient = patientRepository.findById(request.getPatientId())
                 .orElseThrow(() -> new PatientNotFoundException("Patient with id: '" + request.getPatientId() + "' not found!"));
 
-        accommodationOrderRepository.findByPatientIdAndArrivalDateTimeIsBetweenAndDepartureDateTimeIsBetween(
+        accommodationOrderRepository.findByPatientIdAndDateTimeRanges(
                 request.getPatientId(),
-                request.getArrivalDateTime(),
-                request.getDepartureDateTime(),
                 request.getArrivalDateTime(),
                 request.getDepartureDateTime()
         ).stream().findAny().ifPresent((order) -> {
@@ -142,10 +140,8 @@ public class PatientServiceImpl implements PatientService {
         AccommodationOrder accommodationOrder = accommodationOrderRepository.findById(id).orElseThrow(() -> new AccommodationOrderNotFoundException(id));
 
         if(request.getArrivalDateTime() != null){
-            accommodationOrderRepository.findByPatientIdAndArrivalDateTimeIsBetweenAndDepartureDateTimeIsBetween(
+            accommodationOrderRepository.findByPatientIdAndDateTimeRanges(
                     accommodationOrder.getPatient().getId(),
-                    request.getArrivalDateTime(),
-                    request.getDepartureDateTime(),
                     request.getArrivalDateTime(),
                     request.getDepartureDateTime()
             ).stream()
@@ -156,25 +152,11 @@ public class PatientServiceImpl implements PatientService {
                                     .getFirstName() + " already has an order for that time!");
                         }
             });
-            accommodationOrder.setArrivalDateTime(request.getArrivalDateTime());
+
         }
-        if(request.getDepartureDateTime() != null){
-            accommodationOrderRepository.findByPatientIdAndArrivalDateTimeIsBetweenAndDepartureDateTimeIsBetween(
-                    accommodationOrder.getPatient().getId(),
-                    request.getArrivalDateTime(),
-                    request.getDepartureDateTime(),
-                    request.getArrivalDateTime(),
-                    request.getDepartureDateTime()
-            ).stream()
-                    .findAny()
-                    .ifPresent((order) -> {
-                        if (!order.getId().equals(request.getId())) {
-                            throw new IllegalArgumentException("Patient: " + order.getPatient()
-                                    .getFirstName() + " already has an order for that time!");
-                        }
-            });
-            accommodationOrder.setDepartureDateTime(request.getDepartureDateTime());
-        }
+        accommodationOrder.setArrivalDateTime(request.getArrivalDateTime());
+        accommodationOrder.setDepartureDateTime(request.getDepartureDateTime());
+
         if(request.getAccommodationSize() > 0){
             accommodationOrder.setAccommodationSize(request.getAccommodationSize());
         }
