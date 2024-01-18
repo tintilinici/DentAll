@@ -29,7 +29,7 @@ public class AccommodationBookingController {
     @Operation(
             summary = "Create an AccommodationBooking",
             description = "Books an accommodation for a specific AccommodationOrder if there are Accommodations that " +
-                    "match the AccommodationOrder criteria in a circle of 10km around the provided point."
+                    "match the AccommodationOrder criteria in a circle of given radius around the provided point."
     )
     @PostMapping
     public ResponseEntity<AccommodationBookingDto> createAccommodationBooking(@RequestBody CreateAccommodationBookingRequest request) {
