@@ -47,14 +47,73 @@
 			
 			\subsection{Ispitivanje sustava}
 			
-			 \textit{Potrebno je provesti i opisati ispitivanje sustava koristeći radni okvir Selenium\footnote{\url{https://www.seleniumhq.org/}}. Razraditi \textbf{minimalno 4 ispitna slučaja} u kojima će se ispitati redovni slučajevi, rubni uvjeti te poziv funkcionalnosti koja nije implementirana/izaziva pogrešku kako bi se vidjelo na koji način sustav reagira kada nešto nije u potpunosti ostvareno. Ispitni slučaj se treba sastojati od ulaza (npr. korisničko ime i lozinka), očekivanog izlaza ili rezultata, koraka ispitivanja i dobivenog izlaza ili rezultata.\\ }
-			 
-			 \textit{Izradu ispitnih slučajeva pomoću radnog okvira Selenium moguće je provesti pomoću jednog od sljedeća dva alata:}
-			 \begin{itemize}
-			 	\item \textit{dodatak za preglednik \textbf{Selenium IDE} - snimanje korisnikovih akcija radi automatskog ponavljanja ispita	}
-			 	\item \textit{\textbf{Selenium WebDriver} - podrška za pisanje ispita u jezicima Java, C\#, PHP koristeći posebno programsko sučelje.}
-			 \end{itemize}
-		 	\textit{Detalji o korištenju alata Selenium bit će prikazani na posebnom predavanju tijekom semestra.}
+			Ispitivanje sustava izvedeno je u programskom jeziku Python koristeći Selenium WebDriver. Priloženi kodovi su u nastavku, ali prije toga je izdvojen zajednički kod koji koriste svi testovi.
+			
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{slike/selenium_common.png}
+				\centering
+				\caption{Zajednički kod testova}
+				\label{fig:zajednicki-kod-testova}
+			\end{figure}
+			
+			Prvi test ispituje pokušaj prijave s krivim podatcima. Očekivani je da se putanja ne promijeni te da se pojavi obavijest u obliku \textit{Toast}-a koja daje više informacija o greški.   
+			
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{slike/selenium_test1.png}
+				\centering
+				\caption{Izvorni kod 1. testa}
+				\label{fig:izvorni-kod-testa-1}
+			\end{figure}
+		
+			Drugi test ispituje pokušaj prijave s ispravnim podatcima. Očekivano ponašanje je da se putanja promijeni te da gumb "Logout" bude vidljiv.
+			
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{slike/selenium_test2.png}
+				\centering
+				\caption{Izvorni kod 2. testa}
+				\label{fig:izvorni-kod-testa-2}
+			\end{figure}
+		
+			Treći test ispituje stvaranje transportne kompanije. Očekivano ponašanje je povećanje broja redaka u tablici koja prikazuje transportne kompanije za 1.
+		
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{slike/selenium_test3.png}
+				\centering
+				\caption{Izvorni kod 3. testa}
+				\label{fig:izvorni-kod-testa-3}
+			\end{figure}
+		
+			Četvrti test ispituje brisanje transportne kompanije. Očekivano ponašanje je smanjenje broja redaka u tablici koja prikazuje transportne kompanije za 1
+		
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{slike/selenium_test4.png}
+				\centering
+				\caption{Izvorni kod 4. testa}
+				\label{fig:izvorni-kod-testa-4}
+			\end{figure}
+		
+			Peti test ispituje odjavljivanje korisnika. Očekivano ponašanje je promjena putanje na "/login".
+			
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{slike/selenium_test5.png}
+				\centering
+				\caption{Izvorni kod 5. testa}
+				\label{fig:izvorni-kod-testa-5}
+			\end{figure}
+		
+			Kod koji prikazuje kako su testovi pokrenuti.
+			
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{slike/selenium_running.png}
+				\centering
+				\caption{Izvršavanje testova}
+				\label{fig:izvrsavanje-testova}
+			\end{figure}
+		
+			Rezultati izvršenih testova.
+				
+			
+			
 			
 			\eject 
 		
