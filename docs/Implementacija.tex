@@ -172,6 +172,29 @@
 			
 			\item Proces puštanja vanjskog servisa u pogon je identičan.
 		\end{enumerate}
-		
+	
+		Puštanje \textit{frontend}-a u pogon. 
+			
+			
+			\begin{enumerate}
+				
+			\item Na servisu (https://vercel.com/) je potrebno napraviti korisnički račun.
+			
+			\item Potrebno je napraviti novi \textit{hobby} projekt te ga povezati sa GitHub repozitorijem u kojem se nalazi vaš kod.
+			
+			\item Svaki push na granu "master" će pokrenuti novi deployment na servisu Vercel koji će izgenerirati novu poveznicu gdje će biti dostupan vaš frontend. 
+			
+			\item U root frontend/ foldera je potrebno dodati datoteku po imenu .env
+			
+			Ta datoteka će imati jednu varijablu 
+			\begin{verbatim}
+				VITE_BACKEND_URL=...
+			\end{verbatim}
+			koja će reć pokazivati na URL backend-a za potrebe dohvaćivanje podataka putem REST sučelja.
+			
+			\item Svaki puta kada želite pustiti u pogon novu verziju frontend-a potrebno je samo pushati kod u master granu.
+				
+			\end{enumerate}
+			
 			
 			\eject 
