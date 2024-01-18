@@ -9,6 +9,7 @@ import {
   Td,
   Th,
   Thead,
+  Tooltip,
   Tr,
   useDisclosure,
   useToast,
@@ -23,6 +24,17 @@ import useConfirmModal from '../../hooks/useConfirmModal'
 import { useState } from 'react'
 import { AccommodationOrder } from '../../lib/api.types'
 import SelectAccommodationForBookingModal from '../../components/SelectAccommodationForBookingModal'
+import { cn } from '../../lib/utils'
+
+function sortOrders(a: AccommodationOrder, z: AccommodationOrder): number {
+  const hasBooking =
+    (z.accommodationBookingId === null ? 1 : 0) - (a.accommodationBookingId === null ? 1 : 0)
+  if (hasBooking !== 0) return hasBooking
+
+  const aDate = new Date(a.arrivalDateTime).getTime()
+  const zDate = new Date(z.arrivalDateTime).getTime()
+  return aDate - zDate
+}
 
 const AccommodationOrdersPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -115,63 +127,73 @@ const AccommodationOrdersPage = () => {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {data.map((order) => (
-                      <Tr
-                        key={order.id}
-                        className='cursor-pointer hover:bg-gray-100'
+                    {data.sort(sortOrders).map((order) => (
+                      <Tooltip
+                        label='This order is a booking'
+                        isDisabled={order.accommodationBookingId === null}
                       >
-                        <ConfirmModal
-                          title='Brisanje narudžbe'
-                          description='Jeste li sigurni da želite obrisati narudžbu?'
-                          onConfirm={() => deleteOrder(order.id)}
-                        />
-                        <Td>{formatDateTime(order.arrivalDateTime)}</Td>
-                        <Td>{formatDateTime(order.departureDateTime)}</Td>
-                        <Td>{order.accommodationSize}</Td>
-                        <Td>
-                          <AccommodationTypeTag accommodationType={order.accommodationType} />
-                        </Td>
-                        <Td>
-                          <HStack gap={6}>
+                        <Tr
+                          key={order.id}
+                          className={cn(
+                            order.accommodationBookingId !== null
+                              ? 'bg-gray-50'
+                              : 'cursor-pointer hover:bg-gray-100'
+                          )}
+                        >
+                          <ConfirmModal
+                            title='Brisanje narudžbe'
+                            description='Jeste li sigurni da želite obrisati narudžbu?'
+                            onConfirm={() => deleteOrder(order.id)}
+                          />
+                          <Td>{formatDateTime(order.arrivalDateTime)}</Td>
+                          <Td>{formatDateTime(order.departureDateTime)}</Td>
+                          <Td>{order.accommodationSize}</Td>
+                          <Td>
+                            <AccommodationTypeTag accommodationType={order.accommodationType} />
+                          </Td>
+                          <Td>
+                            <HStack gap={6}>
+                              <Button
+                                isDisabled={order.accommodationBookingId !== null}
+                                size={'sm'}
+                                colorScheme='whatsapp'
+                                onClick={() => {
+                                  setTargetOrder(order)
+                                  onSelectAccommodationForBookingModalOpen()
+                                }}
+                              >
+                                + Create booking
+                              </Button>
+                              <Button
+                                isDisabled={order.accommodationBookingId !== null}
+                                colorScheme='whatsapp'
+                                variant={'outline'}
+                                onClick={() => {
+                                  setTargetOrder(order)
+                                  onEditAccommodationOrderModalOpen()
+                                }}
+                                size='sm'
+                              >
+                                Edit
+                              </Button>
+                            </HStack>
+                          </Td>
+                          <Td>
                             <Button
                               isDisabled={order.accommodationBookingId !== null}
                               size={'sm'}
-                              colorScheme='whatsapp'
-                              onClick={() => {
-                                setTargetOrder(order)
-                                onSelectAccommodationForBookingModalOpen()
+                              fontWeight={'semibold'}
+                              colorScheme='red'
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                openConfirmModal()
                               }}
                             >
-                              + Create booking
+                              Remove
                             </Button>
-                            <Button
-                              isDisabled={order.accommodationBookingId !== null}
-                              colorScheme='whatsapp'
-                              variant={'outline'}
-                              onClick={() => {
-                                setTargetOrder(order)
-                                onEditAccommodationOrderModalOpen()
-                              }}
-                              size='sm'
-                            >
-                              Edit
-                            </Button>
-                          </HStack>
-                        </Td>
-                        <Td>
-                          <Button
-                            size={'sm'}
-                            fontWeight={'semibold'}
-                            colorScheme='red'
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              openConfirmModal()
-                            }}
-                          >
-                            Remove
-                          </Button>
-                        </Td>
-                      </Tr>
+                          </Td>
+                        </Tr>
+                      </Tooltip>
                     ))}
                   </Tbody>
                 </Table>
@@ -180,18 +202,23 @@ const AccommodationOrdersPage = () => {
           </Card>
         </>
       )}
-      <SelectAccommodationForBookingModal
-        order={targetOrder}
-        isOpen={isSelectAccommodationForBookingModalOpen}
-        onClose={onSelectAccommodationForBookingModalClose}
-      />
 
-      <AddEditAccommodationOrderModal
-        isOpen={isEditAccommodationOrderModalOpen}
-        onClose={onEditAccommodationOrderModalClose}
-        patientId={id}
-        order={targetOrder}
-      />
+      {isSelectAccommodationForBookingModalOpen && (
+        <SelectAccommodationForBookingModal
+          order={targetOrder}
+          isOpen={isSelectAccommodationForBookingModalOpen}
+          onClose={onSelectAccommodationForBookingModalClose}
+        />
+      )}
+
+      {isEditAccommodationOrderModalOpen && (
+        <AddEditAccommodationOrderModal
+          isOpen={isEditAccommodationOrderModalOpen}
+          onClose={onEditAccommodationOrderModalClose}
+          patientId={id}
+          order={targetOrder}
+        />
+      )}
     </SidebarLayout>
   )
 }

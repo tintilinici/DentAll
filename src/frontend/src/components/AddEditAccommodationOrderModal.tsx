@@ -37,7 +37,12 @@ interface Props {
 
 const AddEditAccommodationOrderModal = ({ isOpen, onClose, patientId, order }: Props) => {
   const { register, handleSubmit, reset, control, setValue, watch } =
-    useForm<AccommodationOrderPostDTO>()
+    useForm<AccommodationOrderPostDTO>({
+      defaultValues: {
+        latitude: 45.81,
+        longitude: 15.97,
+      },
+    })
 
   const mapRef = React.useRef<Map | null>(null)
 
@@ -45,6 +50,7 @@ const AddEditAccommodationOrderModal = ({ isOpen, onClose, patientId, order }: P
     reset()
     setValue('patientId', patientId)
     if (order) {
+      console.log(order)
       setValue('arrivalDateTime', order.arrivalDateTime)
       setValue('departureDateTime', order.departureDateTime)
       setValue('accommodationSize', order.accommodationSize)

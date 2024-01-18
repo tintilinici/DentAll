@@ -12,5 +12,6 @@ export const useGetAccommodationsByOrder = (orderId: string, radius: number) => 
         { method: 'GET' }
       ),
     queryKey: ['accomodationsByOrder', orderId, radius],
+    retry: false,
   })
 }
