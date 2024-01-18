@@ -384,9 +384,15 @@
 		
 		\section{Dijagram aktivnosti}
 			
-			\textbf{\textit{dio 2. revizije}}\\
+			Dijagram aktivnosti primjenjuje se za opis modela toka upravljanja ili toka podataka. Ne upotrebljava se za modeliranje događajima poticanog ponašanja. 
+			Na dijagramu aktivnosti prikazan je proces kreiranja zahtjeva za smještaj, dohvaćanja medicinskih termina te rezervacije vozila za termine. Korisnički administrator unosi zahtjeve za smještaj u sustav se prijavi u sustav. U sustavu se svakih 10 sekundi provjerava postoji li zahtjev za smještaj ( dolazak pacijenta ) koji još nema medicinske termine. Za sve koji nemaju medicinske termine zove se Aplikacija za medicinske usluge ( external API ) koji vraća za sve zahtjeve nasumično 0, 1, 2 ili 3 medicinska termina unutar zadanog vremena dolaska i odlaska pacijenta definiranih u zahtjevu. Također, svakih 10 sekundi se provjerava i postoje li i medicinski termini koji još nemaju rezervirano vozilo za prijevoz. Za sve koji nemaju dodjeljuje se vozilo, ako postoji u terminu medicinske usluge, s uvjetom da pacijent već ima rezerviran smještaj.
 			
-			 \textit{Potrebno je priložiti dijagram aktivnosti s pripadajućim opisom. Dijagram aktivnosti treba prikazivati značajan dio sustava.}
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{slike/activityDiagram.png}
+				\centering
+				\caption{Dijagram aktivnosti}
+				\label{fig:dijagram-aktivnosti}
+			\end{figure}
 			
 			\eject
 		\section{Dijagram komponenti}
