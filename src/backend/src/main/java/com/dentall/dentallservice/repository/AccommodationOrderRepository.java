@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AccommodationOrderRepository extends JpaRepository<AccommodationOrder, String> {
-    List<AccommodationOrder> findByPatientIdAndArrivalDateTimeIsBetweenOrDepartureDateTimeIsBetween(String patient_id, LocalDateTime arrivalDateTime, LocalDateTime arrivalDateTime2, LocalDateTime departureDateTime, LocalDateTime departureDateTime2);
-
     List<AccommodationOrder> findByArrivalDateTimeAfterAndMedicalTreatmentsIsNull(LocalDateTime date);
+
+    List<AccommodationOrder> findByPatientIdAndArrivalDateTimeIsBetweenAndDepartureDateTimeIsBetween(String patientId, LocalDateTime arrivalDateTime, LocalDateTime departureDateTime, LocalDateTime arrivalDateTime1, LocalDateTime departureDateTime1);
 /*
     List<AccommodationOrder> findByAccommodationId(String id);
 

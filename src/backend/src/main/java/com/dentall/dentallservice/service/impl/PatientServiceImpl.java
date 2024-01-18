@@ -113,7 +113,7 @@ public class PatientServiceImpl implements PatientService {
         Patient patient = patientRepository.findById(request.getPatientId())
                 .orElseThrow(() -> new PatientNotFoundException("Patient with id: '" + request.getPatientId() + "' not found!"));
 
-        accommodationOrderRepository.findByPatientIdAndArrivalDateTimeIsBetweenOrDepartureDateTimeIsBetween(
+        accommodationOrderRepository.findByPatientIdAndArrivalDateTimeIsBetweenAndDepartureDateTimeIsBetween(
                 request.getPatientId(),
                 request.getArrivalDateTime(),
                 request.getDepartureDateTime(),
@@ -142,7 +142,7 @@ public class PatientServiceImpl implements PatientService {
         AccommodationOrder accommodationOrder = accommodationOrderRepository.findById(id).orElseThrow(() -> new AccommodationOrderNotFoundException(id));
 
         if(request.getArrivalDateTime() != null){
-            accommodationOrderRepository.findByPatientIdAndArrivalDateTimeIsBetweenOrDepartureDateTimeIsBetween(
+            accommodationOrderRepository.findByPatientIdAndArrivalDateTimeIsBetweenAndDepartureDateTimeIsBetween(
                     accommodationOrder.getPatient().getId(),
                     request.getArrivalDateTime(),
                     request.getDepartureDateTime(),
@@ -159,7 +159,7 @@ public class PatientServiceImpl implements PatientService {
             accommodationOrder.setArrivalDateTime(request.getArrivalDateTime());
         }
         if(request.getDepartureDateTime() != null){
-            accommodationOrderRepository.findByPatientIdAndArrivalDateTimeIsBetweenOrDepartureDateTimeIsBetween(
+            accommodationOrderRepository.findByPatientIdAndArrivalDateTimeIsBetweenAndDepartureDateTimeIsBetween(
                     accommodationOrder.getPatient().getId(),
                     request.getArrivalDateTime(),
                     request.getDepartureDateTime(),
@@ -182,7 +182,7 @@ public class PatientServiceImpl implements PatientService {
             accommodationOrder.setAccommodationType(request.getAccommodationType());
         }
 
-        if (!request.getLatitude().isBlank() && !request.getLongitude().isBlank()) {
+        if (request.getLatitude() != null && request.getLongitude() != null) {
 
             GeometryFactory geometryFactory = new GeometryFactory();
             Point newLocation = geometryFactory.createPoint(new Coordinate(
