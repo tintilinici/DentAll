@@ -13,6 +13,8 @@ import {
   NumberInputField,
   useToast,
   Select,
+  HStack,
+  Flex,
 } from '@chakra-ui/react'
 import DatePicker from 'react-datepicker'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
@@ -22,6 +24,9 @@ import { AccommodationOrder, AccommodationOrderPostDTO } from '../lib/api.types'
 import { AccommodationType } from '../enums/accommodation-type.enum'
 import CustomDateTimeInput from './_CustomDateTimeInput'
 import React, { useEffect } from 'react'
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import { useMapEvent } from 'react-leaflet/hooks'
+import { Map } from 'leaflet'
 
 interface Props {
   isOpen: boolean
@@ -31,7 +36,10 @@ interface Props {
 }
 
 const AddEditAccommodationOrderModal = ({ isOpen, onClose, patientId, order }: Props) => {
-  const { register, handleSubmit, reset, control, setValue } = useForm<AccommodationOrderPostDTO>()
+  const { register, handleSubmit, reset, control, setValue, watch } =
+    useForm<AccommodationOrderPostDTO>()
+
+  const mapRef = React.useRef<Map | null>(null)
 
   useEffect(() => {
     reset()
@@ -41,8 +49,14 @@ const AddEditAccommodationOrderModal = ({ isOpen, onClose, patientId, order }: P
       setValue('departureDateTime', order.departureDateTime)
       setValue('accommodationSize', order.accommodationSize)
       setValue('accommodationType', order.accommodationType)
+      setValue('latitude', order.latitude)
+      setValue('longitude', order.longitude)
+      if (mapRef.current) {
+        mapRef.current.setView([order.latitude, order.longitude])
+      }
     }
-  }, [order, patientId, setValue, reset])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order, patientId, setValue, reset, mapRef.current, mapRef])
 
   const postAccommodationOrder = usePostAccommodationOrder(patientId)
   const putAccommodationOrder = usePutAccommodationOrder(patientId, order?.id || '') // if the order is undefined, this mutation will not be used
@@ -50,6 +64,7 @@ const AddEditAccommodationOrderModal = ({ isOpen, onClose, patientId, order }: P
   const toast = useToast()
 
   const onSubmit: SubmitHandler<AccommodationOrderPostDTO> = (data) => {
+    console.log(data)
     mutation.mutate(data, {
       onSuccess: () => {
         onClose()
@@ -76,6 +91,23 @@ const AddEditAccommodationOrderModal = ({ isOpen, onClose, patientId, order }: P
     })
   }
 
+  function LocationMarker() {
+    const map = useMapEvent('click', (e) => {
+      map.setView(e.latlng, map.getZoom(), {
+        animate: true,
+      })
+      setValue('latitude', e.latlng.lat)
+      setValue('longitude', e.latlng.lng)
+      console.log(e.latlng)
+    })
+
+    return (
+      <Marker position={[watch('latitude') || 45.81, watch('longitude') || 15.97]}>
+        <Popup>Arrival location</Popup>
+      </Marker>
+    )
+  }
+
   return (
     <Modal
       isOpen={isOpen}
@@ -83,82 +115,104 @@ const AddEditAccommodationOrderModal = ({ isOpen, onClose, patientId, order }: P
       isCentered
     >
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent maxW='800px'>
         <ModalHeader>{order ? 'Edit accommodation order' : 'Add accommodation order'}</ModalHeader>
         <ModalCloseButton />
         <form onSubmit={handleSubmit(onSubmit)}>
-          <ModalBody
-            pb={6}
-            className='space-y-4'
-          >
-            <FormControl isRequired>
-              <FormLabel>Arrival</FormLabel>
-              <Controller
-                control={control}
-                name='arrivalDateTime'
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    placeholderText='Select arrival date and time'
-                    onChange={(date) => onChange(date?.toISOString() || '')}
-                    selected={value ? new Date(value) : null}
-                    timeFormat='HH:mm'
-                    minDate={new Date()}
-                    dateFormat={'dd/MM/yyyy - HH:mm'}
-                    customInput={React.createElement(React.forwardRef(CustomDateTimeInput))}
-                    showTimeSelect
-                  />
-                )}
-              />
-            </FormControl>
-
-            <FormControl isRequired>
-              <FormLabel>Departure</FormLabel>
-              <Controller
-                control={control}
-                name='departureDateTime'
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    placeholderText='Select departue date and time'
-                    onChange={(date) => onChange(date?.toISOString() || '')}
-                    selected={value ? new Date(value) : null}
-                    timeFormat='HH:mm'
-                    minDate={new Date()}
-                    dateFormat={'dd/MM/yyyy - HH:mm'}
-                    customInput={React.createElement(React.forwardRef(CustomDateTimeInput))}
-                    showTimeSelect
-                  />
-                )}
-              />
-            </FormControl>
-
-            <FormControl isRequired>
-              <FormLabel>Accommodation size</FormLabel>
-              <NumberInput>
-                <NumberInputField
-                  placeholder='1'
-                  minLength={1}
-                  maxLength={100}
-                  {...register('accommodationSize')}
+          <ModalBody className='space-y-4'>
+            <HStack>
+              <FormControl isRequired>
+                <FormLabel>Arrival</FormLabel>
+                <Controller
+                  control={control}
+                  name='arrivalDateTime'
+                  render={({ field: { onChange, value } }) => (
+                    <DatePicker
+                      placeholderText='Select arrival date and time'
+                      onChange={(date) => onChange(date?.toISOString() || '')}
+                      selected={value ? new Date(value) : null}
+                      timeFormat='HH:mm'
+                      minDate={new Date()}
+                      dateFormat={'dd/MM/yyyy - HH:mm'}
+                      customInput={React.createElement(React.forwardRef(CustomDateTimeInput))}
+                      showTimeSelect
+                    />
+                  )}
                 />
-              </NumberInput>
-            </FormControl>
+              </FormControl>
 
-            <FormControl isRequired>
-              <FormLabel>Accommodation type</FormLabel>
-              <Select
-                placeholder='type'
-                {...register('accommodationType')}
+              <FormControl isRequired>
+                <FormLabel>Departure</FormLabel>
+                <Controller
+                  control={control}
+                  name='departureDateTime'
+                  render={({ field: { onChange, value } }) => (
+                    <DatePicker
+                      placeholderText='Select departue date and time'
+                      onChange={(date) => onChange(date?.toISOString() || '')}
+                      selected={value ? new Date(value) : null}
+                      timeFormat='HH:mm'
+                      minDate={new Date(watch('arrivalDateTime')) || new Date()}
+                      dateFormat={'dd/MM/yyyy - HH:mm'}
+                      customInput={React.createElement(React.forwardRef(CustomDateTimeInput))}
+                      showTimeSelect
+                    />
+                  )}
+                />
+              </FormControl>
+            </HStack>
+
+            <HStack>
+              <FormControl isRequired>
+                <FormLabel>Accommodation size</FormLabel>
+                <NumberInput>
+                  <NumberInputField
+                    placeholder='1'
+                    minLength={1}
+                    maxLength={100}
+                    {...register('accommodationSize')}
+                  />
+                </NumberInput>
+              </FormControl>
+
+              <FormControl isRequired>
+                <FormLabel>Accommodation type</FormLabel>
+                <Select
+                  placeholder='type'
+                  {...register('accommodationType')}
+                >
+                  {Object.values(AccommodationType).map((e, index) => (
+                    <option
+                      key={index}
+                      value={e}
+                    >
+                      {e.toLowerCase()}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+            </HStack>
+
+            <Flex
+              w='100%'
+              minW='600px'
+              height='500px'
+              position='relative'
+              zIndex='0'
+            >
+              <MapContainer
+                center={[45.81, 15.97]}
+                zoom={13}
+                scrollWheelZoom={true}
+                ref={mapRef}
               >
-                {Object.values(AccommodationType).map((e, index) => (
-                  <option
-                    key={index}
-                    value={e}
-                  >
-                    {e.toLowerCase()}
-                  </option>
-                ))}
-              </Select>
-            </FormControl>
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                />
+                <LocationMarker />
+              </MapContainer>
+            </Flex>
           </ModalBody>
 
           <ModalFooter className='space-x-2'>
