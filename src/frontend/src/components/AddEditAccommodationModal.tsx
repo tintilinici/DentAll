@@ -176,6 +176,7 @@ const AddTransportCompanyModal = ({ accommodation, isOpen, onClose }: Props) => 
                     setFormData({ ...formData, availabilityStart: formattedDate })
                   }}
                   dateFormat='dd/MM/yyyy'
+                  minDate={new Date()}
                   // wierd fix per: https://github.com/Hacker0x01/react-datepicker/issues/2165#issuecomment-711032947
                   customInput={React.createElement(React.forwardRef(CustomDateTimeInput))}
                 />
@@ -193,6 +194,11 @@ const AddTransportCompanyModal = ({ accommodation, isOpen, onClose }: Props) => 
                     const formattedDate = date ? date.toLocaleDateString('en-CA') : ''
                     setFormData({ ...formData, availabilityEnd: formattedDate })
                   }}
+                  minDate={
+                    formData && formData.availabilityStart
+                      ? new Date(formData.availabilityStart)
+                      : new Date()
+                  }
                   dateFormat='dd/MM/yyyy'
                   customInput={React.createElement(React.forwardRef(CustomDateTimeInput))}
                 />
@@ -211,7 +217,7 @@ const AddTransportCompanyModal = ({ accommodation, isOpen, onClose }: Props) => 
                     (formData?.longitude as unknown as number) ?? 15.982,
                   ]}
                   zoom={13}
-                  scrollWheelZoom={false}
+                  scrollWheelZoom={true}
                 >
                   <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

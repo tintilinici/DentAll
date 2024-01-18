@@ -1,6 +1,7 @@
 import {
   Button,
   Flex,
+  Heading,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -8,9 +9,14 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
+  Text,
+  Tooltip,
 } from '@chakra-ui/react'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { AccommodationOrder } from '../lib/api.types'
+import { useGetAccommodationsByOrder } from '../hooks/useGetAccommodationsByOrder'
+import { useState } from 'react'
 
 interface Props {
   order: AccommodationOrder
@@ -19,6 +25,11 @@ interface Props {
 }
 
 const SelectAccommodationForBookingModal = ({ order, isOpen, onClose }: Props) => {
+  const { data, isLoading } = useGetAccommodationsByOrder(order.id, 5000)
+  // const postAccommodationBookingBooking = usePostAccommodationBooking(order.patientId, order.id)
+
+  const [targetAccommodationId] = useState<string>('')
+
   // const onSubmit = () => {
   // mutation.mutate(data, {
   //   onSuccess: () => {
@@ -59,7 +70,6 @@ const SelectAccommodationForBookingModal = ({ order, isOpen, onClose }: Props) =
   //     </Marker>
   //   )
   // }
-
   return (
     <Modal
       isOpen={isOpen}
@@ -68,9 +78,30 @@ const SelectAccommodationForBookingModal = ({ order, isOpen, onClose }: Props) =
     >
       <ModalOverlay />
       <ModalContent maxW={800}>
-        <ModalHeader>Avaliable Accommodations</ModalHeader>
+        <ModalHeader>Create accommodation booking</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
+          {isLoading && (
+            <Spinner
+              size='md'
+              color='red'
+            />
+          )}
+
+          {!isLoading && (!data || data?.length === 0) ? (
+            <Heading
+              size='md'
+              color='red.700'
+              mb='2'
+            >
+              No accomodations have been found around this location.
+            </Heading>
+          ) : (
+            <Text mb='2'>
+              Select an accommodation and convert this order to a accommodation booking.
+            </Text>
+          )}
+
           <Flex
             w='100%'
             height='500px'
@@ -104,14 +135,20 @@ const SelectAccommodationForBookingModal = ({ order, isOpen, onClose }: Props) =
           >
             Cancel
           </Button>
-          <Button
-            colorScheme='green'
-            mr={3}
-            w={'full'}
-            type='submit'
+          <Tooltip
+            isDisabled={targetAccommodationId !== ''}
+            label='Please select a accommodaiton'
           >
-            Create
-          </Button>
+            <Button
+              isDisabled={targetAccommodationId === ''}
+              colorScheme='green'
+              mr={3}
+              w={'full'}
+              type='submit'
+            >
+              Create
+            </Button>
+          </Tooltip>
         </ModalFooter>
       </ModalContent>
     </Modal>
