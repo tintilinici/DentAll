@@ -96,10 +96,8 @@
 					\hline[3pt]
 					\SetCell{LightGreen}accommodation\_ID & VARCHAR & primarni ključ tablice\\ 
 					\hline
-					type & VARCHAR & versta smještaja \\
+					type & VARCHAR & vrsta smještaja \\
 					\hline 
-					category & VARCHAR & kategorija smještaja \\
-					\hline
 					address & VARCHAR & adresa smještaja \\
 					\hline
 					availability\_start & DATETIME & datum i vrijeme od kada je smještaj dostupan \\
@@ -222,6 +220,8 @@
 				\hline 
 				\SetCell[c=3]{c}{\textbf{TransportBooking}}\\ 
 				\hline[3pt]
+				\SetCell{LightGreen}transport\_booking\_ID & VARCHAR & primarni ključ tablice \\ 
+				\hline
 				\SetCell{LightBlue} transport\_vehicle\_ID & VARCHAR & vozilo koje obavlja ovaj projevoz \\
 				\hline
 				\SetCell{LightBlue} medical\_
@@ -321,7 +321,7 @@
 			\subsection{Dijagram baze podataka}
 
 				\begin{figure}[H]
-					\includegraphics[scale=0.32]{slike/dijagram_baze.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+					\includegraphics[scale=0.42]{slike/dijagram_baze_v2.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 					\centering
 					\caption{ER Dijagram baze podataka}
 					\label{fig:dijagram_baze_podataka}
