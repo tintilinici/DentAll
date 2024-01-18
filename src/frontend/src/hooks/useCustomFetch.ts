@@ -8,7 +8,7 @@ export const useCustomFetch = () => {
     { interesedInData = true, ...options }: RequestInit & { interesedInData?: boolean } = {}, // Add default value and make it optional
     data?: unknown
   ): Promise<T> => {
-    const url = `${import.meta.env.VITE_FRONTEND_URL}${endpoint}`
+    const url = `${import.meta.env.VITE_BACKEND_URL}${endpoint}`
 
     let headers: HeadersInit = { 'Content-Type': 'application/json' }
     if (token) {

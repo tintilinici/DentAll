@@ -2,12 +2,14 @@ package com.dentall.dentallservice.model.request;
 
 import com.dentall.dentallservice.model.domain.AccommodationType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateAccommodationRequest {

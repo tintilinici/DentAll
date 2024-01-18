@@ -4,7 +4,7 @@ export const customFetch = async <T>(
   token?: string,
   data?: unknown
 ): Promise<T> => {
-  const url = `${import.meta.env.VITE_FRONTEND_URL}${endpoint}`
+  const url = `${import.meta.env.VITE_BACKEND_URL}${endpoint}`
 
   let headers: HeadersInit = { 'Content-Type': 'application/json' }
   if (token) {
