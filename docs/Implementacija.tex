@@ -137,12 +137,41 @@
 		
 		\section{Upute za puštanje u pogon}
 		
-			\textbf{\textit{dio 2. revizije}}\\
+		Unutar korisničkog sučelja Render web aplikacije, nakon registracije, slijedite ove korake:
 		
-			 \textit{U ovom poglavlju potrebno je dati upute za puštanje u pogon (engl. deployment) ostvarene aplikacije. Na primjer, za web aplikacije, opisati postupak kojim se od izvornog kôda dolazi do potpuno postavljene baze podataka i poslužitelja koji odgovara na upite korisnika. Za mobilnu aplikaciju, postupak kojim se aplikacija izgradi, te postavi na neku od trgovina. Za stolnu (engl. desktop) aplikaciju, postupak kojim se aplikacija instalira na računalo. Ukoliko mobilne i stolne aplikacije komuniciraju s poslužiteljem i/ili bazom podataka, opisati i postupak njihovog postavljanja. Pri izradi uputa preporučuje se \textbf{naglasiti korake instalacije uporabom natuknica} te koristiti što je više moguće \textbf{slike ekrana} (engl. screenshots) kako bi upute bile jasne i jednostavne za slijediti.}
+		\begin{enumerate}
+			\item Kliknite na \textbf{``New''} i zatim \textbf{``Web service''} za kreiranje nove backend aplikacije, odnosno \textbf{``PostgreSQL''} za kreiranje nove aplikacije za bazu podataka.
 			
+			\item Odaberite opciju za povezivanje s repozitorijem na GitHubu. Preporučljivo je koristiti GitHub zbog integracije koju Render nudi. 
 			
-			 \textit{Dovršenu aplikaciju potrebno je pokrenuti na javno dostupnom poslužitelju. Studentima se preporuča korištenje neke od sljedećih besplatnih usluga: \href{https://aws.amazon.com/}{Amazon AWS}, \href{https://azure.microsoft.com/en-us/}{Microsoft Azure} ili \href{https://www.heroku.com/}{Heroku}. Mobilne aplikacije trebaju biti objavljene na F-Droid, Google Play ili Amazon App trgovini.}
+			\item Nakon povezivanja s GitHub računom, odaberite repozitorij u kojem se nalazi vaš projekt.
 			
+			\item Unutar sljedećeg prozora, potrebno je:
+			\begin{itemize}
+				\item Odrediti ime aplikacije.
+				\item Odabrati regiju servera na kojoj će aplikacija biti upogonjena.
+				\item Odrediti granu GitHub repozitorija.
+				\item Napisati putanju do izvorne mape.
+				\item Navesti putanju do \texttt{.dockerfile} datoteke potrebne Renderu za uspješno upogonjenje.
+			\end{itemize}
+			
+			\item Odredite varijable okoline (\textit{environment variables}), koje su za ovaj projekt u sljedećem obliku:
+			\begin{verbatim}
+				spring.datasource.url=${DB_URL}
+				spring.datasource.username=${DB_USERNAME}
+				spring.datasource.password=${DB_PASSWORD}
+			\end{verbatim}
+			
+			\item Nakon što je sve konfigurirano, pokrenite proces upogonjenja. Render će automatski preuzeti kod iz GitHub repozitorija, izgraditi aplikaciju prema definiranim komandama i pokrenuti aplikaciju.
+			
+			\item Za povezivanje s bazom podataka, Render nudi integraciju s različitim bazama podataka kao servisom. Možete kreirati novu instancu baze direktno preko Render sučelja i povezati je s vašom aplikacijom kroz varijable okoline.
+			
+			\item Nakon što je aplikacija pokrenuta, Render će pružiti URL na kojem je vaša aplikacija dostupna.
+			
+			\item Za promjene ili ažuriranje aplikacije, ažurirajte kod na GitHubu. Ukoliko ste tako odabrali u postavkama, Render će automatski detektirati promjene i ponovno upogoniti aplikaciju. Isti proces je moguć i ručno te u bilo kojem trenutku možete preusmjeriti render na neku drugu granu GitHub-a.
+			
+			\item Proces puštanja vanjskog servisa u pogon je identičan.
+		\end{enumerate}
+		
 			
 			\eject 
