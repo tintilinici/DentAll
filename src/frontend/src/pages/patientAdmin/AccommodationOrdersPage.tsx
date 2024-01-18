@@ -131,6 +131,7 @@ const AccommodationOrdersPage = () => {
                       <Tooltip
                         label='This order is a booking'
                         isDisabled={order.accommodationBookingId === null}
+                        key={order.id + 'tooltip'}
                       >
                         <Tr
                           key={order.id}
