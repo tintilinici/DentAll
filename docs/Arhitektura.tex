@@ -412,7 +412,20 @@
 			
 			\eject
 		\section{Dijagram komponenti}
-		
-			\textbf{\textit{dio 2. revizije}}\\
-		
-			 \textit{Potrebno je priložiti dijagram komponenti s pripadajućim opisom. Dijagram komponenti treba prikazivati strukturu cijele aplikacije.}
+			
+			Na donjoj slici 4.9 prikazan je dijagram komponenti koji
+			vizualno prikazuje ovisnost komponenti. Aplikacija DentAll
+			sastoji se od tri komponente: frontend, backend i Medical Service. 
+			Komponenta frontenda napravljena je korištenjem biblioteke React, a komponenta
+			backenda izgrađena je pomoću Java Spring Boota. Na slici je označeno da 
+			korisnik preko web preglednika pristupa aplikaciji, komponente frontend 
+			i backend međusobno razmjenjuju podatke preko REST\_API-ja, baza podataka
+			komunicira sa backendom preko SQL upita, a komponenta Medical Service
+			komunicira sa backendom putem REST\_API-ja.
+			
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{slike/dijagram_komponenti.jpeg}
+				\centering
+				\caption{Dijagram aktivnosti}
+				\label{fig:dijagram-komponenti}
+			\end{figure}
