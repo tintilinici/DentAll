@@ -1,47 +1,47 @@
-# docker setup
+# DentAll backend setup
 
-Za pokretanje docker containera:
+## Postavljanje Dockera
 
-U terminalu se pozicionirajte u _**backend**_ folder:
+### Preduvjeti
+- Docker instaliran na vašem sustavu
 
-        .../DentAll/backend
+### Pokretanje Containera
+Za pokretanje Docker containera:
 
-I napišite komandu
+1. U terminalu se pozicionirajte u `backend`:
 
-        docker-compose up
+    ```bash
+    cd putanja/do/DentAll/backend
+    ```
 
-Dopustite da se izvrti do kraja (samo prvi put traje dugo)
+2. Pokrenite Docker Compose naredbu:
 
-Tom komandom pokrenuli ste MySql server (bazu) u docker containeru, 
+    ```bash
+    docker-compose up
+    ```
+
+   Dopustite procesu da se završi. Prvo postavljanje može potrajati.
+
+
+Tom komandom pokrenuli ste PostgreSQL bazu podataka u docker containeru, 
 i sada u njoj želimo napraviti tablice.
 Ta bi to postigli, samo pokrenite Spring app i tablice će 
-se automatski kreirati kao i neki testni podaci za accommodation tablicu 
-u njima. Ako se želite spojiti terminalom na Mysql server 
+se automatski kreirati. Ako se želite spojiti terminalom na PostgreSQL server 
 (kako bi mogli pisati sql naredbe), upišite komandu:
 
 WINDOWS:
 
-        docker exec -it backend_db_1 mysql -u root -p
+        docker exec -it backend_db_1 psql -U postgres -d dentall
 
 MAC:
 
-        docker exec -it backend-db-1 mysql -u root -p
-
-Te kada vas prompta sa password, upišite: **root**
-
-Time ste spojeni na server, ali ne i na našu bazu. 
-Da bi se spojili na bazu, još moramo napisati: 
-
-        connect dentall;
-
-Te tada možemo nad svojom bazom pozivati sql komande npr:
-
-        show tables;
-
-# swagger ui
-
-Za swagger ui u browseru upišite:
-
-        http://localhost:8080/swagger-ui.html
+        docker exec -it backend-db-1 psql -U postgres -d dentall
 
 
+Time ste spojeni na server i bazu `dentall`. 
+
+Sada možete provjeriti ispravnost baze i njenih tablica, na primjer:
+
+```bash
+    \dt
+```
