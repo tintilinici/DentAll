@@ -19,6 +19,7 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import AddEditAccommodationModal from '../../components/AddEditAccommodationModal.tsx'
 import AccommodationTypeTag from '../../components/AccomodationTypeTag.tsx'
+import { normalLocationIcon } from '../../constants/mapIcons.ts'
 
 const AccommodationDetailsPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -91,6 +92,7 @@ const AccommodationDetailsPage = () => {
                       data.latitude as unknown as number,
                       data.longitude as unknown as number,
                     ]}
+                    icon={normalLocationIcon}
                   >
                     <Popup>{data.address}</Popup>
                   </Marker>

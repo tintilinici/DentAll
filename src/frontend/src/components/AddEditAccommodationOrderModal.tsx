@@ -27,6 +27,7 @@ import React, { useEffect } from 'react'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { useMapEvent } from 'react-leaflet/hooks'
 import { Map } from 'leaflet'
+import { normalLocationIcon } from '../constants/mapIcons'
 
 interface Props {
   isOpen: boolean
@@ -108,7 +109,10 @@ const AddEditAccommodationOrderModal = ({ isOpen, onClose, patientId, order }: P
     })
 
     return (
-      <Marker position={[watch('latitude') || 45.81, watch('longitude') || 15.97]}>
+      <Marker
+        position={[watch('latitude') || 45.81, watch('longitude') || 15.97]}
+        icon={normalLocationIcon}
+      >
         <Popup>Arrival location</Popup>
       </Marker>
     )

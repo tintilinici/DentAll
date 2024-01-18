@@ -21,7 +21,7 @@ import { useEffect, useState } from 'react'
 import { usePostAccommodationBooking } from '../hooks/usePostAccommodationBooking'
 import {
   accomodationIcon,
-  patientsArrivalLocationIcon,
+  normalLocationIcon,
   selectedAccomodationIcon,
 } from '../constants/mapIcons'
 
@@ -140,7 +140,7 @@ const SelectAccommodationForBookingModal = ({ order, isOpen, onClose }: Props) =
                 url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
               />
               <Marker
-                icon={patientsArrivalLocationIcon}
+                icon={normalLocationIcon}
                 position={[order.latitude, order.longitude]}
               >
                 <Popup autoPan={true}>Arrival location</Popup>
