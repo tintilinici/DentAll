@@ -21,7 +21,7 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true, jsr250Enabled = true)
 @RequiredArgsConstructor
-@Profile("dev")
+@Profile("!test")
 public class WebConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
