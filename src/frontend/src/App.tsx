@@ -62,7 +62,7 @@ const router = createBrowserRouter([
   {
     path: `${routes.USERS.DASHBOARD}/orders/:id`,
     element: (
-      <ProtectedRoute allowRoles={[ROLE.ROLE_ACCOMMODATION]}>
+      <ProtectedRoute allowRoles={[ROLE.ROLE_PATIENT]}>
         <AccommodationOrdersPage />
       </ProtectedRoute>
     ),
