@@ -18,38 +18,12 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { AccommodationOrder } from '../lib/api.types'
 import { useGetAccommodationsByOrder } from '../hooks/useGetAccommodationsByOrder'
 import { useEffect, useState } from 'react'
-import { Icon } from 'leaflet'
 import { usePostAccommodationBooking } from '../hooks/usePostAccommodationBooking'
-
-const patientsArrivalLocationIcon = new Icon({
-  iconUrl:
-    'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-  iconSize: [25, 41], // size of the icon
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-})
-
-const accomodationIcon = new Icon({
-  iconUrl:
-    'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-  iconSize: [25, 41], // size of the icon
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-})
-
-const selectedAccomodationIcon = new Icon({
-  iconUrl:
-    'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-  iconSize: [25, 41], // size of the icon
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-})
+import {
+  accomodationIcon,
+  patientsArrivalLocationIcon,
+  selectedAccomodationIcon,
+} from '../constants/mapIcons'
 
 interface Props {
   order: AccommodationOrder
