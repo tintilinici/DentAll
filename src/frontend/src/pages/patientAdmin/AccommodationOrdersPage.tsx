@@ -148,8 +148,7 @@ const AccommodationOrdersPage = () => {
                               isDisabled={order.accommodationBookingId !== null}
                               colorScheme='whatsapp'
                               variant={'outline'}
-                              onClick={(e) => {
-                                e.stopPropagation()
+                              onClick={() => {
                                 setTargetOrder(order)
                                 onEditAccommodationOrderModalOpen()
                               }}
@@ -186,6 +185,7 @@ const AccommodationOrdersPage = () => {
         isOpen={isSelectAccommodationForBookingModalOpen}
         onClose={onSelectAccommodationForBookingModalClose}
       />
+
       <AddEditAccommodationOrderModal
         isOpen={isEditAccommodationOrderModalOpen}
         onClose={onEditAccommodationOrderModalClose}

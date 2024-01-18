@@ -16,7 +16,38 @@ import {
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { AccommodationOrder } from '../lib/api.types'
 import { useGetAccommodationsByOrder } from '../hooks/useGetAccommodationsByOrder'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { Icon } from 'leaflet'
+
+const patientsArrivalLocationIcon = new Icon({
+  iconUrl:
+    'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41], // size of the icon
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+})
+
+const accomodationIcon = new Icon({
+  iconUrl:
+    'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41], // size of the icon
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+})
+
+const selectedAccomodationIcon = new Icon({
+  iconUrl:
+    'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41], // size of the icon
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+})
 
 interface Props {
   order: AccommodationOrder
@@ -25,10 +56,10 @@ interface Props {
 }
 
 const SelectAccommodationForBookingModal = ({ order, isOpen, onClose }: Props) => {
-  const { data, isLoading } = useGetAccommodationsByOrder(order.id, 5000)
+  const { data, isLoading, error } = useGetAccommodationsByOrder(order.id, 5000)
   // const postAccommodationBookingBooking = usePostAccommodationBooking(order.patientId, order.id)
 
-  const [targetAccommodationId] = useState<string>('')
+  const [targetAccommodationId, setTargetAccommodationId] = useState<string>('')
 
   // const onSubmit = () => {
   // mutation.mutate(data, {
@@ -70,6 +101,33 @@ const SelectAccommodationForBookingModal = ({ order, isOpen, onClose }: Props) =
   //     </Marker>
   //   )
   // }
+
+  useEffect(() => {
+    setTargetAccommodationId('')
+  }, [order])
+
+  const AccomodationMarkers = () => {
+    return (
+      data &&
+      data.map((accommodation) => (
+        <Marker
+          key={accommodation.id}
+          position={[parseFloat(accommodation.latitude), parseFloat(accommodation.longitude)]}
+          eventHandlers={{
+            click: () => setTargetAccommodationId(accommodation.id),
+          }}
+          icon={
+            targetAccommodationId === accommodation.id ? selectedAccomodationIcon : accomodationIcon
+          }
+        >
+          <Popup autoPan={true}>{accommodation.address}</Popup>
+        </Marker>
+      ))
+    )
+  }
+
+  if (error) console.error(error)
+
   return (
     <Modal
       isOpen={isOpen}
@@ -119,16 +177,23 @@ const SelectAccommodationForBookingModal = ({ order, isOpen, onClose }: Props) =
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
               />
-              <Marker position={[order.latitude, order.longitude]}>
+              <Marker
+                icon={patientsArrivalLocationIcon}
+                position={[order.latitude, order.longitude]}
+              >
                 <Popup autoPan={true}>Arrival location</Popup>
               </Marker>
+              <AccomodationMarkers />
             </MapContainer>
           </Flex>
         </ModalBody>
 
         <ModalFooter className='space-x-2'>
           <Button
-            onClick={onClose}
+            onClick={() => {
+              onClose()
+              setTargetAccommodationId('')
+            }}
             variant={'outline'}
             colorScheme='red'
             w={'full'}
