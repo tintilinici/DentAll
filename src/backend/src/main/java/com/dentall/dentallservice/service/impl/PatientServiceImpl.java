@@ -148,9 +148,13 @@ public class PatientServiceImpl implements PatientService {
                     request.getDepartureDateTime(),
                     request.getArrivalDateTime(),
                     request.getDepartureDateTime()
-            ).stream().findAny().ifPresent((order) -> {
-                if (!order.getId().equals(request.getId()))
-                    throw new IllegalArgumentException("Patient: " + order.getPatient().getFirstName() + " already has an order for that time!");
+            ).stream()
+                    .findAny()
+                    .ifPresent((order) -> {
+                        if (!order.getId().equals(request.getId())) {
+                            throw new IllegalArgumentException("Patient: " + order.getPatient()
+                                    .getFirstName() + " already has an order for that time!");
+                        }
             });
             accommodationOrder.setArrivalDateTime(request.getArrivalDateTime());
         }
@@ -161,9 +165,13 @@ public class PatientServiceImpl implements PatientService {
                     request.getDepartureDateTime(),
                     request.getArrivalDateTime(),
                     request.getDepartureDateTime()
-            ).stream().findAny().ifPresent((order) -> {
-                if (!order.getId().equals(request.getId()))
-                    throw new IllegalArgumentException("Patient: " + order.getPatient().getFirstName() + " already has an order for that time!");
+            ).stream()
+                    .findAny()
+                    .ifPresent((order) -> {
+                        if (!order.getId().equals(request.getId())) {
+                            throw new IllegalArgumentException("Patient: " + order.getPatient()
+                                    .getFirstName() + " already has an order for that time!");
+                        }
             });
             accommodationOrder.setDepartureDateTime(request.getDepartureDateTime());
         }
