@@ -66,8 +66,8 @@ const LandingPage = () => {
       />
       <img
         className='house'
-        src='/src/assets/House.svg'
-        alt={house}
+        src={house}
+        alt='house'
       />
     </div>
   )
