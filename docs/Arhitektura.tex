@@ -32,7 +32,7 @@
 				
 		\section{Baza podataka}
 
-			Za potrebe naše aplikaicje korisiti ćemo relacijsku bazu podataka kako bismo lakše oblikovali stvarni svijet. Baza nam je potrbna za metodičku pohranu podataka te njihovo brzo dohvaćanje. Naša baza podataka se sastoji od sljedećih entiteta:
+			Za potrebe naše aplikacije korisiti ćemo relacijsku bazu podataka kako bismo lakše oblikovali stvarni svijet. Baza nam je potrbna za metodičku pohranu podataka te njihovo brzo dohvaćanje. Naša baza podataka se sastoji od sljedećih entiteta:
 			
 			\begin{packed_item}
 				\item Patient
@@ -52,7 +52,7 @@
 			
 				
 				\noindent
-				\textbf{Patient} Ova entitet sadrži sve informacije o korisniku usluga našeg sustava. Kako su svi korisnici pacijenti odlučili smo ih imenovati tako. Entitet sadrži atribute: patient\_ID, first\_name, last\_name, PIN, email i phone\_number. Ovaj entitet je u vezi \textit{One-to-Many} s entitetom AccommodationOrder preko atributa patient\_ID i u \textit{One-to-Many} s entitetom AccommodationBooking preko atributa patient\_ID.
+				\textbf{Patient} Ovaj entitet sadrži sve informacije o korisniku usluga našeg sustava. Kako su svi korisnici pacijenti odlučili smo ih imenovati tako. Entitet sadrži atribute: patient\_ID, first\_name, last\_name, PIN, email i phone\_number. Ovaj entitet je u vezi \textit{One-to-Many} s entitetom AccommodationOrder preko atributa patient\_ID.
 				
 				\begin{longtblr}[
 					label=none,
@@ -96,10 +96,8 @@
 					\hline[3pt]
 					\SetCell{LightGreen}accommodation\_ID & VARCHAR & primarni ključ tablice\\ 
 					\hline
-					type & VARCHAR & versta smještaja \\
+					type & VARCHAR & vrsta smještaja \\
 					\hline 
-					category & VARCHAR & kategorija smještaja \\
-					\hline
 					address & VARCHAR & adresa smještaja \\
 					\hline
 					availability\_start & DATETIME & datum i vrijeme od kada je smještaj dostupan \\
@@ -111,13 +109,13 @@
 				\end{longtblr}
 			
 			\noindent
-			\textbf{AccommodationOrder} Ovaj entitet se koristi za pohravnjivanje pacijentovih zahtjeva o traženom smještaju. U slučaju da traženi smještaj nije odmah dostupan zahtjev se sprema kako bih se kasnije mogao opet pogledati. Entitet sadrži atribute: accommodation\_order\_ID, arrival\_datetime, departure\_datetime, accommodation\_type, accommodation\_category i patient\_ID. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom Patient preko patient\_ID atributa.
+			\textbf{AccommodationOrder} Ovaj entitet se koristi za pohravnjivanje pacijentovih zahtjeva o traženom smještaju. U slučaju da traženi smještaj nije odmah dostupan zahtjev se sprema kako bih se kasnije mogao opet pogledati. Entitet sadrži atribute: accommodation\_order\_ID, arrival\_datetime, departure\_datetime, accommodation\_type, accommodation\_category i patient\_ID. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom Patient preko atributa patient\_id i u vezi \textit{One-to-One} s entitetom AccommodationBooking preko atributa accommodation\_booking\_id.
 			\begin{longtblr}[
 				label=none,
 				entry=none
 				]{
 					width = \textwidth,
-					colspec={|X[13,l]|X[6, l]|X[20, l]|}, 
+					colspec={|X[15,l]|X[6, l]|X[20, l]|}, 
 					rowhead = 1,
 				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 				\hline 
@@ -133,12 +131,16 @@
 				\hline
 				accommodation\_category & VARCHAR & željena kategorija smještaja koju pacijent traži \\
 				\hline
-				\SetCell{LightBlue} patient\_ID	& STRING & ID pacijenta koji je napravio ovaj zahtjev \\
+				location & VARCHAR & kordinate područja na kojem je potrebno naći smještaj \\
+				\hline
+				\SetCell{LightBlue} patient\_ID	& VARCHAR & ID pacijenta koji je napravio ovaj zahtjev \\
+				\hline 
+				\SetCell{LightBlue} accommodation\_booking\_id	& VARCHAR & ID bookinga koji je napravljen na temelju zahtjeva \\
 				\hline 
 			\end{longtblr}
 			
 			\noindent
-			\textbf{AccommodationBooking} Ovaj vezni entitet se koristi za pohranjivanje informacije koji pacijent je kada u kojem smještaju. Entitet sadrži atribute: accommodation\_booking\_ID, start\_datetime, end\_datetime, accommodation\_ID, patient\_ID. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom Accommodation preko atributa accommodation\_ID. U \textit{Many-to-One} vezi s entitetom Patient preko atributa patient\_ID. I u \textit{One-to-Many} s entitetom TransportBooking preko accommodation\_booking\_ID.
+			\textbf{AccommodationBooking} Ovaj vezni entitet se koristi za pohranjivanje informacije koji pacijent je kada u kojem smještaju. Entitet sadrži atribute: accommodation\_booking\_ID i accommodation\_ID, patient\_ID. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom Accommodation preko atributa accommodation\_ID. U \textit{Many-to-One} vezi s entitetom Patient preko atributa patient\_ID. 
 			\begin{longtblr}[
 				label=none,
 				entry=none
@@ -152,10 +154,6 @@
 				\hline[3pt]
 				\SetCell{LightGreen}accommodation\_
 				booking\_ID & VARCHAR & primarni ključ tablice \\ 
-				\hline
-				start\_datetime & DATETIME & datum i vrijeme od kada je pacijent u smještaju \\
-				\hline
-				end\_datetime & DATETIME & datum i vrijeme do kada je pacijent u smještaju \\
 				\hline 
 				\SetCell{LightBlue} accommodation\_ID	& VARCHAR & smještaj u koji je pacijent smješten \\
 				\hline 
@@ -210,7 +208,7 @@
 			\end{longtblr}
 			
 			\noindent
-			\textbf{TransportBooking} Ovo je slabi vezni entitet koji označava prijevoz pacijenta. Ujedinjuje tri entiteta iz kojih saznajem kojeg pacijenta treba voziti, od kuda će biti transportiran, koje vozilo će se korisiti i do koje klinike će se transportirati. Entitet sadrži atribute: transport\_vehicle\_ID, accommodation\_booking\_ID, medical\_appointment\_ID. Entitet je u \textit{Many-to-One} vezi s entitetom TransportVehicle preko atributa transport\_vehicle\_ID. U \textit{Many-to-One} vezi s entitetom AccommodationBooking preko atributa accommodaton\_booking\_ID. I u \textit{Many-to-One} vezi s entitetom MedicalAppointment preko atributa medical\_appointment\_ID.
+			\textbf{TransportBooking} Ovo je slabi vezni entitet koji označava prijevoz pacijenta. Ujedinjuje dva entiteta iz kojih saznajemo koji MedicalAppointment je povezan s vozilom. Entitet sadrži atribute: transport\_vehicle\_ID i medical\_appointment\_. Entitet je u \textit{Many-to-One} vezi s entitetom TransportVehicle preko atributa transport\_vehicle\_ID. I u \textit{Many-to-One} vezi s entitetom MedicalAppointment preko atributa medical\_appointment\_ID.
 			\begin{longtblr}[
 				label=none,
 				entry=none
@@ -222,10 +220,9 @@
 				\hline 
 				\SetCell[c=3]{c}{\textbf{TransportBooking}}\\ 
 				\hline[3pt]
+				\SetCell{LightGreen}transport\_booking\_ID & VARCHAR & primarni ključ tablice \\ 
+				\hline
 				\SetCell{LightBlue} transport\_vehicle\_ID & VARCHAR & vozilo koje obavlja ovaj projevoz \\
-				\hline 
-				\SetCell{LightBlue} accommodation\_
-				booking\_ID & VARCHAR & poveznica na smještaj i pacijenta koje treba prevesti iz tog smještaja \\
 				\hline
 				\SetCell{LightBlue} medical\_
 				appointment\_ID & VARCHAR & poveznica na medicinski tretman koji nam daje informaciju gdje pacijenta treba voziti \\
@@ -233,7 +230,7 @@
 			\end{longtblr}
 			
 			\noindent
-			\textbf{MedicalAppointment} Ovaj entitet korisimo za spremanje podataka o medicinskim tretmanima nekog pacijenta. Informacije o ovom ćemo dobiti iz medicinskog sustava, ali ako nije moguće odmah napravit TransportBooking zbog npr. nedostatka vozila, želimo pospremiti informacije o tretmanu. Entitet sadrži atribute: medical\_appointment\_ID, PIN, clinic\_address, start\_datetime, end\_datetime. Entitet je u \textit{One-to-One} vezi s entitetom TransportBooking preko atributa medical\_appointment\_ID. 
+			\textbf{MedicalAppointment} Ovaj entitet korisimo za spremanje podataka o medicinskim tretmanima nekog pacijenta. Informacije o ovom ćemo dobiti iz medicinskog sustava, ali ako nije moguće odmah napravit TransportBooking zbog npr. nedostatka vozila, želimo pospremiti informacije o tretmanu. Entitet sadrži atribute: medical\_appointment\_ID, patient\_PIN, clinic\_address, start\_datetime, end\_datetime. Entitet je u \textit{One-to-One} vezi s entitetom TransportBooking preko atributa medical\_appointment\_ID. I u \textit{Many-to-One} vezi s entitetom AccommodationOrder.
 			\begin{longtblr}[
 				label=none,
 				entry=none
@@ -248,7 +245,7 @@
 				\SetCell{LightGreen}medical\_
 				appointment\_ID & VARCHAR & primarni ključ tablice \\ 
 				\hline
-				PIN & VARCHAR & Personal Identification Number pacijenta za kojeg je ovo medicinski tretman \\
+				patient\_PIN & VARCHAR & Personal Identification Number pacijenta za kojeg je ovo medicinski tretman \\
 				\hline 
 				clinic\_address & VARCHAR & adresa klinike u kojoj je tretman \\
 				\hline
@@ -259,7 +256,7 @@
 			\end{longtblr}
 			
 			\noindent
-			\textbf{AdminRole} Ovaj entitet označava role admina. Sadrži atribute, admin\_role\_ID i name. Entitet je u \textit{One-to-Many} vezi s entitetom AdminRoles preko atributa admin\_role\_ID. 
+			\textbf{AdminRole} Ovaj entitet označava role admina. Sadrži atribute, admin\_role\_ID i name. Entitet je u \textit{Many-to-Many} vezi s entitetom AdminRoles preko atributa admin\_role\_ID. 
 			\begin{longtblr}[
 				label=none,
 				entry=none
@@ -279,7 +276,7 @@
 		
 			
 			\noindent
-			\textbf{Admin} Ovaj entitet sadrži podatke o adminima. Entitet sadrži atribute: admin\_ID, email, first\_name, last\_name. Entitet je u \textit{One-to-Many} vezi s entitetom AdminRoles preko atributa admin\_ID. 
+			\textbf{Admin} Ovaj entitet sadrži podatke o adminima. Entitet sadrži atribute: admin\_ID, email, first\_name, last\_name. Entitet je u \textit{Many-to-Many} vezi s entitetom AdminRoles preko atributa admin\_ID. 
 			\begin{longtblr}[
 				label=none,
 				entry=none
@@ -324,7 +321,7 @@
 			\subsection{Dijagram baze podataka}
 
 				\begin{figure}[H]
-					\includegraphics[scale=0.32]{slike/dijagram_baze.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+					\includegraphics[scale=0.42]{slike/dijagram_baze_v2.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 					\centering
 					\caption{ER Dijagram baze podataka}
 					\label{fig:dijagram_baze_podataka}
@@ -337,41 +334,53 @@
 		
 			Na slikama \ref{fig:arhitektura_controller_class_diagram}  do \ref{fig:arhitektura_model_class_diagram}  prikazani su ključni elementi backend dijela arhitekture DentAll aplikacije. 
 			
-			Prva slika \ref{fig:arhitektura_controller_class_diagram}  prikazuje dijagram razreda svih Controller razreda koji se koriste u našoj aplikaciji.  Slika \ref{fig:arhitektura_dto_class_diagram} fokusira se na dijagram razreda s DTO razredima koje služe za prijenos podataka između Controllera i Modela. Svaka DTO klasa odgovara određenom razredu iz Modela, osiguravajući učinkovit prijenos podataka unutar aplikacije. Na slici \ref{fig:arhitektura_requests_class_diagram} nalaze se Requests razredi koje predstavljaju zahtjeve od klijenta prema Controller razredima. Ovi razredi sadrže sve potrebne informacije za izvođenje funkcionalnosti poput CREATE i UPDATE. Obuhvaćajući sve domain razrede iz modela DentAll aplikacije, dijagram razreda sa slike  \ref{fig:arhitektura_model_class_diagram} prikazuje relacije i međusobnu povezanost između razreda unutar modela. 
+			Prva slika \ref{fig:arhitektura_controller_class_diagram}  prikazuje dijagram razreda Controllera, prikazujući sve Controller razrede u aplikaciji.  Sljedeći veliki element arhitekture backenda su Service sučelja i pripadajući ServiceImpl razredi prikazani na \ref{fig:arhitektura_service_class_diagram}. Slika \ref{fig:arhitektura_dto_class_diagram} fokusira se na dijagram razreda s DTO razredima koje služe za prijenos podataka između Controllera i Modela. Svaka DTO klasa odgovara određenom razredu iz Modela, osiguravajući učinkovit prijenos podataka unutar aplikacije. Na slici \ref{fig:arhitektura_requests_class_diagram} nalaze se Requests razredi koje predstavljaju zahtjeve od klijenta prema Controller razredima. Ovi razredi sadrže sve potrebne informacije za izvođenje funkcionalnosti poput CREATE i UPDATE. Obuhvaćajući sve domain razrede iz modela DentAll aplikacije, dijagram razreda sa slike  \ref{fig:arhitektura_model_class_diagram} prikazuje relacije i međusobnu povezanost između razreda unutar modela. Svaki segment dokumentacije dijagrama razreda osmišljen je da naglasi važnost svakog dijela arhitekture u dizajnu i implementaciji sustava.
 			
 						
 			\begin{figure}[H]
-				\includegraphics[scale=0.10]{slike/arhitektura_controller_class_diagram.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\includegraphics[scale=0.07]{slike/arhitektura_controller_class_diagram_v2.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 				\centering
 				\caption{Dijagram razreda - dio Controllers}
 				\label{fig:arhitektura_controller_class_diagram}
 			\end{figure}
 			
+			Kontroleri su poveznica između korisnika i aplikacije, odgovorni za upravljanje okom HTTP zahtjeva i odgovora. Svaki Controller razred u DentAll aplikaciji povezan je s određenim Service sučeljem koji omogućuje obradu poslovne logike. PatientController upravlja pacijentima i sadrži metode poput createPatient i deletePatient, koje prate RESTful princip za CRUD operacije. TransportVehicleController i TransportCompanyController omogućavaju upravljanje vozilima i tvrtkama za transport, s metodama kao što su createTransportVehicle i updateTransportCompany. AccommodationController i AccommodationBookingController služe za upravljanje smještajem te njegovu rezervaciju kroz booking. SecurityController upravlja autentifikacijom i autorizacijom, s metodama poput register i login.
+			
 			\begin{figure}[H]
-				\includegraphics[scale=0.12]{slike/arhitektura_dto_class_diagram.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\includegraphics[scale=0.07]{slike/arhitektura_controller_class_diagram_v2.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram razreda - dio Service}
+				\label{fig:arhitektura_service_class_diagram}
+			\end{figure}
+			
+			*Insert opis za Service i ServiceImpl*
+			
+			\begin{figure}[H]
+				\includegraphics[scale=0.12]{slike/arhitektura_dto_class_diagram_v2.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 				\centering
 				\caption{Dijagram razreda - dio DTO}
 				\label{fig:arhitektura_dto_class_diagram}
 			\end{figure}
 			
+			DTO razredi su ključni za učinkovit i siguran prijenos podataka između slojeva aplikacije. DTO omogućuje da se modeli ne izlažu direktno klijentima, što smanjuje rizik od manipulacije podataka. Svaki DTO sadrži atribute koji se mapiraju na entitet modela, uz potrebne gettere i settere za pristup i modifikaciju podataka.
+			
 			\begin{figure}[H]
-				\includegraphics[scale=0.08]{slike/arhitektura_requests_class_diagram.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\includegraphics[scale=0.08]{slike/arhitektura_requests_class_diagram_v2.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 				\centering
 				\caption{Dijagram razreda - dio Requests}
 				\label{fig:arhitektura_requests_class_diagram}
 			\end{figure}
 			
+			Request razredi su specijalizirani razredi koji sadrže sve potrebne informacije za obradu zahtjeva. Oni olakšavaju validaciju ulaznih podataka i smanjuju složenost Controller razreda.
+			
 			\begin{figure}[H]
-				\includegraphics[scale=0.08]{slike/arhitektura_model_class_diagram.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\includegraphics[scale=0.08]{slike/arhitektura_model_class_diagram_v2.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 				\centering
 				\caption{Dijagram razreda - dio Model}
 				\label{fig:arhitektura_model_class_diagram}
 			\end{figure}
 			
-			\textbf{\textit{dio 2. revizije}}\\			
-			
-			\textit{Prilikom druge predaje projekta dijagram razreda i opisi moraju odgovarati stvarnom stanju implementacije}
-			
+			 Domain modeli su osnovni razred nad kojim se obrađuje sve u aplikaciji.  Patient, TransportVehicle, Accommodation, i AccommodationOrder su osnovni entiteti koji se međusobno povezuju. Odnosi između entiteta su jasno definirani s odgovarajućim vezama (npr. jedan pacijent može imati više medicinskih tretmana). SecurityUser i SecurityRole modeliraju sigurnosni aspekt aplikacije, omogućavajući upravljanje pristupom i autorizacijom. 
 			
 			
 			\eject
@@ -388,13 +397,32 @@
 		
 		\section{Dijagram aktivnosti}
 			
-			\textbf{\textit{dio 2. revizije}}\\
+			Dijagram aktivnosti primjenjuje se za opis modela toka upravljanja ili toka podataka. Ne upotrebljava se za modeliranje događajima poticanog ponašanja. 
+			Na dijagramu aktivnosti \ref{fig:dijagram-aktivnosti} prikazan je proces kreiranja zahtjeva za smještaj, dohvaćanja medicinskih termina te rezervacije vozila za termine. Korisnički administrator unosi zahtjeve za smještaj u sustav se prijavi u sustav. U sustavu se svakih 10 sekundi provjerava postoji li zahtjev za smještaj ( dolazak pacijenta ) koji još nema medicinske termine. Za sve koji nemaju medicinske termine zove se Aplikacija za medicinske usluge ( external API ) koji vraća za sve zahtjeve nasumično 0, 1, 2 ili 3 medicinska termina unutar zadanog vremena dolaska i odlaska pacijenta definiranih u zahtjevu. Također, svakih 10 sekundi se provjerava i postoje li i medicinski termini koji još nemaju rezervirano vozilo za prijevoz. Za sve koji nemaju dodjeljuje se vozilo, ako postoji u terminu medicinske usluge, s uvjetom da pacijent već ima rezerviran smještaj.
 			
-			 \textit{Potrebno je priložiti dijagram aktivnosti s pripadajućim opisom. Dijagram aktivnosti treba prikazivati značajan dio sustava.}
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{slike/activityDiagram.png}
+				\centering
+				\caption{Dijagram aktivnosti}
+				\label{fig:dijagram-aktivnosti}
+			\end{figure}
 			
 			\eject
 		\section{Dijagram komponenti}
-		
-			\textbf{\textit{dio 2. revizije}}\\
-		
-			 \textit{Potrebno je priložiti dijagram komponenti s pripadajućim opisom. Dijagram komponenti treba prikazivati strukturu cijele aplikacije.}
+			
+			Na donjoj slici 4.9 prikazan je dijagram komponenti koji
+			vizualno prikazuje ovisnost komponenti. Aplikacija DentAll
+			sastoji se od tri komponente: frontend, backend i Medical Service. 
+			Komponenta frontenda napravljena je korištenjem biblioteke React, a komponenta
+			backenda izgrađena je pomoću Java Spring Boota. Na slici je označeno da 
+			korisnik preko web preglednika pristupa aplikaciji, komponente frontend 
+			i backend međusobno razmjenjuju podatke preko REST\_API-ja, baza podataka
+			komunicira sa backendom preko SQL upita, a komponenta Medical Service
+			komunicira sa backendom putem REST\_API-ja.
+			
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{slike/dijagram_komponenti.png}
+				\centering
+				\caption{Dijagram aktivnosti}
+				\label{fig:dijagram-komponenti}
+			\end{figure}
