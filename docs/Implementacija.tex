@@ -37,7 +37,207 @@
 			
 			
 			\subsection{Ispitivanje komponenti}
-			\textit{Potrebno je provesti ispitivanje jedinica (engl. unit testing) nad razredima koji implementiraju temeljne funkcionalnosti. Razraditi \textbf{minimalno 6 ispitnih slučajeva} u kojima će se ispitati redovni slučajevi, rubni uvjeti te izazivanje pogreške (engl. exception throwing). Poželjno je stvoriti i ispitni slučaj koji koristi funkcionalnosti koje nisu implementirane. Potrebno je priložiti izvorni kôd svih ispitnih slučajeva te prikaz rezultata izvođenja ispita u razvojnom okruženju (prolaz/pad ispita). }
+			
+			Ispitivanje komponenti ostvareno je korištenjem JUnit, Mockito i RestAssured alata za ispitivanje. U nastavku su opisani provedeni testovi, te su priloženi kodovi.
+			
+			Testovi testiraju \texttt{AccommodationController} kao i druge komponente o kojima \texttt{AccommodationController} ovisi.
+			
+			Inicijalizacija izgleda ovako:
+			
+			\begin{lstlisting}[language=Java]
+				@BeforeEach
+				void setUp() {
+					RestAssured.port = port;
+					Mockito.when(authenticationManager.authenticate(Mockito.any()))
+					.thenReturn(new TestingAuthenticationToken("admin", "password", "ACCOMMODATION", "TRANSPORT", "PATIENT"));
+				}
+			\end{lstlisting}
+			
+			U ovom ispitnom slučaju ispitan je pokušaj kreacije novog smještaja, a očekivani rezultat je u isti taj smještaj u JSON obliku te HTTP status kod 200.
+			
+			\begin{lstlisting}[language=Java]
+				@Test
+				@WithMockUser(username = "admin", roles = {"ACCOMMODATION", "TRANSPORT", "PATIENT"})
+				void testCreateAccommodation() {
+					CreateAccommodationRequest request = new CreateAccommodationRequest();
+					request.setAddress(UUID.randomUUID().toString());
+					request.setLatitude("45");
+					request.setLongitude("15");
+					request.setAccommodationType("ROOM");
+					request.setAddress(UUID.randomUUID().toString());
+					request.setAvailabilityEnd(LocalDate.of(2021, 12, 31));
+					request.setAvailabilityEnd(LocalDate.of(2022, 12, 31));
+					
+					Response response = given()
+					.contentType("application/json")
+					.body(request)
+					.when()
+					.post("/accommodations")
+					.then()
+					.statusCode(200)
+					.extract()
+					.response();
+					
+					AccommodationDto dtoResponse = response.as(AccommodationDto.class);
+					assertEquals(request.getAccommodationType(), dtoResponse.getAccommodationType().toString());
+					assertEquals(request.getAddress(), dtoResponse.getAddress());
+					assertEquals(request.getLatitude() + ".0", dtoResponse.getLatitude());
+					assertEquals(request.getLongitude() + ".0", dtoResponse.getLongitude());
+					assertEquals(request.getAvailabilityStart(), dtoResponse.getAvailabilityStart());
+					assertEquals(request.getAvailabilityEnd(), dtoResponse.getAvailabilityEnd());
+					
+					ArgumentCaptor<Accommodation> captor = ArgumentCaptor.forClass(Accommodation.class);
+					Mockito.verify(accommodationRepository).save(captor.capture());
+					Accommodation accommodation = captor.getValue();
+					
+					assertEquals(request.getAccommodationType(), accommodation.getAccommodationType().toString());
+					assertEquals(request.getAddress(), accommodation.getAddress());
+					assertEquals(request.getLatitude() + ".0", String.valueOf(accommodation.getLocation().getY()));
+					assertEquals(request.getLongitude() + ".0", String.valueOf(accommodation.getLocation().getX()));
+					assertEquals(request.getAvailabilityStart(), accommodation.getAvailabilityStart());
+					assertEquals(request.getAvailabilityEnd(), accommodation.getAvailabilityEnd());
+				}
+			\end{lstlisting}
+			
+			U drugom ispitnom slučaju testiran je pokušaj brisanja smještaja, kada taj smještaj postoji.
+			
+			\begin{lstlisting}[language=Java]
+				@Test
+				@WithMockUser(username = "admin", roles = {"ACCOMMODATION", "TRANSPORT", "PATIENT"})
+				void testDeleteAccommodation_whenExists() {
+					String id = UUID.randomUUID().toString();
+					Mockito.when(accommodationRepository.existsById(id)).thenReturn(true);
+					
+					Response response = given()
+					.contentType("application/json")
+					.when()
+					.delete("/accommodations/" + id)
+					.then()
+					.statusCode(200)
+					.extract()
+					.response();
+					
+					assertEquals("Successfully deleted", response.asString());
+					
+					Mockito.verify(accommodationRepository).deleteById(id);
+				}
+			\end{lstlisting}
+			
+			U trećem ispitnom slučaju testiran je pokušaj brisanja smještaja kada smještaj NE postoji. Očekuje se iznimka.
+			
+			\begin{lstlisting}[language=Java]
+				@Test
+				@WithMockUser(username = "admin", roles = {"ACCOMMODATION", "TRANSPORT", "PATIENT"})
+				void testDeleteAccommodation_whenDoesNotExist_shouldThrow() {
+					String id = UUID.randomUUID().toString();
+					Mockito.when(accommodationRepository.existsById(id)).thenReturn(false);
+					
+					Response response = given()
+					.contentType("application/json")
+					.when()
+					.delete("/accommodations/" + id)
+					.then()
+					.statusCode(400)
+					.extract()
+					.response();
+					
+					ExceptionResponse exceptionResponse = response.as(ExceptionResponse.class);
+					
+					assertEquals("Accommodation with id: '" + id + "' not found!", exceptionResponse.getMessage());
+				}
+			\end{lstlisting}
+			
+			U četvrtom ispitnom slučaju testiran je pokušaj ažuriranja smještaja kada on postoji.
+			
+			\begin{lstlisting}[language=Java]
+				@Test
+				@WithMockUser(username = "admin", roles = {"ACCOMMODATION", "TRANSPORT", "PATIENT"})
+				void testUpdateAccommodation_whenDoesExist() {
+					String id = UUID.randomUUID().toString();
+					UpdateAccommodationRequest request = UpdateAccommodationRequest.builder()
+					.accommodationType(AccommodationType.APARTMENT)
+					.address(UUID.randomUUID().toString())
+					.availabilityStart(LocalDate.of(2021, 12, 31))
+					.availabilityEnd(LocalDate.of(2022, 12, 31))
+					.build();
+					
+					Mockito.when(accommodationRepository.findById(id)).thenReturn(Optional.of(Accommodation.builder()
+					.id(id)
+					.accommodationType(AccommodationType.ROOM)
+					.address(UUID.randomUUID().toString())
+					.availabilityStart(LocalDate.of(2021, 1, 1))
+					.availabilityEnd(LocalDate.of(2021, 1, 31))
+					.location(toPoint("15", "45"))
+					.build()));
+					
+					Response response = given()
+					.contentType("application/json")
+					.body(request)
+					.when()
+					.put("/accommodations/" + id)
+					.then()
+					.statusCode(200)
+					.extract()
+					.response();
+					
+					AccommodationDto dtoResponse = response.as(AccommodationDto.class);
+					
+					assertEquals(request.getAccommodationType().toString(), dtoResponse.getAccommodationType().toString());
+					assertEquals(request.getAddress(), dtoResponse.getAddress());
+					assertEquals(request.getAvailabilityStart(), dtoResponse.getAvailabilityStart());
+					assertEquals(request.getAvailabilityEnd(), dtoResponse.getAvailabilityEnd());
+					
+					Mockito.verify(accommodationRepository).findById(id);
+					
+					ArgumentCaptor<Accommodation> captor = ArgumentCaptor.forClass(Accommodation.class);
+					
+					Mockito.verify(accommodationRepository).save(captor.capture());
+					Accommodation accommodation = captor.getValue();
+					
+					assertEquals(request.getAccommodationType().toString(), accommodation.getAccommodationType().toString());
+					assertEquals(request.getAddress(), accommodation.getAddress());
+					assertEquals(request.getAvailabilityStart(), accommodation.getAvailabilityStart());
+					assertEquals(request.getAvailabilityEnd(), accommodation.getAvailabilityEnd());
+				}
+				
+				private static Point toPoint(String longitude, String latitude) {
+					GeometryFactory geometryFactory = new GeometryFactory();
+					return geometryFactory.createPoint(new Coordinate(Double.parseDouble(longitude), Double.parseDouble(latitude)));
+				}
+			\end{lstlisting}
+			
+			U petom ispitnom slučaju testiran je pokušaj ažuriranja smještaja kada on NE postoji.
+			
+			\begin{lstlisting}[language=Java]
+				@Test
+				@WithMockUser(username = "admin", roles = {"ACCOMMODATION", "TRANSPORT", "PATIENT"})
+				void testUpdateAccommodation_whenDoesNotExist_shouldThrow() {
+					String id = UUID.randomUUID().toString();
+					UpdateAccommodationRequest request = UpdateAccommodationRequest.builder()
+					.accommodationType(AccommodationType.APARTMENT)
+					.address(UUID.randomUUID().toString())
+					.availabilityStart(LocalDate.of(2021, 12, 31))
+					.availabilityEnd(LocalDate.of(2022, 12, 31))
+					.build();
+					
+					Mockito.when(accommodationRepository.existsById(id)).thenReturn(false);
+					
+					Response response = given()
+					.contentType("application/json")
+					.body(request)
+					.when()
+					.put("/accommodations/" + id)
+					.then()
+					.statusCode(400)
+					.extract()
+					.response();
+					
+					ExceptionResponse exceptionResponse = response.as(ExceptionResponse.class);
+					
+					assertEquals("Accommodation with id: '" + id + "' not found!", exceptionResponse.getMessage());
+				}
+			\end{lstlisting}
+			
 			
 			
 			

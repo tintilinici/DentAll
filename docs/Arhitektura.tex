@@ -81,7 +81,7 @@
 				\end{longtblr}
 			
 				\noindent
-				\textbf{Accommodation} Ovaj entitet sadržava potrebne podatke o nekom smještaju koji je smještajni administrator unio. Entitet sadrži atribute: accommodation\_ID, type, category, address, availibility\_start, availability\_end i location. Ovaj entitet je u \textit{One-to-Many} vezi s entitetom AccommodationBooking preko atributa accommodation\_ID.
+				\textbf{Accommodation} Ovaj entitet sadržava potrebne podatke o nekom smještaju koji je smještajni administrator unio. Entitet sadrži atribute: accommodation\_ID, type, address, availibility\_start, availability\_end i location. Ovaj entitet je u \textit{One-to-Many} vezi s entitetom AccommodationBooking preko atributa accommodation\_ID.
 				
 				\begin{longtblr}[
 					label=none,
@@ -109,7 +109,7 @@
 				\end{longtblr}
 			
 			\noindent
-			\textbf{AccommodationOrder} Ovaj entitet se koristi za pohravnjivanje pacijentovih zahtjeva o traženom smještaju. U slučaju da traženi smještaj nije odmah dostupan zahtjev se sprema kako bih se kasnije mogao opet pogledati. Entitet sadrži atribute: accommodation\_order\_ID, arrival\_datetime, departure\_datetime, accommodation\_type, accommodation\_category i patient\_ID. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom Patient preko atributa patient\_id i u vezi \textit{One-to-One} s entitetom AccommodationBooking preko atributa accommodation\_booking\_id.
+			\textbf{AccommodationOrder} Ovaj entitet se koristi za pohravnjivanje pacijentovih zahtjeva o traženom smještaju. U slučaju da traženi smještaj nije odmah dostupan zahtjev se sprema kako bih se kasnije mogao opet pogledati. Entitet sadrži atribute: accommodation\_order\_ID, arrival\_datetime, departure\_datetime, accommodation\_type i patient\_ID. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom Patient preko atributa patient\_id i u vezi \textit{One-to-One} s entitetom AccommodationBooking preko atributa accommodation\_booking\_id.
 			\begin{longtblr}[
 				label=none,
 				entry=none
@@ -129,8 +129,6 @@
 				\hline
 				accommodation\_type & VARCHAR & željeni tip smještaja koji pacijent traži \\
 				\hline
-				accommodation\_category & VARCHAR & željena kategorija smještaja koju pacijent traži \\
-				\hline
 				location & VARCHAR & kordinate područja na kojem je potrebno naći smještaj \\
 				\hline
 				\SetCell{LightBlue} patient\_ID	& VARCHAR & ID pacijenta koji je napravio ovaj zahtjev \\
@@ -140,13 +138,13 @@
 			\end{longtblr}
 			
 			\noindent
-			\textbf{AccommodationBooking} Ovaj vezni entitet se koristi za pohranjivanje informacije koji pacijent je kada u kojem smještaju. Entitet sadrži atribute: accommodation\_booking\_ID i accommodation\_ID, patient\_ID. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom Accommodation preko atributa accommodation\_ID. U \textit{Many-to-One} vezi s entitetom Patient preko atributa patient\_ID. 
+			\textbf{AccommodationBooking} Ovaj vezni entitet se koristi za pohranjivanje informacije koji pacijent je kada u kojem smještaju. Entitet sadrži atribute: accommodation\_booking\_ID i accommodation\_ID, accommodation\_order\_ID. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom Accommodation preko atributa accommodation\_ID. U \textit{One-to-One} vezi s entitetom AccommodationOrder preko atributa accommodation\_order\_ID. 
 			\begin{longtblr}[
 				label=none,
 				entry=none
 				]{
 					width = \textwidth,
-					colspec={|X[10, l]|X[6, l]|X[20, l]|}, 
+					colspec={|X[13, l]|X[6, l]|X[20, l]|}, 
 					rowhead = 1,
 				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 				\hline 
@@ -157,7 +155,7 @@
 				\hline 
 				\SetCell{LightBlue} accommodation\_ID	& VARCHAR & smještaj u koji je pacijent smješten \\
 				\hline 
-				\SetCell{LightBlue} patient\_ID & VARCHAR & pacijent koji ostaje u smještaju \\
+				\SetCell{LightBlue} accommodation\_order\_ID & VARCHAR & ID zahtjeva na temelju kojeg je napravljen booking \\
 				\hline
 			\end{longtblr}
 			
@@ -208,7 +206,7 @@
 			\end{longtblr}
 			
 			\noindent
-			\textbf{TransportBooking} Ovo je slabi vezni entitet koji označava prijevoz pacijenta. Ujedinjuje dva entiteta iz kojih saznajemo koji MedicalAppointment je povezan s vozilom. Entitet sadrži atribute: transport\_vehicle\_ID i medical\_appointment\_. Entitet je u \textit{Many-to-One} vezi s entitetom TransportVehicle preko atributa transport\_vehicle\_ID. I u \textit{Many-to-One} vezi s entitetom MedicalAppointment preko atributa medical\_appointment\_ID.
+			\textbf{TransportBooking} Ovo je slabi vezni entitet koji označava prijevoz pacijenta. Ujedinjuje dva entiteta iz kojih saznajemo koji MedicalAppointment je povezan s vozilom. Entitet sadrži atribute: transport\_vehicle\_ID i medical\_appointment\_. Entitet je u \textit{Many-to-One} vezi s entitetom TransportVehicle preko atributa transport\_vehicle\_ID. I u \textit{One-to-One} vezi s entitetom MedicalAppointment preko atributa medical\_appointment\_ID.
 			\begin{longtblr}[
 				label=none,
 				entry=none
@@ -256,7 +254,7 @@
 			\end{longtblr}
 			
 			\noindent
-			\textbf{AdminRole} Ovaj entitet označava role admina. Sadrži atribute, admin\_role\_ID i name. Entitet je u \textit{Many-to-Many} vezi s entitetom AdminRoles preko atributa admin\_role\_ID. 
+			\textbf{AdminRole} Ovaj entitet označava role admina. Sadrži atribute, admin\_role\_ID i name. Entitet je u \textit{One-to-Many} vezi s entitetom AdminRoles preko atributa admin\_role\_ID. 
 			\begin{longtblr}[
 				label=none,
 				entry=none
@@ -276,7 +274,7 @@
 		
 			
 			\noindent
-			\textbf{Admin} Ovaj entitet sadrži podatke o adminima. Entitet sadrži atribute: admin\_ID, email, first\_name, last\_name. Entitet je u \textit{Many-to-Many} vezi s entitetom AdminRoles preko atributa admin\_ID. 
+			\textbf{Admin} Ovaj entitet sadrži podatke o adminima. Entitet sadrži atribute: admin\_ID, email, first\_name, last\_name. Entitet je u \textit{One-to-Many} vezi s entitetom AdminRoles preko atributa admin\_ID. 
 			\begin{longtblr}[
 				label=none,
 				entry=none
@@ -347,13 +345,13 @@
 			Kontroleri su poveznica između korisnika i aplikacije, odgovorni za upravljanje okom HTTP zahtjeva i odgovora. Svaki Controller razred u DentAll aplikaciji povezan je s određenim Service sučeljem koji omogućuje obradu poslovne logike. PatientController upravlja pacijentima i sadrži metode poput createPatient i deletePatient, koje prate RESTful princip za CRUD operacije. TransportVehicleController i TransportCompanyController omogućavaju upravljanje vozilima i tvrtkama za transport, s metodama kao što su createTransportVehicle i updateTransportCompany. AccommodationController i AccommodationBookingController služe za upravljanje smještajem te njegovu rezervaciju kroz booking. SecurityController upravlja autentifikacijom i autorizacijom, s metodama poput register i login.
 			
 			\begin{figure}[H]
-				\includegraphics[scale=0.07]{slike/arhitektura_controller_class_diagram_v2.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\includegraphics[scale=0.05]{slike/arhitektura_service_class_diagram.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 				\centering
 				\caption{Dijagram razreda - dio Service}
 				\label{fig:arhitektura_service_class_diagram}
 			\end{figure}
 			
-			*Insert opis za Service i ServiceImpl*
+			Servisni sloj u arhitekturi služi kao posrednik između Controllera i domenskih modela, pružajući apstrakciju koja omogućava Controllerima da se usredotoče na obradu HTTP zahtjeva i odgovora, dok Service sloj upravlja poslovnim logikama. Servisni sloj je prikazan na \ref{fig:arhitektura_service_class_diagram}, gdje su implementacije i sučelja organizirani u skladu s funkcionalnostima koje pružaju. Možemo izdvojiti EmailService i JwtService servise koji pružaju specijalizirane funkcionalnosti – slanje emailova i upravljanje JWT tokenima za autentifikaciju i autorizaciju korisnika. SecurityService sučelje i SecurityServiceImpl su zaduženi za sigurnosne aspekte aplikacije, uključujući autentifikaciju, autorizaciju i upravljanje korisničkim računima.
 			
 			\begin{figure}[H]
 				\includegraphics[scale=0.12]{slike/arhitektura_dto_class_diagram_v2.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
@@ -388,9 +386,34 @@
 		\section{Dijagram stanja}
 			
 			
-			\textbf{\textit{dio 2. revizije}}\\
+			Unutar \textbf{Patients dashboard} stanja, sustav nudi nekoliko interakcija:
 			
-			\textit{Potrebno je priložiti dijagram stanja i opisati ga. Dovoljan je jedan dijagram stanja koji prikazuje \textbf{značajan dio funkcionalnosti} sustava. Na primjer, stanja korisničkog sučelja i tijek korištenja neke ključne funkcionalnosti jesu značajan dio sustava, a registracija i prijava nisu. }
+			\begin{itemize}
+				\item Klikom na \textit{Add patient} otvara se modal za unos informacija o pacijentu. Iz ovog modala, moguće su dvije akcije:
+				\begin{enumerate}
+					\item Klikom na \textit{Add}, sustav prelazi u stanje izrade pacijenta i nakon toga se vraća na \textbf{Patients dashboard}.
+					\item Klikom na \textit{Cancel}, sustav se odmah vraća na \textbf{Patients dashboard} bez kreiranja novog pacijenta.
+				\end{enumerate}
+				
+				\item Za brisanje pacijenata, klikom na \textit{Remove} pojavljuje se modal potvrde. Nakon akcije, sustav se uvijek vraća na \textbf{Patients dashboard}.
+				
+				\item Dodavanje \textit{accommodation ordera} za pacijente ostvaruje se klikom na \textit{Add accommodation order}, što otvara odgovarajući modal. Iz ovog modala, akcijama \textit{add} ili \textit{cancel} sustav se vraća na \textbf{Patients dashboard}.
+				
+				\item Klikom na svakog pacijenta, sustav prelazi u listu narudžbi smještaja, unutar kojeg se može:
+				\begin{itemize}
+					\item Kreirati \textit{accommodation booking}.
+					\item Urediti postojeću narudžbu.
+				\end{itemize}
+				Oba stanja, nakon odrađene akcije, vraćaju na listu narudžbi za navedeni smještaj.
+			\end{itemize}
+			
+			
+			\begin{figure}[H]
+				\includegraphics[scale=0.8]{slike/arhitektura_state_machine_diagram.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram stanja}
+				\label{fig:arhitektura_state_machine_diagram}
+			\end{figure}
 			
 			
 			\eject 
