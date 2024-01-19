@@ -1,9 +1,9 @@
 # Stage 1 : build with maven builder image with native capabilities
-FROM maven:3.8.4-openjdk-17-slim AS build
+FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-21 AS build
 WORKDIR /app
-COPY pom.xml .
-COPY src src
-RUN mvn clean package -Pnative -DskipTests
+COPY pom.xml ./
+COPY src ./src
+RUN ./mvnw package -Pnative -Dquarkus.native.container-build=true -DskipTests
 
 FROM quay.io/quarkus/quarkus-micro-image:2.0
 WORKDIR /work/
