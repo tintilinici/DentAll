@@ -58,6 +58,7 @@ const AddEditAccommodationOrderModal = ({ isOpen, onClose, patientId, order }: P
       setValue('accommodationType', order.accommodationType)
       setValue('latitude', order.latitude)
       setValue('longitude', order.longitude)
+
       if (mapRef.current) {
         mapRef.current.setView([order.latitude, order.longitude])
       }

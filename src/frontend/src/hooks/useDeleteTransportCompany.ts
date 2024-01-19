@@ -1,24 +1,17 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useAuth } from '../components/auth/useAuth'
+import { useCustomFetch } from './useCustomFetch'
 
 export const useDeleteTransportCompanyMutation = () => {
   const queryClient = useQueryClient()
-  const { token } = useAuth()
+  const customFetch = useCustomFetch()
 
   return useMutation({
     mutationKey: ['deleteTransportCompany'],
-    mutationFn: async (companyId: string) => {
-      const res = await fetch(`http://localhost:8080/transportCompanies/${companyId}`, {
+    mutationFn: (companyId: string) =>
+      customFetch(`/transportCompanies/${companyId}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.message || 'Something went wrong.')
-      }
-    },
+        interesedInData: false,
+      }),
     onSuccess: () => {
       return queryClient.invalidateQueries({ queryKey: ['transportCompanies'] })
     },

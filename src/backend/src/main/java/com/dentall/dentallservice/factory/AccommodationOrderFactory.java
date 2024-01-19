@@ -26,7 +26,7 @@ public class AccommodationOrderFactory {
                 .build();
     }
 
-    private static Point toPoint(String longitude, String latitude) {
+    public static Point toPoint(String longitude, String latitude) {
         GeometryFactory geometryFactory = new GeometryFactory();
         return geometryFactory.createPoint(new Coordinate(Double.parseDouble(longitude), Double.parseDouble(latitude)));
     }
