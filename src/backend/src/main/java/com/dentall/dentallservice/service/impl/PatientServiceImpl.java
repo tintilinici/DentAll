@@ -154,6 +154,8 @@ public class PatientServiceImpl implements PatientService {
             });
 
         }
+        
+
         accommodationOrder.setArrivalDateTime(request.getArrivalDateTime());
         accommodationOrder.setDepartureDateTime(request.getDepartureDateTime());
 
