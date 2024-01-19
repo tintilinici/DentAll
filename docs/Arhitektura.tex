@@ -254,7 +254,7 @@
 			\end{longtblr}
 			
 			\noindent
-			\textbf{AdminRole} Ovaj entitet označava role admina. Sadrži atribute, admin\_role\_ID i name. Entitet je u \textit{Many-to-Many} vezi s entitetom AdminRoles preko atributa admin\_role\_ID. 
+			\textbf{AdminRole} Ovaj entitet označava role admina. Sadrži atribute, admin\_role\_ID i name. Entitet je u \textit{One-to-Many} vezi s entitetom AdminRoles preko atributa admin\_role\_ID. 
 			\begin{longtblr}[
 				label=none,
 				entry=none
@@ -274,7 +274,7 @@
 		
 			
 			\noindent
-			\textbf{Admin} Ovaj entitet sadrži podatke o adminima. Entitet sadrži atribute: admin\_ID, email, first\_name, last\_name. Entitet je u \textit{Many-to-Many} vezi s entitetom AdminRoles preko atributa admin\_ID. 
+			\textbf{Admin} Ovaj entitet sadrži podatke o adminima. Entitet sadrži atribute: admin\_ID, email, first\_name, last\_name. Entitet je u \textit{One-to-Many} vezi s entitetom AdminRoles preko atributa admin\_ID. 
 			\begin{longtblr}[
 				label=none,
 				entry=none
