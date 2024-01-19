@@ -81,7 +81,7 @@
 				\end{longtblr}
 			
 				\noindent
-				\textbf{Accommodation} Ovaj entitet sadržava potrebne podatke o nekom smještaju koji je smještajni administrator unio. Entitet sadrži atribute: accommodation\_ID, type, category, address, availibility\_start, availability\_end i location. Ovaj entitet je u \textit{One-to-Many} vezi s entitetom AccommodationBooking preko atributa accommodation\_ID.
+				\textbf{Accommodation} Ovaj entitet sadržava potrebne podatke o nekom smještaju koji je smještajni administrator unio. Entitet sadrži atribute: accommodation\_ID, type, address, availibility\_start, availability\_end i location. Ovaj entitet je u \textit{One-to-Many} vezi s entitetom AccommodationBooking preko atributa accommodation\_ID.
 				
 				\begin{longtblr}[
 					label=none,
@@ -109,7 +109,7 @@
 				\end{longtblr}
 			
 			\noindent
-			\textbf{AccommodationOrder} Ovaj entitet se koristi za pohravnjivanje pacijentovih zahtjeva o traženom smještaju. U slučaju da traženi smještaj nije odmah dostupan zahtjev se sprema kako bih se kasnije mogao opet pogledati. Entitet sadrži atribute: accommodation\_order\_ID, arrival\_datetime, departure\_datetime, accommodation\_type, accommodation\_category i patient\_ID. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom Patient preko atributa patient\_id i u vezi \textit{One-to-One} s entitetom AccommodationBooking preko atributa accommodation\_booking\_id.
+			\textbf{AccommodationOrder} Ovaj entitet se koristi za pohravnjivanje pacijentovih zahtjeva o traženom smještaju. U slučaju da traženi smještaj nije odmah dostupan zahtjev se sprema kako bih se kasnije mogao opet pogledati. Entitet sadrži atribute: accommodation\_order\_ID, arrival\_datetime, departure\_datetime, accommodation\_type i patient\_ID. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom Patient preko atributa patient\_id i u vezi \textit{One-to-One} s entitetom AccommodationBooking preko atributa accommodation\_booking\_id.
 			\begin{longtblr}[
 				label=none,
 				entry=none
@@ -129,8 +129,6 @@
 				\hline
 				accommodation\_type & VARCHAR & željeni tip smještaja koji pacijent traži \\
 				\hline
-				accommodation\_category & VARCHAR & željena kategorija smještaja koju pacijent traži \\
-				\hline
 				location & VARCHAR & kordinate područja na kojem je potrebno naći smještaj \\
 				\hline
 				\SetCell{LightBlue} patient\_ID	& VARCHAR & ID pacijenta koji je napravio ovaj zahtjev \\
@@ -140,13 +138,13 @@
 			\end{longtblr}
 			
 			\noindent
-			\textbf{AccommodationBooking} Ovaj vezni entitet se koristi za pohranjivanje informacije koji pacijent je kada u kojem smještaju. Entitet sadrži atribute: accommodation\_booking\_ID i accommodation\_ID, patient\_ID. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom Accommodation preko atributa accommodation\_ID. U \textit{Many-to-One} vezi s entitetom Patient preko atributa patient\_ID. 
+			\textbf{AccommodationBooking} Ovaj vezni entitet se koristi za pohranjivanje informacije koji pacijent je kada u kojem smještaju. Entitet sadrži atribute: accommodation\_booking\_ID i accommodation\_ID, accommodation\_order\_ID. Ovaj entitet je u \textit{Many-to-One} vezi s entitetom Accommodation preko atributa accommodation\_ID. U \textit{One-to-One} vezi s entitetom AccommodationOrder preko atributa accommodation\_order\_ID. 
 			\begin{longtblr}[
 				label=none,
 				entry=none
 				]{
 					width = \textwidth,
-					colspec={|X[10, l]|X[6, l]|X[20, l]|}, 
+					colspec={|X[13, l]|X[6, l]|X[20, l]|}, 
 					rowhead = 1,
 				} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 				\hline 
@@ -157,7 +155,7 @@
 				\hline 
 				\SetCell{LightBlue} accommodation\_ID	& VARCHAR & smještaj u koji je pacijent smješten \\
 				\hline 
-				\SetCell{LightBlue} patient\_ID & VARCHAR & pacijent koji ostaje u smještaju \\
+				\SetCell{LightBlue} accommodation\_order\_ID & VARCHAR & ID zahtjeva na temelju kojeg je napravljen booking \\
 				\hline
 			\end{longtblr}
 			
@@ -208,7 +206,7 @@
 			\end{longtblr}
 			
 			\noindent
-			\textbf{TransportBooking} Ovo je slabi vezni entitet koji označava prijevoz pacijenta. Ujedinjuje dva entiteta iz kojih saznajemo koji MedicalAppointment je povezan s vozilom. Entitet sadrži atribute: transport\_vehicle\_ID i medical\_appointment\_. Entitet je u \textit{Many-to-One} vezi s entitetom TransportVehicle preko atributa transport\_vehicle\_ID. I u \textit{Many-to-One} vezi s entitetom MedicalAppointment preko atributa medical\_appointment\_ID.
+			\textbf{TransportBooking} Ovo je slabi vezni entitet koji označava prijevoz pacijenta. Ujedinjuje dva entiteta iz kojih saznajemo koji MedicalAppointment je povezan s vozilom. Entitet sadrži atribute: transport\_vehicle\_ID i medical\_appointment\_. Entitet je u \textit{Many-to-One} vezi s entitetom TransportVehicle preko atributa transport\_vehicle\_ID. I u \textit{One-to-One} vezi s entitetom MedicalAppointment preko atributa medical\_appointment\_ID.
 			\begin{longtblr}[
 				label=none,
 				entry=none
