@@ -345,13 +345,13 @@
 			Kontroleri su poveznica između korisnika i aplikacije, odgovorni za upravljanje okom HTTP zahtjeva i odgovora. Svaki Controller razred u DentAll aplikaciji povezan je s određenim Service sučeljem koji omogućuje obradu poslovne logike. PatientController upravlja pacijentima i sadrži metode poput createPatient i deletePatient, koje prate RESTful princip za CRUD operacije. TransportVehicleController i TransportCompanyController omogućavaju upravljanje vozilima i tvrtkama za transport, s metodama kao što su createTransportVehicle i updateTransportCompany. AccommodationController i AccommodationBookingController služe za upravljanje smještajem te njegovu rezervaciju kroz booking. SecurityController upravlja autentifikacijom i autorizacijom, s metodama poput register i login.
 			
 			\begin{figure}[H]
-				\includegraphics[scale=0.07]{slike/arhitektura_controller_class_diagram_v2.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\includegraphics[scale=0.05]{slike/arhitektura_service_class_diagram.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 				\centering
 				\caption{Dijagram razreda - dio Service}
 				\label{fig:arhitektura_service_class_diagram}
 			\end{figure}
 			
-			*Insert opis za Service i ServiceImpl*
+			Servisni sloj u arhitekturi služi kao posrednik između Controllera i domenskih modela, pružajući apstrakciju koja omogućava Controllerima da se usredotoče na obradu HTTP zahtjeva i odgovora, dok Service sloj upravlja poslovnim logikama. Servisni sloj je prikazan na \ref{fig:arhitektura_service_class_diagram}, gdje su implementacije i sučelja organizirani u skladu s funkcionalnostima koje pružaju. Možemo izdvojiti EmailService i JwtService servise koji pružaju specijalizirane funkcionalnosti – slanje emailova i upravljanje JWT tokenima za autentifikaciju i autorizaciju korisnika. SecurityService sučelje i SecurityServiceImpl su zaduženi za sigurnosne aspekte aplikacije, uključujući autentifikaciju, autorizaciju i upravljanje korisničkim računima.
 			
 			\begin{figure}[H]
 				\includegraphics[scale=0.12]{slike/arhitektura_dto_class_diagram_v2.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
