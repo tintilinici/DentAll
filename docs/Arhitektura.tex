@@ -386,9 +386,34 @@
 		\section{Dijagram stanja}
 			
 			
-			\textbf{\textit{dio 2. revizije}}\\
+			Unutar \textbf{Patients dashboard} stanja, sustav nudi nekoliko interakcija:
 			
-			\textit{Potrebno je priložiti dijagram stanja i opisati ga. Dovoljan je jedan dijagram stanja koji prikazuje \textbf{značajan dio funkcionalnosti} sustava. Na primjer, stanja korisničkog sučelja i tijek korištenja neke ključne funkcionalnosti jesu značajan dio sustava, a registracija i prijava nisu. }
+			\begin{itemize}
+				\item Klikom na \textit{Add patient} otvara se modal za unos informacija o pacijentu. Iz ovog modala, moguće su dvije akcije:
+				\begin{enumerate}
+					\item Klikom na \textit{Add}, sustav prelazi u stanje izrade pacijenta i nakon toga se vraća na \textbf{Patients dashboard}.
+					\item Klikom na \textit{Cancel}, sustav se odmah vraća na \textbf{Patients dashboard} bez kreiranja novog pacijenta.
+				\end{enumerate}
+				
+				\item Za brisanje pacijenata, klikom na \textit{Remove} pojavljuje se modal potvrde. Nakon akcije, sustav se uvijek vraća na \textbf{Patients dashboard}.
+				
+				\item Dodavanje \textit{ordera} za pacijente ostvaruje se klikom na \textit{Add order}, što otvara odgovarajući modal. Iz ovog modala, akcijama \textit{add} ili \textit{cancel} sustav se vraća na \textbf{Patients dashboard}.
+				
+				\item Klikom na svakog pacijenta, sustav prelazi u listu narudžbi smještaja, unutar kojeg se može:
+				\begin{itemize}
+					\item Kreirati \textit{booking}.
+					\item Urediti postojeću narudžbu.
+				\end{itemize}
+				Oba stanja, nakon odrađene akcije, vraćaju na listu narudžbi za navedeni smještaj.
+			\end{itemize}
+			
+			
+			\begin{figure}[H]
+				\includegraphics[scale=0.8]{slike/arhitektura_state_machine_diagram.png} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram stanja}
+				\label{fig:arhitektura_state_machine_diagram}
+			\end{figure}
 			
 			
 			\eject 
