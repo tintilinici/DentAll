@@ -165,12 +165,7 @@ public class PatientServiceImpl implements PatientService {
         }
 
         if (request.getLatitude() != null && request.getLongitude() != null) {
-
-            GeometryFactory geometryFactory = new GeometryFactory();
-            Point newLocation = geometryFactory.createPoint(new Coordinate(
-                    Double.parseDouble(request.getLatitude()), Double.parseDouble(request.getLongitude()))
-            );
-            accommodationOrder.setLocation(newLocation);
+            accommodationOrder.setLocation(AccommodationOrderFactory.toPoint(request.getLongitude(), request.getLatitude()));
         }
 
         accommodationOrderRepository.save(accommodationOrder);
