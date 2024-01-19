@@ -11,6 +11,6 @@ RUN mvn clean package -DskipTests
 # Package stage
 FROM openjdk:17-jdk-alpine
 WORKDIR /app
-COPY --from=build /app/target/*-runner.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8081
 ENTRYPOINT ["java","-jar","app.jar"]
