@@ -147,7 +147,7 @@ public class PatientServiceImpl implements PatientService {
             ).stream()
                     .findAny()
                     .ifPresent((order) -> {
-                        if (!order.getId().equals(request.getId())) {
+                        if (!order.getId().equals(id)) {
                             throw new IllegalArgumentException("Patient: " + order.getPatient()
                                     .getFirstName() + " already has an order for that time!");
                         }
