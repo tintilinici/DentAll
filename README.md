@@ -5,3 +5,6 @@
  - Cold start je jako dugačak pa Vas molimo za strpljenje dok se server ne zagrije. :)
 ### Frontend
  - Poveznica na frontend u pogonu: https://dent-all.vercel.app
+ - podatci za prijavu su:
+ - mail: admin@admin.com
+ - pass: admin
